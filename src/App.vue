@@ -1,12 +1,72 @@
-<script setup>
-  
+<!-- <script setup>
+// import japenMap from '@/components/JapenMap.vue'
+import headerBar from '@/views/header.vue'
+import Banner from '@/views/Banner-put.vue'
+import Content from '@/views/Content-vue.vue'
+import { onMounted, ref } from 'vue'
+const shwo = ref(false)
+const shwo1 = ref(false)
+const shwo2 = ref(false)
+const shwo3 = ref(false)
+const handleScroll = () => {
+  console.log(window.scrollY)
+  if (window.scrollY > 100) shwo.value = true
+  if (window.scrollY > 995) shwo1.value = true
+  if (window.scrollY > 1800) shwo2.value = true
+  if (window.scrollY > 2600) shwo3.value = true
+}
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
 </script>
 
 <template>
   <div>
-    123
+    <headerBar></headerBar>
+    <banner></banner>
+    <transition-group>
+      <Content v-show="shwo"></Content>
+      <Content v-show="shwo1"></Content>
+      <Content v-show="shwo2"></Content>
+      <Content v-show="shwo3"></Content>
+    </transition-group>
+  </div>
+</template> -->
+<script setup>
+// import japenMap from '@/components/JapenMap.vue'
+import headerBar from '@/views/header.vue'
+import Banner from '@/views/Banner-put.vue'
+import Content from '@/views/Content-vue.vue'
+</script>
+
+<template>
+  <div>
+    <headerBar></headerBar>
+    <banner></banner>
+    <Content></Content>
+    <Content></Content>
+    <Content></Content>
+    <Content></Content>
   </div>
 </template>
 
 <style>
+* {
+  margin: auto;
+  padding: 0;
+}
+
+a {
+  list-style-type: none;
+  text-decoration: none;
+}
+input:focus {
+  outline: none;
+}
+
+.container {
+  width: 1280px;
+  display: flex;
+  margin: auto;
+}
 </style>
