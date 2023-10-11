@@ -22,7 +22,7 @@ ChangePage()
 </script>
 
 <template>
-  <div class="banner">
+  <div class="banner-change">
     <transition-group>
       <div
         ref="formRef"
@@ -43,7 +43,7 @@ ChangePage()
 </template>
 <style>
 /* banner 輪播圖*/
-.banner {
+.banner-change {
   width: 100%;
   height: 800px;
   min-width: 380px;
@@ -75,7 +75,7 @@ ChangePage()
   width: 50%;
   font-size: 30px;
   color: rgb(117, 117, 117);
-  top: 10%;
+  top: 35%;
   left: 10%;
   position: absolute;
   background: transparent;

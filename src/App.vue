@@ -33,6 +33,7 @@ onMounted(() => {
   </div>
 </template> -->
 <script setup>
+// import { onMounted, ref } from 'vue'
 // import japenMap from '@/components/JapenMap.vue'
 import headerBar from '@/views/header.vue'
 import Banner from '@/views/Banner-put.vue'
@@ -43,9 +44,6 @@ import Content from '@/views/Content-vue.vue'
   <div>
     <headerBar></headerBar>
     <banner></banner>
-    <Content></Content>
-    <Content></Content>
-    <Content></Content>
     <Content></Content>
   </div>
 </template>
