@@ -33,18 +33,32 @@ onMounted(() => {
   </div>
 </template> -->
 <script setup>
-// import { onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 // import japenMap from '@/components/JapenMap.vue'
 import headerBar from '@/views/header.vue'
 import Banner from '@/views/Banner-put.vue'
 import Content from '@/views/Content-vue.vue'
+import MainIndex from '@/views/main-index.vue'
+// 監聽滾動屬性 並附值給ref
+const scrollRef = ref()
+// 監聽屬性邏輯
+const handleScroll = () => {
+  const scrollY = window.scrollY
+  scrollRef.value = scrollY
+}
+handleScroll()
+// 掛載監聽屬性
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
 </script>
 
 <template>
   <div>
-    <headerBar></headerBar>
+    <headerBar :scrollRef="scrollRef"></headerBar>
     <banner></banner>
-    <Content></Content>
+    <Content :scrollRef="scrollRef"></Content>
+    <MainIndex :scrollRef="scrollRef"></MainIndex>
   </div>
 </template>
 

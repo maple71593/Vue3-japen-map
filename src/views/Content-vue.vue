@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, defineProps, computed } from 'vue'
 const cardPages = ref([
   {
     title: '東京',
@@ -55,20 +55,9 @@ const changeIMG = (item) => {
   const url = new URL(item, import.meta.url).href
   return url
 }
-const pro = defineProps({ value: String })
-console.log(pro)
-const noActivated = ref(false)
-const BannerBar = ref(false)
-const handleScroll = () => {
-  const scrollY = window.scrollY
-  console.log(scrollY)
-  scrollY > 250 ? (BannerBar.value = true) : BannerBar.value
-  scrollY > 350 ? (noActivated.value = true) : noActivated.value
-}
-handleScroll()
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-})
+const scrollRef = defineProps(['scrollRef'])
+const BannerBar = computed(() => scrollRef.scrollRef > 250)
+const noActivated = computed(() => scrollRef.scrollRef > 350)
 </script>
 
 <template>
@@ -92,6 +81,7 @@ onMounted(() => {
 .content {
   width: 1200px;
   margin-top: 30px;
+  margin-bottom: 100px;
   padding-top: 30px;
   text-align: left;
   border-radius: 30px;

@@ -1,6 +1,11 @@
+<script setup>
+import { computed, defineProps } from 'vue'
+const scrollRef = defineProps(['scrollRef'])
+const show = computed(() => scrollRef.scrollRef > 800)
+</script>
 <template>
-  <div class="header">
-    <h4 class="logo">我是log</h4>
+  <div class="header" :class="{ headREer: show }">
+    <h4 class="logo">我是logo</h4>
     <ul>
       <li><a href="#">加入我們</a></li>
       <li><a href="#">精選旅程</a></li>
@@ -19,6 +24,17 @@
   position: fixed;
   background: linear-gradient(to bottom, #474747, transparent);
   top: 0;
+  width: 100%;
+  z-index: 100;
+  transition: 1.5s ease-in-out;
+}
+.headREer {
+  height: 100px;
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  background: linear-gradient(to bottom, #474747, transparent);
+  top: -100px;
   width: 100%;
   z-index: 100;
 }
