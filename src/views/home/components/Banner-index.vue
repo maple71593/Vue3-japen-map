@@ -71,14 +71,12 @@ useBannerBcak()
   position: absolute;
 }
 .test-box {
-  width: 50%;
+  width: 420px;
   font-size: 30px;
   color: rgb(117, 117, 117);
   top: 35%;
   left: 10%;
   position: absolute;
-  background: transparent;
-  color: white;
 }
 .btn {
   display: inline-block;
