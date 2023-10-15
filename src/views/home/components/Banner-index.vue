@@ -30,13 +30,14 @@ useBannerBcak()
         <img class="ImgBoxIMG" :src="item.img" alt="" />
       </div>
     </transition-group>
-    <div class="test-box" v-if="show">
+    <div class="gotravel" v-if="show">
       <h1>有多久沒出門旅行</h1>
       <h2>現在就來趟旅程吧</h2>
-      <button class="btn">開始旅程</button>
+      <button @click="show = !show" class="btn">開始旅程</button>
     </div>
     <div class="test-box" v-else>
       <Calendar></Calendar>
+      <button @click="show = !show" class="btn">再想想</button>
     </div>
   </div>
 </template>
@@ -70,10 +71,11 @@ useBannerBcak()
   height: 100%;
   position: absolute;
 }
+.gotravel {
+  color: #fff;
+  font-size: 100px;
+}
 .test-box {
-  width: 420px;
-  font-size: 30px;
-  color: rgb(117, 117, 117);
   top: 35%;
   left: 10%;
   position: absolute;
