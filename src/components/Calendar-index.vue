@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from 'vue'
-
 // 全部演算數據的儲存
 const DateArrayRef = ref({})
 //獲取現在時間 年 月 日
 const Now = new Date()
 const Year = Now.getFullYear()
 const Month = Now.getMonth() + 1
+const NowDate = Now.getDate()
 // 進入函數[三個參數](推算的年份，推算的月份，遍歷幾次)
 const GetDate = (Year, Month, index) => {
   // 取得每個月的第一天
@@ -55,6 +55,8 @@ const ChangeLeft = (num) => {
   left.value = newlaft
 }
 //點擊改變input裡數值
+const InpRefPeol = ref()
+const InpRefWhereGo = ref()
 const isCheckStart = ref()
 const isCheckedEnd = ref()
 const InpRefStart = ref()
@@ -63,11 +65,12 @@ const InpRefEnd = ref()
 const InpRefEndData = ref()
 const StartChecked = ref(false)
 const EndChecked = ref(false)
+const numShow = ref(false)
 const GetInputData = (item) => {
   const { year, mon, date, id } = item
-  console.log(item)
   //第一層判斷(是否點到空的區域)
   if (year === undefined && mon === undefined && date === undefined) return
+  if (year <= Year && mon <= Month && date < NowDate) return
   const checkedDay = [year, mon, date].join('/')
   const checkedData = id
   // 第一層判斷 (判斷開始日期是否有值)
@@ -118,20 +121,62 @@ const GetInputData = (item) => {
     isCheckStart.value = id
   }
 }
+//重置選項
+const reset = () => {
+  InpRefPeol.value = ''
+  InpRefWhereGo.value = ''
+  isCheckStart.value = ''
+  isCheckedEnd.value = ''
+  InpRefStart.value = ''
+  InpRefStartData.value = ''
+  InpRefEnd.value = ''
+  InpRefEndData.value = ''
+  StartChecked.value = false
+  EndChecked.value = false
+  left.value = 0
+}
+const PeolData = (n) => {
+  InpRefPeol.value = n.target.textContent
+  numShow.value = false
+}
 </script>
 <template>
-  <div>
+  <div class="inp-text">
+    <input
+      v-model="InpRefWhereGo"
+      class="inputTest"
+      type="text"
+      placeholder="想去哪裡呢"
+    />
     <input
       v-model="InpRefStart"
       class="inputTest"
       type="text"
-      placeholder="出發日期 年/月/日"
-    /><input
+      readonly="readonly"
+      placeholder="出發日期"
+    />
+    <input
       v-model="InpRefEnd"
       class="inputTest"
-      placeholder="結束日期 年/月/日"
+      readonly="readonly"
+      placeholder="結束日期"
       type="text"
     />
+    <input
+      v-model="InpRefPeol"
+      class="inputTest"
+      readonly="readonly"
+      placeholder="選擇人數"
+      type="text"
+      @click="numShow = !numShow"
+    />
+    <div class="num-box" v-show="numShow">
+      <p v-for="(item, index) in 10" :key="index" @click="PeolData">
+        {{ index + 1 }}
+      </p>
+    </div>
+    <button @click="reset" class="input-btn">重置</button>
+    <button class="input-btn">搜尋</button>
   </div>
   <div class="btn-Relative">
     <button class="btnLeft" @click="ChangeLeft(435)">〈</button>
@@ -175,8 +220,24 @@ const GetInputData = (item) => {
               @click="GetInputData(item)"
               class="datebox"
               :class="{
-                StartChecked: item.id === isCheckStart,
-                EndChecked: item.id === isCheckedEnd
+                //AI筆記:
+                //在Vue模板中，如果你没有明確地為某個元素或組件綁定特定的屬性或數據，
+                // Vue會將該元素的類別和屬性繼承到當前組件的數據中。
+                // 這可能會導致模板中未明確定義的屬性或類別也會被渲染，
+                // 具體渲染效果取決於你組件的數據狀態。
+                // 在你的代碼中，你使用了v-for指令來遍歷DateArrayRef數組，
+                // 但其中一些項目並未與具體的日期數據綁定，因此它們會繼承StartChecked和EndChecked類別。
+                // 這是因為在v-for循環中，Vue會儘量渲染所有的項目，即使某些項目在數據中未明確定義。
+                // 當你未為這些項目提供特定數據時，Vue會默認為它們創建數據，將它們視為未定義的數據項目，
+                // 因此它們會繼承組件上已定義的屬性或類別。
+                // 如果你希望這些空格子不繼承StartChecked和EndChecked類別，
+                // 你可以在v-for中添加條件來檢查是否為有效日期數據，
+                // 只有在日期數據可用時才應用StartChecked和EndChecked類別。
+                // 這裡，item.id === isCheckStart && item.id 和 item.id === isCheckedEnd && item.id
+                // 條件確保只有在item.id存在並與isCheckStart或isCheckedEnd匹配時才應用相應的類別。
+                // 這將防止空格子繼承這些類別，因為它們的item.id為undefined。
+                StartChecked: item.id === isCheckStart && item.id,
+                EndChecked: item.id === isCheckedEnd && item.id
               }"
               v-for="(item, index) in items"
               :key="index"
@@ -197,7 +258,7 @@ const GetInputData = (item) => {
   padding-left: 10px;
   margin-left: 10px;
   margin-bottom: 10px;
-  width: 425px;
+  width: 165px;
   height: 40px;
   font-size: 20px;
   border-radius: 10px;
@@ -323,5 +384,49 @@ const GetInputData = (item) => {
 .btnRight:hover {
   background-color: #1e87d7;
   transition: background-color 0.3s ease;
+}
+/* 搜索框的按鈕 */
+.input-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-left: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  background-color: #3498db;
+  color: #fff;
+  border: 2px solid #2980b9;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.input-btn:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+.num-box {
+  width: 165px;
+  background-color: #fff;
+  top: 45px;
+  border-radius: 10px;
+  left: 535px;
+  text-align: center;
+  position: absolute;
+  z-index: 10;
+}
+.num-box p {
+  margin: 10px 0px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.num-box p:hover {
+  margin: 10px 0px;
+  font-size: 20px;
+  box-shadow: 0px 0px 10px;
+  cursor: pointer;
 }
 </style>

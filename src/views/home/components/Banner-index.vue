@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { GetBannerBcak } from '@/api/home.js'
 import Calendar from '@/components/Calendar-index.vue'
 const ChangePageNum = ref(0)
-const show = ref(false)
+const show = ref(true)
 const Pic = ref()
 const useBannerBcak = async () => {
   const { data } = await GetBannerBcak()
@@ -32,11 +32,12 @@ useBannerBcak()
     </transition-group>
     <div class="gotravel" v-if="show">
       <h1>有多久沒出門旅行</h1>
-      <h2>現在就來趟旅程吧</h2>
-      <button @click="show = !show" class="btn">開始旅程</button>
+      <h2>不如現在就走</h2>
+      <button @click="show = !show" class="btn">出發</button>
     </div>
     <div class="test-box" v-else>
       <Calendar></Calendar>
+      <br />
       <button @click="show = !show" class="btn">再想想</button>
     </div>
   </div>
@@ -73,7 +74,10 @@ useBannerBcak()
 }
 .gotravel {
   color: #fff;
-  font-size: 100px;
+  font-size: 40px;
+  top: 35%;
+  left: 10%;
+  position: absolute;
 }
 .test-box {
   top: 35%;
