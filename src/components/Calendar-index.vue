@@ -15,12 +15,15 @@ const GetDate = (Year, Month, index) => {
   //取得下個月的回推這個月的最後一天(獲得當月總共有幾天)
   const GetMonLastDay = new Date(Year, Month, 0).getDate()
   // 新增日期資料為空共計6個禮拜42天
-  const DateArray = Array.from({ length: 42 }, (_, index) => [index])
+  const DateArray = Array.from({ length: 42 }, (_, index) => [index + 1])
   // 將為空的資料儲存到Ref
   DateArrayRef.value[index] = DateArray
   // 將數據從每個月的第一天開始導入 遍歷推進ref
   for (let i = 1; i <= GetMonLastDay; i++) {
     const ref = {
+      id: `${Year}${Month.toString().padStart(2, '0')}${i
+        .toString()
+        .padStart(2, '0')}`,
       year: Year,
       mon: Month,
       date: i
@@ -52,39 +55,67 @@ const ChangeLeft = (num) => {
   left.value = newlaft
 }
 //點擊改變input裡數值
+const isCheckStart = ref()
+const isCheckedEnd = ref()
 const InpRefStart = ref()
 const InpRefStartData = ref()
 const InpRefEnd = ref()
 const InpRefEndData = ref()
 const StartChecked = ref(false)
 const EndChecked = ref(false)
-const GetData = (item) => {
-  const { year, mon, date } = item
+const GetInputData = (item) => {
+  const { year, mon, date, id } = item
+  console.log(item)
+  //第一層判斷(是否點到空的區域)
   if (year === undefined && mon === undefined && date === undefined) return
   const checkedDay = [year, mon, date].join('/')
-  const checkedData = `${year}${mon.toString().padStart(2, '0')}${date
-    .toString()
-    .padStart(2, '0')}`
-
-  if (StartChecked.value === true) {
-    if (EndChecked.value === true) {
-      if (InpRefStartData.value > checkedData) {
-        alert('出發日期不能大於結束日期')
+  const checkedData = id
+  // 第一層判斷 (判斷開始日期是否有值)
+  if (StartChecked.value) {
+    //第二層判斷(是否選到出發日 選中出發日就重製)
+    if (InpRefStartData.value === checkedData) {
+      InpRefStart.value = ''
+      InpRefStartData.value = ''
+      InpRefEndData.value = ''
+      InpRefEnd.value = ''
+      isCheckStart.value = ''
+      isCheckedEnd.value = ''
+      StartChecked.value = false
+      EndChecked.value = false
+      // 第二層判斷(是否選到 出發天的前面日子)
+    } else if (InpRefStartData.value > checkedData) {
+      InpRefStart.value = checkedDay
+      InpRefStartData.value = checkedData
+      isCheckStart.value = id
+    } else {
+      // 第三層判斷(結束日是否有值 有值就進入判斷 沒值就傳入值)
+      if (EndChecked.value) {
+        // 第四層判斷(是否選到一樣的結束日)
+        if (InpRefEndData.value === checkedData) {
+          // 選中同樣的結束日將值清空
+          InpRefEnd.value = ''
+          InpRefEndData.value = ''
+          isCheckedEnd.value = ''
+          EndChecked.value = false
+          // 如果選中其他值，就將值傳入
+        } else {
+          InpRefEnd.value = checkedDay
+          InpRefEndData.value = checkedData
+          EndChecked.value = true
+          isCheckedEnd.value = id
+        }
       } else {
         InpRefEnd.value = checkedDay
         InpRefEndData.value = checkedData
+        EndChecked.value = true
+        isCheckedEnd.value = id
       }
-    } else {
-      InpRefEnd.value = checkedDay
-      InpRefEndData.value = checkedData
-      EndChecked.value = true
     }
-  } else {
-    if (StartChecked.value === false && EndChecked.value === false)
-      InpRefStart.value = checkedDay
-    console.log(StartChecked.value)
+  } else if (StartChecked.value === false && EndChecked.value === false) {
+    InpRefStart.value = checkedDay
     InpRefStartData.value = checkedData
     StartChecked.value = true
+    isCheckStart.value = id
   }
 }
 </script>
@@ -141,8 +172,12 @@ const GetData = (item) => {
           </thead>
           <tbody class="ManthBox">
             <tr
-              @click="GetData(item)"
+              @click="GetInputData(item)"
               class="datebox"
+              :class="{
+                StartChecked: item.id === isCheckStart,
+                EndChecked: item.id === isCheckedEnd
+              }"
               v-for="(item, index) in items"
               :key="index"
             >
@@ -210,6 +245,28 @@ const GetData = (item) => {
   width: 60px;
   height: 30px;
   box-sizing: border-box;
+  display: flex;
+  margin: auto;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.StartChecked {
+  border: 1px solid rgb(225, 225, 225);
+  width: 60px;
+  height: 30px;
+  box-sizing: border-box;
+  background-color: #1e87d7;
+  display: flex;
+  margin: auto;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.EndChecked {
+  border: 1px solid rgb(225, 225, 225);
+  width: 60px;
+  height: 30px;
+  box-sizing: border-box;
+  background-color: #386281;
   display: flex;
   margin: auto;
   border-radius: 10px;

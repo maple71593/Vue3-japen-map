@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     Calendar: typeof import('./src/components/calendar.vue')['default']
     CalendarIndex: typeof import('./src/components/Calendar-index.vue')['default']
+    copy: typeof import('./src/components/Calendar-index copy.vue')['default']
     'Data.index': typeof import('./src/components/data.index.vue')['default']
     DataIndex: typeof import('./src/components/Data-Index.vue')['default']
     ElCalendar: typeof import('element-plus/es')['ElCalendar']
