@@ -1,111 +1,41 @@
-<script>
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import 'swiper/css'
-import 'swiper/css/effect-coverflow'
-import 'swiper/css/pagination'
-import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules'
+<script setup>
+import { ref, defineProps, computed } from 'vue'
 import { GetCardPages } from '@/api/home.js'
-import { ref } from 'vue'
-export default {
-  components: {
-    Swiper,
-    SwiperSlide
-  },
-  props: ['scrollRef'],
-  computed: {
-    BannerBar() {
-      return this.scrollRef > 250
-    }
-  },
-  setup() {
-    const CardPages = ref()
-    const uesCardPages = async () => {
-      const { data } = await GetCardPages()
-      CardPages.value = data
-    }
-    uesCardPages()
-    return {
-      CardPages,
-      modules: [EffectCoverflow, Pagination, Autoplay]
-    }
-  }
+//獲取本地資訊圖片(資料留存參考 已改axios獲取資料)
+// const changeIMG = (item) => {
+//   const url = new URL(item, import.meta.url).href
+//   return url
+// }
+const CardPages = ref()
+const uesCardPages = async () => {
+  const { data } = await GetCardPages()
+  CardPages.value = data
 }
+//判斷父組件傳遞滾動data是否達到指定值
+uesCardPages()
+const scrollRef = defineProps(['scrollRef'])
+const BannerBar = computed(() => scrollRef.scrollRef > 250)
+const noActivated = computed(() => scrollRef.scrollRef > 350)
 </script>
+
 <template>
   <div class="content">
     <div class="content-p" :class="{ contentp: BannerBar }">精選旅程</div>
     <div class="content-after" :class="{ contentafter: BannerBar }"></div>
-    <swiper
-      :spaceBetween="30"
-      :centeredSlides="true"
-      :effect="'coverflow'"
-      :autoplay="{
-        delay: 2500,
-        disableOnInteraction: false
-      }"
-      :grabCursor="true"
-      :slidesPerView="'auto'"
-      :coverflowEffect="{
-        rotate: 50,
-        stretch: 0,
-        depth: 100,
-        modifier: 1,
-        slideShadows: true
-      }"
-      :pagination="true"
-      :modules="modules"
-      class="mySwiper"
-    >
-      <SwiperSlide v-for="(item, index) in CardPages" :key="index">
+    <div class="card">
+      <div
+        class="card-page"
+        :class="{ cardpage: noActivated }"
+        v-for="(item, index) in CardPages"
+        :key="index"
+      >
         <h3 class="card-page-h3">{{ item.title }}</h3>
         <img :src="item.imageSrc" alt="" />
-      </SwiperSlide>
-    </swiper>
+      </div>
+    </div>
   </div>
 </template>
-
 <style>
-#app {
-  height: 100%;
-}
-html,
-body {
-  position: relative;
-  height: 100%;
-}
-
-body {
-  background: #eee;
-  font-family:
-    Helvetica Neue,
-    Helvetica,
-    Arial,
-    sans-serif;
-  font-size: 14px;
-  color: #000;
-  margin: 0;
-  padding: 0;
-}
-
-.swiper {
-  width: 100%;
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
-
-.swiper-slide {
-  background-position: center;
-  background-size: cover;
-  width: 300px;
-  height: 300px;
-}
-
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-}
 .content {
   width: 1200px;
   margin-top: 30px;

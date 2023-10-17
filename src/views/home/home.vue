@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-// import japenMap from '@/components/JapenMap.vue'
+// import JapenMapcopy from '@/views/home/components/JapenMap-copy.vue'
+import japenMap from '@/views/home/components/JapenMap.vue'
 import Header from '@/views/home/components/header-index.vue'
 import Banner from '@/views/home/components/Banner-index.vue'
 import Content from '@/views/home/components/Content-index.vue'
@@ -21,13 +22,12 @@ onMounted(() => {
 
 <template>
   <div>
-    <video autoplay loop muted playsinline id="background-video">
-      <source src="@/assets/umi2.mp4" type="video/mp4" />
-    </video>
     <Header :scrollRef="scrollRef"></Header>
     <Banner></Banner>
     <Content :scrollRef="scrollRef"></Content>
     <Main :scrollRef="scrollRef"></Main>
+    <japenMap></japenMap>
+    <!-- <JapenMapcopy></JapenMapcopy> -->
   </div>
 </template>
 
