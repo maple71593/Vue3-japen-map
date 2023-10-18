@@ -33,8 +33,10 @@ export default {
 </script>
 <template>
   <div class="content">
-    <div class="content-p" :class="{ contentp: BannerBar }">精選旅程</div>
-    <div class="content-after" :class="{ contentafter: BannerBar }"></div>
+    <div>
+      <div class="content-p" :class="{ contentp: BannerBar }">精選旅程</div>
+      <div class="content-after" :class="{ contentafter: BannerBar }"></div>
+    </div>
     <swiper
       :spaceBetween="30"
       :centeredSlides="true"
@@ -88,7 +90,7 @@ body {
 }
 
 .swiper {
-  width: 100%;
+  width: 70%;
   padding-top: 50px;
   padding-bottom: 50px;
 }
@@ -113,6 +115,7 @@ body {
   padding-top: 30px;
   text-align: left;
   border-radius: 30px;
+  display: flex;
 }
 
 /* 控制文字標題 */
@@ -125,7 +128,7 @@ body {
   left: -50px;
   position: relative;
   opacity: 0;
-  transition: 1s;
+  transition: 2s;
 }
 .contentp {
   color: rgb(72, 72, 73);

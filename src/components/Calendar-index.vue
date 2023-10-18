@@ -63,61 +63,53 @@ const InpRefStart = ref()
 const InpRefStartData = ref()
 const InpRefEnd = ref()
 const InpRefEndData = ref()
-const StartChecked = ref(false)
-const EndChecked = ref(false)
 const numShow = ref(false)
+// 判斷點到的數值
 const GetInputData = (item) => {
   const { year, mon, date, id } = item
-  //第一層判斷(是否點到空的區域)
+  //第一層判斷(是否點到空的區域與過去的日期)
   if (year === undefined && mon === undefined && date === undefined) return
   if (year <= Year && mon <= Month && date < NowDate) return
   const checkedDay = [year, mon, date].join('/')
-  const checkedData = id
   // 第一層判斷 (判斷開始日期是否有值)
-  if (StartChecked.value) {
+  if (InpRefStart.value) {
     //第二層判斷(是否選到出發日 選中出發日就重製)
-    if (InpRefStartData.value === checkedData) {
+    if (InpRefStartData.value === id) {
       InpRefStart.value = ''
       InpRefStartData.value = ''
       InpRefEndData.value = ''
       InpRefEnd.value = ''
       isCheckStart.value = ''
       isCheckedEnd.value = ''
-      StartChecked.value = false
-      EndChecked.value = false
       // 第二層判斷(是否選到 出發天的前面日子)
-    } else if (InpRefStartData.value > checkedData) {
+    } else if (InpRefStartData.value > id) {
       InpRefStart.value = checkedDay
-      InpRefStartData.value = checkedData
+      InpRefStartData.value = id
       isCheckStart.value = id
     } else {
       // 第三層判斷(結束日是否有值 有值就進入判斷 沒值就傳入值)
-      if (EndChecked.value) {
+      if (InpRefEnd.value) {
         // 第四層判斷(是否選到一樣的結束日)
-        if (InpRefEndData.value === checkedData) {
+        if (InpRefEndData.value === id) {
           // 選中同樣的結束日將值清空
           InpRefEnd.value = ''
           InpRefEndData.value = ''
           isCheckedEnd.value = ''
-          EndChecked.value = false
           // 如果選中其他值，就將值傳入
         } else {
           InpRefEnd.value = checkedDay
-          InpRefEndData.value = checkedData
-          EndChecked.value = true
+          InpRefEndData.value = id
           isCheckedEnd.value = id
         }
       } else {
         InpRefEnd.value = checkedDay
-        InpRefEndData.value = checkedData
-        EndChecked.value = true
+        InpRefEndData.value = id
         isCheckedEnd.value = id
       }
     }
-  } else if (StartChecked.value === false && EndChecked.value === false) {
+  } else {
     InpRefStart.value = checkedDay
-    InpRefStartData.value = checkedData
-    StartChecked.value = true
+    InpRefStartData.value = id
     isCheckStart.value = id
   }
 }
@@ -131,10 +123,9 @@ const reset = () => {
   InpRefStartData.value = ''
   InpRefEnd.value = ''
   InpRefEndData.value = ''
-  StartChecked.value = false
-  EndChecked.value = false
   left.value = 0
 }
+// 點擊人數設定
 const PeolData = (n) => {
   InpRefPeol.value = n.target.textContent
   numShow.value = false
@@ -194,6 +185,9 @@ const PeolData = (n) => {
         <table class="tablebox">
           <thead class="ManthBox">
             <tr>
+              <div>日</div>
+            </tr>
+            <tr>
               <div>一</div>
             </tr>
             <tr>
@@ -210,9 +204,6 @@ const PeolData = (n) => {
             </tr>
             <tr>
               <div>六</div>
-            </tr>
-            <tr>
-              <div>日</div>
             </tr>
           </thead>
           <tbody class="ManthBox">
@@ -237,7 +228,10 @@ const PeolData = (n) => {
                 // 條件確保只有在item.id存在並與isCheckStart或isCheckedEnd匹配時才應用相應的類別。
                 // 這將防止空格子繼承這些類別，因為它們的item.id為undefined。
                 StartChecked: item.id === isCheckStart && item.id,
-                EndChecked: item.id === isCheckedEnd && item.id
+                EndChecked: item.id === isCheckedEnd && item.id,
+                StartBeforeDay:
+                  item.year <= Year && item.mon <= Month && item.date < NowDate,
+                BetweenChecked: item.id > isCheckStart && item.id < isCheckedEnd
               }"
               v-for="(item, index) in items"
               :key="index"
@@ -328,6 +322,29 @@ const PeolData = (n) => {
   height: 30px;
   box-sizing: border-box;
   background-color: #386281;
+  display: flex;
+  margin: auto;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.BetweenChecked {
+  border: 1px solid rgb(225, 225, 225);
+  width: 60px;
+  height: 30px;
+  box-sizing: border-box;
+  background-color: #e95b5b;
+  display: flex;
+  margin: auto;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.StartBeforeDay {
+  border: 1px solid rgb(225, 225, 225);
+  color: rgb(224, 161, 161);
+  width: 60px;
+  height: 30px;
+  box-sizing: border-box;
+  background-color: #e87b7b;
   display: flex;
   margin: auto;
   border-radius: 10px;

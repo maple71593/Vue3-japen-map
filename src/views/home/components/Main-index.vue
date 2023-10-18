@@ -45,10 +45,6 @@ useMasterPic()
 <template>
   <div class="main">
     <div class="main-box" :class="{ mainbox: Mixshow }">
-      <div>
-        <div class="content-p" :class="{ contentp: Mixshow }">專業團隊</div>
-        <div class="content-after" :class="{ contentafter: Mixshow }"></div>
-      </div>
       <div class="master" v-for="item in pic" :key="item.id">
         <div class="master-testBox">
           <h2>{{ item.name }}</h2>
@@ -59,6 +55,10 @@ useMasterPic()
           <p>{{ item.test }}</p>
         </div>
         <img :src="item.img" alt="" />
+      </div>
+      <div>
+        <div class="content-p" :class="{ contentp: Mixshow }">專業團隊</div>
+        <div class="content-after" :class="{ contentafter: Mixshow }"></div>
       </div>
     </div>
   </div>
