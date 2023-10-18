@@ -1,7 +1,8 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 // import JapenMapcopy from '@/views/home/components/JapenMap-copy.vue'
-import japenMap from '@/views/home/components/JapenMap.vue'
+import ContentIndex from '@/views/home/components/Content-2-index.vue'
+import Footer from '@/views/home/components/Footer-index.vue'
 import Header from '@/views/home/components/header-index.vue'
 import Banner from '@/views/home/components/Banner-index.vue'
 import Content from '@/views/home/components/Content-index.vue'
@@ -25,9 +26,9 @@ onMounted(() => {
     <Header :scrollRef="scrollRef"></Header>
     <Banner></Banner>
     <Content :scrollRef="scrollRef"></Content>
+    <ContentIndex :scrollRef="scrollRef"></ContentIndex>
     <Main :scrollRef="scrollRef"></Main>
-    <japenMap></japenMap>
-    <!-- <JapenMapcopy></JapenMapcopy> -->
+    <Footer></Footer>
   </div>
 </template>
 
@@ -49,22 +50,5 @@ input:focus {
   width: 1280px;
   display: flex;
   margin: auto;
-}
-/* html,
-body {
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-} */
-
-#background-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-  opacity: 0.5;
 }
 </style>

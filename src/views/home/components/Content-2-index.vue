@@ -1,11 +1,6 @@
 <script setup>
 import { ref, defineProps, computed } from 'vue'
 import { GetCardPages } from '@/api/home.js'
-//獲取本地資訊圖片(資料留存參考 已改axios獲取資料)
-// const changeIMG = (item) => {
-//   const url = new URL(item, import.meta.url).href
-//   return url
-// }
 const CardPages = ref()
 const uesCardPages = async () => {
   const { data } = await GetCardPages()
@@ -14,29 +9,29 @@ const uesCardPages = async () => {
 //判斷父組件傳遞滾動data是否達到指定值
 uesCardPages()
 const scrollRef = defineProps(['scrollRef'])
-const BannerBar = computed(() => scrollRef.scrollRef > 250)
-const noActivated = computed(() => scrollRef.scrollRef > 350)
+const BannerBar = computed(() => scrollRef.scrollRef > 800)
+const noActivated = computed(() => scrollRef.scrollRef > 900)
 </script>
 
 <template>
-  <div class="content">
-    <div class="content-p" :class="{ contentp: BannerBar }">精選旅程</div>
-    <div class="content-after" :class="{ contentafter: BannerBar }"></div>
-    <div class="card">
+  <div class="content2">
+    <div class="content2-p" :class="{ contentp: BannerBar }">想去哪裡</div>
+    <div class="content2-after" :class="{ contentafter: BannerBar }"></div>
+    <div class="card2">
       <div
-        class="card-page"
+        class="card2-page"
         :class="{ cardpage: noActivated }"
         v-for="(item, index) in CardPages"
         :key="index"
       >
-        <h3 class="card-page-h3">{{ item.title }}</h3>
+        <h3 class="card2-page-h3">{{ item.title }}</h3>
         <img :src="item.imageSrc" alt="" />
       </div>
     </div>
   </div>
 </template>
 <style>
-.content {
+.content2 {
   width: 1200px;
   margin-top: 30px;
   margin-bottom: 100px;
@@ -46,7 +41,7 @@ const noActivated = computed(() => scrollRef.scrollRef > 350)
 }
 
 /* 控制文字標題 */
-.content-p {
+.content2-p {
   color: rgb(72, 72, 73);
   font-size: 50px;
   font-weight: 1000;
@@ -70,7 +65,7 @@ const noActivated = computed(() => scrollRef.scrollRef > 350)
 }
 
 /* 控制文字標題下方假裝的偽元素 ()*/
-.content-after {
+.content2-after {
   width: 1%;
   height: 1px;
   background-color: brown;
@@ -84,13 +79,13 @@ const noActivated = computed(() => scrollRef.scrollRef > 350)
   background-color: brown;
 }
 /* 卡片盒子 */
-.card {
+.card2 {
   width: 1200px;
   display: flex;
   flex-wrap: wrap;
 }
 /* 卡片控制 */
-.card-page {
+.card2-page {
   width: 280px;
   margin: 10px;
   font-size: 20px;
@@ -126,21 +121,21 @@ const noActivated = computed(() => scrollRef.scrollRef > 350)
   position: relative;
 }
 /* 卡片標題文字 */
-.card-page-h3 {
+.card2-page-h3 {
   position: absolute;
   font-size: 50px;
   color: rgb(193, 193, 193);
   transition: 0.2s;
   text-shadow: 1px 1px 1px black;
 }
-.cardpage:hover .card-page-h3 {
+.cardpage:hover .card2-page-h3 {
   position: absolute;
   font-size: 50px;
   color: rgb(227, 227, 227);
   text-shadow: 1px 1px 10px black;
 }
 /* 卡片圖片控制 */
-.card-page img {
+.card2-page img {
   width: 100%;
   height: 100%;
   border-radius: 10px;

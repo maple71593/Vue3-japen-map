@@ -61,6 +61,10 @@ export default {
       <SwiperSlide v-for="(item, index) in CardPages" :key="index">
         <h3 class="card-page-h3">{{ item.title }}</h3>
         <img :src="item.imageSrc" alt="" />
+        <div class="card-page-text">
+          <h3>{{ item.content }}</h3>
+          <h2>{{ item.amount }}</h2>
+        </div>
       </SwiperSlide>
     </swiper>
   </div>
@@ -156,61 +160,59 @@ body {
   margin-bottom: 10px;
   background-color: brown;
 }
-/* 卡片盒子 */
-.card {
-  width: 1200px;
-  display: flex;
-  flex-wrap: wrap;
-}
-/* 卡片控制 */
-.card-page {
-  width: 280px;
-  margin: 10px;
-  font-size: 20px;
-  text-shadow: 10px;
-  background-color: rgb(198, 198, 198);
-  border-radius: 10px;
-  bottom: -50px;
-  right: 0px;
-  position: relative;
-  opacity: 0;
-  transition: 1.3s ease-out;
-}
-.cardpage {
-  width: 280px;
-  margin: 10px;
-  font-size: 20px;
-  text-shadow: 10px;
-  border-radius: 10px;
-  bottom: 0px;
-  right: 0px;
-  opacity: 1;
-  position: relative;
-}
-/* 控制卡片滑鼠靠近 */
-.cardpage:hover {
-  width: 280px;
-  margin: 10px;
-  font-size: 20px;
-  text-shadow: 10px;
-  border-radius: 10px;
-  bottom: 7px;
-  right: 5px;
-  position: relative;
-}
 /* 卡片標題文字 */
 .card-page-h3 {
   position: absolute;
   font-size: 50px;
-  color: rgb(193, 193, 193);
+  color: rgb(237, 237, 237);
   transition: 0.2s;
   text-shadow: 1px 1px 1px black;
 }
-.cardpage:hover .card-page-h3 {
+.card-page-text {
+  width: 100%;
+  height: 40%;
+  font-size: 13px;
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 1px black;
+  bottom: 0;
+  left: 0;
+  border-radius: 0px 0px 10px 10px;
+  background: linear-gradient(
+    to bottom,
+    rgba(200, 200, 200, 0.5),
+    rgba(255, 255, 255, 1)
+  );
   position: absolute;
-  font-size: 50px;
-  color: rgb(227, 227, 227);
-  text-shadow: 1px 1px 10px black;
+}
+.card-page-text h2 {
+  width: 100%;
+  height: 40%;
+  font-size: 30px;
+  color: rgb(255, 0, 0);
+  bottom: 0;
+  left: 1;
+  text-align: right;
+  position: absolute;
+}
+.card-page-text h2::before {
+  content: '$';
+  width: 100%;
+  height: 40%;
+  font-size: 30px;
+  color: rgb(255, 0, 0);
+  bottom: 0;
+  left: 1;
+  text-align: right;
+}
+.card-page-text h2::after {
+  content: '起';
+  width: 100%;
+  height: 40%;
+  font-size: 25px;
+  color: rgb(0, 0, 0);
+  bottom: 0;
+  left: 1;
+  text-align: right;
 }
 /* 卡片圖片控制 */
 .card-page img {
