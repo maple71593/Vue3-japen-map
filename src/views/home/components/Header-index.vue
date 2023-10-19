@@ -5,12 +5,12 @@ const show = computed(() => scrollRef.scrollRef > 800)
 </script>
 <template>
   <div class="header" :class="{ headREer: show }">
-    <h4 class="logo">我是logo</h4>
+    <h4 class="logo" @click="$router.push('/')">宏宏旅行社</h4>
     <ul>
-      <li><a href="#">加入我們</a></li>
+      <li><a href="#">旅遊諮詢</a></li>
       <li><a href="#">精選旅程</a></li>
       <li><a href="#">購物車</a></li>
-      <li><a href="#">會員中心</a></li>
+      <li><a href="#">會員登入</a></li>
     </ul>
   </div>
 </template>
@@ -45,6 +45,7 @@ const show = computed(() => scrollRef.scrollRef > 800)
   text-align: center;
   font-size: 50px;
   color: rgb(255, 255, 255);
+  cursor: pointer;
 }
 
 .header ul li a {

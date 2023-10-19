@@ -95,6 +95,9 @@ const GetInputData = (item) => {
           InpRefEnd.value = ''
           InpRefEndData.value = ''
           isCheckedEnd.value = ''
+          InpRefStart.value = checkedDay
+          InpRefStartData.value = id
+          isCheckStart.value = id
           // 如果選中其他值，就將值傳入
         } else {
           InpRefEnd.value = checkedDay
@@ -132,120 +135,129 @@ const PeolData = (n) => {
 }
 </script>
 <template>
-  <div class="inp-text">
-    <input
-      v-model="InpRefWhereGo"
-      class="inputTest"
-      type="text"
-      placeholder="想去哪裡呢"
-    />
-    <input
-      v-model="InpRefStart"
-      class="inputTest"
-      type="text"
-      readonly="readonly"
-      placeholder="出發日期"
-    />
-    <input
-      v-model="InpRefEnd"
-      class="inputTest"
-      readonly="readonly"
-      placeholder="結束日期"
-      type="text"
-    />
-    <input
-      v-model="InpRefPeol"
-      class="inputTest"
-      readonly="readonly"
-      placeholder="選擇人數"
-      type="text"
-      @click="numShow = !numShow"
-    />
-    <div class="num-box" v-show="numShow">
-      <p v-for="(item, index) in 10" :key="index" @click="PeolData">
-        {{ index + 1 }}
-      </p>
+  <div class="AllCalender">
+    <div class="inp-text">
+      <input
+        v-model="InpRefWhereGo"
+        class="inputTest"
+        type="text"
+        placeholder="想去哪裡呢"
+      />
+      <input
+        v-model="InpRefStart"
+        class="inputTest"
+        type="text"
+        readonly="readonly"
+        placeholder="出發日期"
+      />
+      <input
+        v-model="InpRefEnd"
+        class="inputTest"
+        readonly="readonly"
+        placeholder="結束日期"
+        type="text"
+      />
+      <input
+        v-model="InpRefPeol"
+        class="inputTest"
+        readonly="readonly"
+        placeholder="選擇人數"
+        type="text"
+        @click="numShow = !numShow"
+      />
+      <div class="num-box" v-show="numShow">
+        <p v-for="(item, index) in 10" :key="index" @click="PeolData">
+          {{ index + 1 }}
+        </p>
+      </div>
+      <button @click="reset" class="input-btn">重置</button>
+      <button @click="$router.push('/search')" class="input-btn">搜尋</button>
     </div>
-    <button @click="reset" class="input-btn">重置</button>
-    <button class="input-btn">搜尋</button>
-  </div>
-  <div class="btn-Relative">
-    <button class="btnLeft" @click="ChangeLeft(435)">〈</button>
-    <button class="btnRight" @click="ChangeLeft(-435)">〉</button>
-  </div>
-  <div class="calenderCOM">
-    <div
-      class="calender"
-      :style="{ left: left + 'px' }"
-      v-for="(items, indexs) in DateArrayRef"
-      :key="indexs"
-    >
-      <div class="vforbox">
-        <h2>{{ items[15].year }}年{{ items[15].mon }}月</h2>
-        <table class="tablebox">
-          <thead class="ManthBox">
-            <tr>
-              <div>日</div>
-            </tr>
-            <tr>
-              <div>一</div>
-            </tr>
-            <tr>
-              <div>二</div>
-            </tr>
-            <tr>
-              <div>三</div>
-            </tr>
-            <tr>
-              <div>四</div>
-            </tr>
-            <tr>
-              <div>五</div>
-            </tr>
-            <tr>
-              <div>六</div>
-            </tr>
-          </thead>
-          <tbody class="ManthBox">
-            <tr
-              @click="GetInputData(item)"
-              class="datebox"
-              :class="{
-                //AI筆記:
-                //在Vue模板中，如果你没有明確地為某個元素或組件綁定特定的屬性或數據，
-                // Vue會將該元素的類別和屬性繼承到當前組件的數據中。
-                // 這可能會導致模板中未明確定義的屬性或類別也會被渲染，
-                // 具體渲染效果取決於你組件的數據狀態。
-                // 在你的代碼中，你使用了v-for指令來遍歷DateArrayRef數組，
-                // 但其中一些項目並未與具體的日期數據綁定，因此它們會繼承StartChecked和EndChecked類別。
-                // 這是因為在v-for循環中，Vue會儘量渲染所有的項目，即使某些項目在數據中未明確定義。
-                // 當你未為這些項目提供特定數據時，Vue會默認為它們創建數據，將它們視為未定義的數據項目，
-                // 因此它們會繼承組件上已定義的屬性或類別。
-                // 如果你希望這些空格子不繼承StartChecked和EndChecked類別，
-                // 你可以在v-for中添加條件來檢查是否為有效日期數據，
-                // 只有在日期數據可用時才應用StartChecked和EndChecked類別。
-                // 這裡，item.id === isCheckStart && item.id 和 item.id === isCheckedEnd && item.id
-                // 條件確保只有在item.id存在並與isCheckStart或isCheckedEnd匹配時才應用相應的類別。
-                // 這將防止空格子繼承這些類別，因為它們的item.id為undefined。
-                StartChecked: item.id === isCheckStart && item.id,
-                EndChecked: item.id === isCheckedEnd && item.id,
-                StartBeforeDay:
-                  item.year <= Year && item.mon <= Month && item.date < NowDate,
-                BetweenChecked: item.id > isCheckStart && item.id < isCheckedEnd
-              }"
-              v-for="(item, index) in items"
-              :key="index"
-            >
-              <td>{{ item.date }}</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="btn-Relative">
+      <button class="btnLeft" @click="ChangeLeft(435)">〈</button>
+      <button class="btnRight" @click="ChangeLeft(-435)">〉</button>
+    </div>
+    <div class="calenderCOM">
+      <div
+        class="calender"
+        :style="{ left: left + 'px' }"
+        v-for="(items, indexs) in DateArrayRef"
+        :key="indexs"
+      >
+        <div class="vforbox">
+          <h2>{{ items[15].year }}年{{ items[15].mon }}月</h2>
+          <table class="tablebox">
+            <thead class="ManthBox">
+              <tr>
+                <div>日</div>
+              </tr>
+              <tr>
+                <div>一</div>
+              </tr>
+              <tr>
+                <div>二</div>
+              </tr>
+              <tr>
+                <div>三</div>
+              </tr>
+              <tr>
+                <div>四</div>
+              </tr>
+              <tr>
+                <div>五</div>
+              </tr>
+              <tr>
+                <div>六</div>
+              </tr>
+            </thead>
+            <tbody class="ManthBox">
+              <tr
+                @click="GetInputData(item)"
+                class="datebox"
+                :class="{
+                  //AI筆記:
+                  //在Vue模板中，如果你没有明確地為某個元素或組件綁定特定的屬性或數據，
+                  // Vue會將該元素的類別和屬性繼承到當前組件的數據中。
+                  // 這可能會導致模板中未明確定義的屬性或類別也會被渲染，
+                  // 具體渲染效果取決於你組件的數據狀態。
+                  // 在你的代碼中，你使用了v-for指令來遍歷DateArrayRef數組，
+                  // 但其中一些項目並未與具體的日期數據綁定，因此它們會繼承StartChecked和EndChecked類別。
+                  // 這是因為在v-for循環中，Vue會儘量渲染所有的項目，即使某些項目在數據中未明確定義。
+                  // 當你未為這些項目提供特定數據時，Vue會默認為它們創建數據，將它們視為未定義的數據項目，
+                  // 因此它們會繼承組件上已定義的屬性或類別。
+                  // 如果你希望這些空格子不繼承StartChecked和EndChecked類別，
+                  // 你可以在v-for中添加條件來檢查是否為有效日期數據，
+                  // 只有在日期數據可用時才應用StartChecked和EndChecked類別。
+                  // 這裡，item.id === isCheckStart && item.id 和 item.id === isCheckedEnd && item.id
+                  // 條件確保只有在item.id存在並與isCheckStart或isCheckedEnd匹配時才應用相應的類別。
+                  // 這將防止空格子繼承這些類別，因為它們的item.id為undefined。
+                  StartChecked: item.id === isCheckStart && item.id,
+                  EndChecked: item.id === isCheckedEnd && item.id,
+                  StartBeforeDay:
+                    item.year <= Year &&
+                    item.mon <= Month &&
+                    item.date < NowDate,
+                  BetweenChecked:
+                    item.id > isCheckStart && item.id < isCheckedEnd
+                }"
+                v-for="(item, index) in items"
+                :key="index"
+              >
+                <td>{{ item.date }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style>
+.AllCalender {
+  width: 100vw;
+  max-width: 880px;
+}
 /* 處理input */
 .inputTest {
   box-sizing: border-box;
@@ -424,6 +436,9 @@ const PeolData = (n) => {
 .input-btn:hover {
   background-color: #2980b9;
   transform: translateY(-2px);
+}
+.inp-text {
+  position: relative;
 }
 .num-box {
   width: 165px;

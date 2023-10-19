@@ -18,7 +18,9 @@ declare module 'vue' {
     ElCalendar: typeof import('element-plus/es')['ElCalendar']
     ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
+    FakeHeader: typeof import('./src/components/Fake-Header.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SideComponents: typeof import('./src/components/Side-components.vue')['default']
   }
 }

@@ -8,7 +8,7 @@ const uesCardPages = async () => {
 }
 //判斷父組件傳遞滾動data是否達到指定值
 uesCardPages()
-const scrollRef = defineProps(['scrollRef'])
+const { scrollRef } = defineProps(['scrollRef'])
 const BannerBar = computed(() => scrollRef.scrollRef > 800)
 const noActivated = computed(() => scrollRef.scrollRef > 900)
 </script>

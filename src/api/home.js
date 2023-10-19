@@ -12,3 +12,7 @@ export const getMasterPic = () => request.get('http://localhost:3000/master')
 
 //獲得網路時間
 export const getTime = () => request.get('https://worldtimeapi.org/api/ip')
+
+//獲取搜尋資料
+export const getSecrchData = () =>
+  request.get('http://localhost:3000/SearchCard')

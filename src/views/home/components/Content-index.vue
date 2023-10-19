@@ -14,7 +14,7 @@ export default {
   props: ['scrollRef'],
   computed: {
     BannerBar() {
-      return this.scrollRef > 250
+      return this.scrollRef.scrollRef > 250
     }
   },
   setup() {
