@@ -18,15 +18,19 @@ import FakeHeader from '@/components/Fake-Header.vue'
     <!-- 第一個 -->
     <div class="box">
       <div class="box-1">
-        <img
-          src="../../../public/list-1/321-26-min.png"
-          style="width: 10vw"
-          alt=""
-        />
-        <div class="box-text">
-          <h2>義精緻、法優雅與日柔粹美學交鋒</h2>
-          <h2>三大酒店品牌</h2>
-          <h2>共譜人文與自然瑰麗棲居</h2>
+        <div>
+          <div>
+            <img
+              src="../../../public/list-1/321-26-min.png"
+              style="width: 10vw"
+              alt=""
+            />
+          </div>
+          <div class="box-text">
+            <h2>義精緻、法優雅與日柔粹美學交鋒</h2>
+            <h2>三大酒店品牌</h2>
+            <h2>共譜人文與自然瑰麗棲居</h2>
+          </div>
         </div>
       </div>
     </div>
@@ -38,13 +42,17 @@ import FakeHeader from '@/components/Fake-Header.vue'
     <!-- 第二個 -->
     <div class="box2">
       <div class="box-1">
-        <img
-          src="../../../public/list-1/資產-4-min.png"
-          style="width: 100%"
-          alt=""
-        />
-        <div class="box-text">
-          <h2>東京 寶格麗</h2>
+        <div>
+          <div>
+            <img
+              src="../../../public/list-1/資產-4-min.png"
+              style="width: 100%"
+              alt=""
+            />
+          </div>
+          <div class="box-text">
+            <h2>東京 寶格麗</h2>
+          </div>
         </div>
       </div>
     </div>
@@ -79,9 +87,10 @@ import FakeHeader from '@/components/Fake-Header.vue'
         <div>
           <img src="../../../public/list-1/box4-2.png" alt="" />
           <h1>客房 東京鎏金夜</h1>
-          <div style="width: 100%; height: 2px; background-color: #fe9c08">
-            米蘭首屈一指建築團隊ACPV操刀
-          </div>
+          <div
+            style="width: 100%; height: 2px; background-color: #fe9c08"
+          ></div>
+          <p>米蘭首屈一指建築團隊ACPV操刀</p>
           <p>8房型、98間房揉合羅馬與東京氣質</p>
           <p>Maxalto桌、Flexform扶手椅等</p>
           <p>義大利精品家具</p>
@@ -120,9 +129,87 @@ import FakeHeader from '@/components/Fake-Header.vue'
     <!-- 第七個 -->
     <div class="box7">
       <div class="box7-1">
-        <img src="../../../public/list-1/box7.png" alt="" />
-        <img src="../../../public/list-1/box7-2.png" alt="" />
-        <img src="../../../public/list-1/box7-1.png" alt="" />
+        <div>
+          <img src="../../../public/list-1/box7.png" alt="" />
+        </div>
+        <div>
+          <img src="../../../public/list-1/box7-2.png" alt="" />
+        </div>
+        <div><img src="../../../public/list-1/box7-1.png" alt="" /></div>
+      </div>
+    </div>
+    <!-- 第八個 -->
+    <div class="box8">
+      <div class="box8-1">
+        <h3>THE</h3>
+        <h3>HIRAMATSU</h3>
+        <h4>仙石原</h4>
+        <img src="../../../public/list-1/box8-1.png" alt="" />
+      </div>
+    </div>
+    <!-- 第九個 -->
+    <div class="box9">
+      <div class="box9-1">
+        <div>
+          <img src="../../../public/list-1/box9.png" alt="" />
+        </div>
+        <div class="box9-1-3">
+          <img src="../../../public//list-1/box9-1.png" alt="" />
+          <p>行家鍾愛法饌之宿</p>
+          <p>外輪山群峰競秀</p>
+          <p>瞭望箱根四時之美</p>
+          <p>大片玻璃觀景窗</p>
+          <p>感受仙石原的靈動婀娜</p>
+          <img src="../../../public/list-1/box9-2.png" alt="" />
+        </div>
+        <div>
+          <img
+            src="../../../public/list-1/box9-3.png"
+            style="width: 80%"
+            alt=""
+          />
+        </div>
+      </div>
+    </div>
+    <!-- 第十個 -->
+    <div class="box10">
+      <div class="box10-1">
+        <div><img src="../../../public/list-1/box10.png" alt="" /></div>
+        <div><img src="../../../public//list-1/box10-1.png" alt="" /></div>
+        <div class="box10-1-3">
+          <h1>箱根名湯</h1>
+          <h1>新姥子溫泉</h1>
+          <p>透明泉質具美容功效</p>
+          <p>全11室皆附半露天溫</p>
+          <p>泉天然源泉汨汨湧流</p>
+        </div>
+      </div>
+    </div>
+    <div class="box11">
+      <div class="box11-1">
+        <div class="box11-1-1">
+          <div>
+            <h4 style="font-size: 60px; color: rgb(177, 127, 91)">CUISINE</h4>
+            <div class="box11-1-1-2">
+              <p>法義料理翻玩和風</p>
+              <p>濃淡皆宜宛如藝品</p>
+              <p>料理長吉越謙二郎獨創流派</p>
+              <p>饕餮之士不遠千里而來</p>
+              <p>不受傳統日式旅館用餐時限</p>
+              <p>旅行更隨心所欲</p>
+            </div>
+          </div>
+          <div class="box11-1-1-2">
+            <h3 style="color: rgb(177, 127, 91); font-size: 40px">琉璃仙石</h3>
+            <h4 style="margin-top: 40px; font-size: 40px">喫嘗箱根自然風土</h4>
+          </div>
+        </div>
+        <div>
+          <img src="../../../public/list-1/box11.png" alt="" />
+        </div>
+        <div>
+          <img src="../../../public//list-1/box10-1.png" alt="" />
+        </div>
       </div>
     </div>
   </div>
@@ -137,16 +224,15 @@ import FakeHeader from '@/components/Fake-Header.vue'
   font-family: Arial, Helvetica, sans-serif;
 }
 .box {
-  margin: auto;
   width: 100vw;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-image: url('../../../public/list-1/20221116_200021_886eb28e_w1920.jpg');
   background-size: cover;
 }
 .box-1 {
-  padding-top: 10vh;
-  width: 20vw;
-  height: 10vh;
   color: rgb(255, 255, 255);
   text-align: center;
 }
@@ -162,11 +248,16 @@ import FakeHeader from '@/components/Fake-Header.vue'
 .box2 {
   width: 100vw;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-image: url('../../../public/list-1/jcr_content.jpg');
   background-size: cover;
 }
 .box3 {
-  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .box3-1 {
   width: 100vw;
@@ -187,7 +278,9 @@ import FakeHeader from '@/components/Fake-Header.vue'
   width: 100vw;
   height: 100vh;
   background-color: black;
-  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .box4-1 {
   display: flex;
@@ -235,10 +328,97 @@ import FakeHeader from '@/components/Fake-Header.vue'
 }
 .box7 {
   width: 100vw;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box7-1 {
+  display: flex;
+}
+.box7-1 div:nth-child(2) {
+  width: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+.box8 {
+  display: flex;
+  font-size: 50px;
+  color: aliceblue;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
   height: 100vh;
-  margin: auto;
+  background-image: url('../../../public/list-1/box8.jpg');
+  background-size: cover;
+}
+.box8-1 p,
+.box8-1 img {
+  margin-top: 40px;
+}
+.box9 {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box9-1 {
+  display: flex;
   text-align: center;
 }
-.box7-1 img:nth-child(2) {
+.box9-1 p {
+  font-size: 20px;
+  text-shadow: 1px 1px 3px rgb(163, 163, 163);
+  margin-top: 20px;
+}
+.box9-1-3 img:nth-child(7) {
+  margin-top: 40px;
+}
+.box10 {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 16, 8);
+}
+.box10-1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 23px;
+  text-align: center;
+  text-shadow: 1px 1px 3px rgb(32, 63, 0);
+  color: rgb(238, 238, 238);
+}
+.box10-1-3 {
+  margin: 0px 0px 0px 20px;
+}
+.box10-1-3 h1:nth-child(1)::before {
+  content: 'SPA';
+  font-family: Georgia, Times, Times;
+  font-size: 80px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: rgb(21, 235, 32);
+}
+.box11 {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box11-1 {
+  display: flex;
+}
+.box11-1-1 {
+  display: flex;
+  font-size: 30px;
+}
+.box11-1-1-2 {
+  writing-mode: vertical-rl;
 }
 </style>
