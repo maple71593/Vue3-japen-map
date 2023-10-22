@@ -1,7 +1,6 @@
 <script setup>
 import { useFirestore, useCollection } from 'vuefire'
 import { collection } from 'firebase/firestore'
-// import { db } from './../firebase/index.js'
 // import { useDocument } from 'vuefire'
 // import { doc } from 'firebase/firestore'
 const db = useFirestore()
@@ -10,7 +9,6 @@ const db = useFirestore()
 //   state: 'CA',
 //   country: 'USA'
 // })
-
 const todos = useCollection(collection(db, 'todos'))
 console.log(todos)
 

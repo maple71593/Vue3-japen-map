@@ -30,7 +30,8 @@ const router = createRouter({
         }
       ]
     },
-    { path: '/Search', component: () => import('@/views/search/index.vue') }
+    { path: '/Search', component: () => import('@/views/search/index.vue') },
+    { path: '/Login', component: () => import('@/views/Login/login-page.vue') }
   ]
 })
 
