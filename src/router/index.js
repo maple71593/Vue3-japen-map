@@ -23,6 +23,10 @@ const router = createRouter({
         {
           path: '/list-2',
           component: () => import('@/views/search/list-2.vue')
+        },
+        {
+          path: '/list-3',
+          component: () => import('@/views/search/list-3.vue')
         }
       ]
     },

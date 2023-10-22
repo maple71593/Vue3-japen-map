@@ -7,17 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    Calendar: typeof import('./src/components/calendar.vue')['default']
     CalendarIndex: typeof import('./src/components/Calendar-index.vue')['default']
-    copy: typeof import('./src/components/Calendar-index copy.vue')['default']
-    CounterIndex: typeof import('./src/components/Counter-index.vue')['default']
-    CounterVerilog: typeof import('./src/components/counter-verilog.vue')['default']
-    CountVerilog: typeof import('./src/components/Count-Verilog.vue')['default']
-    'Data.index': typeof import('./src/components/data.index.vue')['default']
-    DataIndex: typeof import('./src/components/Data-Index.vue')['default']
-    ElCalendar: typeof import('element-plus/es')['ElCalendar']
-    ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
-    ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     FakeHeader: typeof import('./src/components/Fake-Header.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

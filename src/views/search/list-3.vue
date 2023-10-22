@@ -1,5 +1,7 @@
-<script setup></script>
+<script setup>
+import test from './../test.vue'
+</script>
 <template>
-  <div></div>
+  <div><test></test></div>
 </template>
 <style></style>
