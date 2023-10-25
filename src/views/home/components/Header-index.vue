@@ -1,7 +1,12 @@
 <script setup>
 import { computed, defineProps } from 'vue'
+import { useUserStore } from '../../../stores'
 const scrollRef = defineProps(['scrollRef'])
 const show = computed(() => scrollRef.scrollRef > 800)
+const userStore = useUserStore()
+userStore.username
+userStore.userpic
+console.log(userStore.userpic, userStore.username)
 </script>
 <template>
   <div class="header" :class="{ headREer: show }">
@@ -11,6 +16,9 @@ const show = computed(() => scrollRef.scrollRef > 800)
       <li><a href="#">精選旅程</a></li>
       <li><a href="#">購物車</a></li>
       <li><a href="#">會員登入</a></li>
+      <!-- <li>
+        <a href="#"> {{ userStore.username }}</a>
+      </li> -->
     </ul>
   </div>
 </template>

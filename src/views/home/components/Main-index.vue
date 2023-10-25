@@ -2,7 +2,6 @@
 import { getMasterPic } from '@/api/home.js'
 import { computed, ref, defineProps } from 'vue'
 const { scrollRef } = defineProps(['scrollRef'])
-console.log(scrollRef.scrollRef)
 const Mixshow = computed(() => scrollRef.scrollRef > 1700)
 const pic = ref([])
 const useMasterPic = async () => {

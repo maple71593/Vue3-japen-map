@@ -2,11 +2,11 @@
 import { ref } from 'vue'
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  onAuthStateChanged
+  signInWithEmailAndPassword
 } from 'firebase/auth'
-import { useFirebaseAuth } from 'vuefire'
+import { useFirebaseAuth, getCurrentUser } from 'vuefire'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores'
 const show = ref(false)
 const auth = useFirebaseAuth()
 const email = ref('')
@@ -15,16 +15,8 @@ const errorCode = ref()
 const errorMessage = ref()
 const userErrMsg = ref()
 const PasswordErrMsg = ref()
-// 獲取用戶資訊
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const uid = user.uid
-    console.log(uid)
-    console.log(user)
-  } else {
-    // User is signed out
-  }
-})
+const getuser = getCurrentUser()
+console.log(getuser)
 
 // 解決更換註冊與登入頁面input還殘留的問題
 const ChangeShow = () => {
@@ -89,10 +81,12 @@ const useregister = () => {
 }
 // 登入
 const router = useRouter()
+const userstore = useUserStore()
 const useLogin = () => {
   signInWithEmailAndPassword(auth, email.value, password.value)
     .then(() => {
       alert('登入成功')
+      userstore.GetUserData()
       router.push('/')
     })
     .catch((error) => {
