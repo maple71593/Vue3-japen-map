@@ -1,4 +1,5 @@
 import { getFirestore, collection } from 'firebase/firestore'
+import { getStorage, ref } from 'firebase/storage'
 import { initializeApp } from 'firebase/app'
 import { VueFire, VueFireAuth } from 'vuefire'
 export const firebaseApp = initializeApp({
@@ -10,7 +11,9 @@ export const firebaseApp = initializeApp({
   appId: '1:80896090227:web:dc5814ea6761aac3848a06',
   measurementId: 'G-2SSX4HNBTW'
 })
-
+//儲存圖片
+const storage = getStorage(firebaseApp)
+export const storageRef = ref(storage)
 // used for the firestore refs
 export const db = getFirestore(firebaseApp)
 

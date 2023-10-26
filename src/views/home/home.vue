@@ -2,7 +2,6 @@
 import { onMounted, ref } from 'vue'
 import Header from '@/views/home/components/header-index.vue'
 import Side from '@//components/Side-components.vue'
-import { useFirebaseAuth } from 'vuefire'
 // 監聽滾動屬性 並附值給ref
 const scrollRef = ref()
 // 監聽屬性邏輯
@@ -10,9 +9,6 @@ const handleScroll = () => {
   const scrollY = window.scrollY
   scrollRef.value = scrollY
 }
-const auth = useFirebaseAuth()
-const user = auth.currentUser
-console.log(user)
 handleScroll()
 // 掛載監聽屬性
 onMounted(() => {

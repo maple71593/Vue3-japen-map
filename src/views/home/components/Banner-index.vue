@@ -87,7 +87,7 @@ useBannerBcak()
 .btn {
   display: inline-block;
   padding: 10px 20px;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: bold;
   text-align: center;
   text-decoration: none;
