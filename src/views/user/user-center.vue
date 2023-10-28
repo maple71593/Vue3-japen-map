@@ -1,14 +1,13 @@
 <script setup>
 import { useUserStore } from '../../stores'
 const useStore = useUserStore()
+const { username, phoneNum, email } = useStore
 </script>
 <template>
   <div class="user-center">
-    <p>姓名 : {{ useStore.dispalyname }}</p>
-    <p>email : {{ useStore.email }}</p>
-    <p>身分證字號 : {{ 123 }}</p>
-    <p>住址 : {{ 456 }}</p>
-    <p>電話 : {{ 789 }}</p>
+    <p>姓名 : {{ username }}</p>
+    <p>email : {{ email }}</p>
+    <p>電話 : {{ phoneNum }}</p>
   </div>
 </template>
 <style lang="scss" scoped>

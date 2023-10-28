@@ -43,6 +43,10 @@ const router = createRouter({
             {
               path: '/user/dataChange',
               component: () => import('@/views/user/user-userdataChange.vue')
+            },
+            {
+              path: '/user/ChangePic',
+              component: () => import('@/views/user/user-changepic.vue')
             }
           ]
         }
@@ -55,8 +59,6 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const useStore = useUserStore()
-  console.log(to)
-  console.log(useStore.token)
   if (useStore.token && to.path === '/login') {
     return '/user-page'
   }

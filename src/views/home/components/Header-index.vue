@@ -18,7 +18,8 @@ const toLogin = () => {
 }
 // 獲取用戶資訊
 const userStore = useUserStore()
-console.log(userStore.userpic, userStore.username, userStore.email)
+const { noUserpic, userpic, username, email, token } = userStore
+console.log(userpic, username, email)
 </script>
 <template>
   <div class="header" :class="{ headREer: show }">
@@ -30,7 +31,7 @@ console.log(userStore.userpic, userStore.username, userStore.email)
       <li><router-link :to="'/home'">精選旅程</router-link></li>
       <li><router-link :to="'/home'">購物車</router-link></li>
     </ul>
-    <div v-if="!userStore.token">
+    <div v-if="!token">
       <button @click="toLogin" class="btn">會員登入</button>
     </div>
     <div
@@ -40,7 +41,7 @@ console.log(userStore.userpic, userStore.username, userStore.email)
       @click="showUser = !showUser"
     >
       <div class="user-show">
-        <img src="../../../../public/paidasun.jpeg" alt="" />
+        <img :src="userpic ? userpic : noUserpic" alt="" />
       </div>
       <ul class="user-side-box">
         <li>
@@ -173,6 +174,7 @@ console.log(userStore.userpic, userStore.username, userStore.email)
   box-sizing: border-box;
   > div {
     width: 80px;
+    height: 80px;
     border-radius: 50%;
     overflow: hidden;
     margin-top: 10px;

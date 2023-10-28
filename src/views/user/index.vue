@@ -8,9 +8,12 @@ import fake from '@/components/fake-Header.vue'
       <ul>
         <li><router-link to="/user/center">會員中心</router-link></li>
         <li>
-          <router-link to="/user/passwordChange">修改個人資訊</router-link>
+          <router-link to="/user/dataChange">修改個人資訊</router-link>
         </li>
-        <li><router-link to="/user/dataChange">修改密碼</router-link></li>
+        <li>
+          <router-link to="/user/ChangePic">修改大頭照</router-link>
+        </li>
+        <li><router-link to="/user/passwordChange">修改密碼</router-link></li>
       </ul>
     </div>
     <div><router-view></router-view></div>
