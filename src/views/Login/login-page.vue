@@ -4,17 +4,18 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword
 } from 'firebase/auth'
-import { useFirebaseAuth, getCurrentUser } from 'vuefire'
+import { useFirebaseAuth, getCurrentUser, useFirestore } from 'vuefire'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores'
+import { doc, setDoc } from 'firebase/firestore'
 const show = ref(false)
 const auth = useFirebaseAuth()
 const email = ref('')
 const password = ref('')
-const errorCode = ref()
-const errorMessage = ref()
+const doublepassword = ref('')
 const userErrMsg = ref()
 const PasswordErrMsg = ref()
+const doublePasswordErrMsg = ref()
 const getuser = getCurrentUser()
 console.log(getuser)
 
@@ -25,11 +26,12 @@ const ChangeShow = () => {
   password.value = ''
   userErrMsg.value = ''
   PasswordErrMsg.value = ''
+  doublepassword.value = ''
 }
 // 較驗
 // 正則表達
 const emailRE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-const passwordRE = /^[a-zA-Z0-9]{6,12}$/
+const passwordRE = /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,12}$/
 //帳號較驗
 const userCheck = () => {
   if (email.value === '') {
@@ -52,31 +54,57 @@ const passwordcheck = () => {
     return true
   }
 }
-// 檢驗帳密雙方是否為ture
+//第二次密碼較驗
+const doulblepasswordcheck = () => {
+  if (doublepassword.value === '') {
+    doublePasswordErrMsg.value = '請再次輸入密碼'
+  } else if (doublepassword.value !== password.value) {
+    doublePasswordErrMsg.value = '密碼不相同'
+  } else {
+    doublePasswordErrMsg.value = ''
+    return true
+  }
+}
+// 檢驗帳密三方是否為ture
 const InputCheck = () => {
-  if (userCheck() && passwordcheck()) {
+  if (userCheck() && passwordcheck() && doulblepasswordcheck()) {
     return true
   } else {
     return false
   }
 }
+
+// 新建第一次註冊帳號初始資料
+const db = useFirestore()
+// const washingtonRef = doc(db, 'UserData', email)
+const addFirstData = async () => {
+  await setDoc(doc(db, 'UserData', email.value), {
+    name: '',
+    phoneNum: '',
+    pic: ''
+  })
+}
+
 // 註冊
 const useregister = () => {
   // 較驗
-  if (!InputCheck()) return
+  if (!InputCheck()) return alert('請檢查資料是否有誤')
   // 使用createUserWithEmailAndPassword方法 並將參數傳入
   createUserWithEmailAndPassword(auth, email.value, password.value)
     .then(() => {
+      addFirstData()
+      ChangeShow()
       alert('註冊成功')
-      show.value = !show.value
-      userErrMsg.value = ''
-      PasswordErrMsg.value = ''
     })
     .catch((error) => {
-      errorCode.value = error.code
-      errorMessage.value = error.message
-      console.log(errorCode.value, errorMessage.value)
-      // ..
+      if (error.code === 'auth/email-already-in-use') {
+        userErrMsg.value = ''
+        PasswordErrMsg.value = ''
+        doublepassword.value = ''
+        alert('信箱已被註冊。')
+      }
+      // error.code
+      // error.message
     })
 }
 // 登入
@@ -84,14 +112,13 @@ const router = useRouter()
 const userstore = useUserStore()
 const useLogin = () => {
   signInWithEmailAndPassword(auth, email.value, password.value)
-    .then(() => {
+    .then((user) => {
       alert('登入成功')
-      userstore.GetUserData()
+      userstore.upData(user.user)
       router.push('/')
     })
     .catch((error) => {
-      console.log(error.code)
-      console.log(error.message)
+      console.log(error)
     })
 }
 </script>
@@ -114,6 +141,13 @@ const useLogin = () => {
           placeholder="請輸入你的密碼"
         />
         <p>{{ PasswordErrMsg }}</p>
+        <input
+          v-model="doublepassword"
+          @blur="doulblepasswordcheck"
+          type="password"
+          placeholder="請再次輸入你的密碼"
+        />
+        <p>{{ doublePasswordErrMsg }}</p>
         <button @click="useregister">註冊</button>
         <button @click="ChangeShow">已有會員</button>
       </div>

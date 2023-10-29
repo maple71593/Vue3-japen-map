@@ -2,6 +2,22 @@
 import { computed, defineProps, ref } from 'vue'
 import { useUserStore } from '../../../stores'
 import { useRouter } from 'vue-router'
+import { signOut } from 'firebase/auth'
+import { useFirebaseAuth } from 'vuefire'
+const userStore = useUserStore()
+const route = useRouter()
+const auth = useFirebaseAuth()
+const SignOut = () => {
+  signOut(auth)
+    .then(() => {
+      userStore.SignOutClsData()
+      route.push('/home')
+      alert('以登出')
+    })
+    .catch((error) => {
+      console.log('登出失敗', error)
+    })
+}
 // 滾輪監控
 const scrollRef = defineProps(['scrollRef'])
 const show = computed(() => scrollRef.scrollRef > 800)
@@ -16,10 +32,6 @@ const router = useRouter()
 const toLogin = () => {
   router.push('/login')
 }
-// 獲取用戶資訊
-const userStore = useUserStore()
-const { noUserpic, userpic, username, email, token } = userStore
-console.log(userpic, username, email)
 </script>
 <template>
   <div class="header" :class="{ headREer: show }">
@@ -31,7 +43,7 @@ console.log(userpic, username, email)
       <li><router-link :to="'/home'">精選旅程</router-link></li>
       <li><router-link :to="'/home'">購物車</router-link></li>
     </ul>
-    <div v-if="!token">
+    <div v-if="!userStore.token">
       <button @click="toLogin" class="btn">會員登入</button>
     </div>
     <div
@@ -41,7 +53,10 @@ console.log(userpic, username, email)
       @click="showUser = !showUser"
     >
       <div class="user-show">
-        <img :src="userpic ? userpic : noUserpic" alt="" />
+        <img
+          :src="userStore.userpic ? userStore.userpic : userStore.noUserpic"
+          alt=""
+        />
       </div>
       <ul class="user-side-box">
         <li>
@@ -69,7 +84,7 @@ console.log(userpic, username, email)
           >
         </li>
         <li>
-          <router-link :to="'/home'"
+          <router-link @click="SignOut" :to="'/home'"
             ><img
               src="../../../../public/loginout.png"
               alt=""
@@ -181,6 +196,7 @@ console.log(userpic, username, email)
     border: 2px solid rgb(1, 101, 209);
     > img {
       width: 100%;
+      height: 100%;
       cursor: pointer;
     }
   }

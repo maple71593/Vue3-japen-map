@@ -5,9 +5,9 @@ const { username, phoneNum, email } = useStore
 </script>
 <template>
   <div class="user-center">
-    <p>姓名 : {{ username }}</p>
     <p>email : {{ email }}</p>
-    <p>電話 : {{ phoneNum }}</p>
+    <p>姓名 : {{ username }}</p>
+    <p>電話 : {{ phoneNum }}功能停用</p>
   </div>
 </template>
 <style lang="scss" scoped>

@@ -2,7 +2,8 @@
 import { doc, updateDoc } from 'firebase/firestore'
 import { useUserStore } from '../../stores'
 import { ref } from 'vue'
-import { useFirestore } from 'vuefire'
+import { updateProfile } from 'firebase/auth'
+import { useFirestore, useFirebaseAuth } from 'vuefire'
 const useStore = useUserStore()
 const { email, upNewuserData, username, phoneNum } = useStore
 const NewName = ref('')
@@ -13,7 +14,7 @@ const nameRegex = /^[A-Za-z\u4e00-\u9fa5]+$/
 const phoneRegex = /^(09)[0-9]{8}$/
 const nameCheck = () => {
   if (NewName.value === '') {
-    nameErrMsg.value = '請輸入帳號'
+    nameErrMsg.value = '請輸入名稱'
   } else if (!nameRegex.test(NewName.value)) {
     nameErrMsg.value = '請勿輸入特殊符號'
   } else {
@@ -43,15 +44,32 @@ const twoCheck = () => {
 const db = useFirestore()
 // 需傳遞三個參數 (更新值Picurl , newname ,newphone)
 const UpLoadData = async () => {
-  if (!NewName.value && !Newphone.value) return console.log('不得為空')
-  if (!twoCheck()) return console.log('有誤')
+  if (!NewName.value && !Newphone.value) return alert('不得為空')
+  if (!twoCheck()) return alert('有誤')
   await updateDoc(doc(db, 'UserData', email), {
     name: `${NewName.value}`,
     phoneNum: `${Newphone.value}`
   })
+  updatePic()
   upNewuserData(NewName.value, Newphone.value)
   alert('更新成功')
 }
+// 更新用戶資訊
+const auth = useFirebaseAuth()
+const updatePic = () => {
+  updateProfile(auth.currentUser, {
+    displayName: `${NewName.value}`,
+    phoneNumber: `${Newphone.value}`
+  })
+    .then(() => {
+      console.log(Newphone.value)
+      console.log('名子與手機更新成功')
+    })
+    .catch(() => {
+      console.log('名子與手機更新失敗')
+    })
+}
+
 const SetInputValue = () => {
   NewName.value = username
   Newphone.value = phoneNum
@@ -69,7 +87,7 @@ SetInputValue()
       <input
         type="text"
         v-model="NewName"
-        placeholder="請輸入暱稱"
+        placeholder="請輸入名稱"
         @blur="nameCheck"
       />
       <h6>{{ nameErrMsg }}</h6>
@@ -79,7 +97,7 @@ SetInputValue()
       <input
         type="text"
         v-model="Newphone"
-        placeholder="請輸入電話"
+        placeholder="功能無法完全儲存，請用戶注意"
         maxlength="10"
         @blur="phoneCheck"
       />

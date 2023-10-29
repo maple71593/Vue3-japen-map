@@ -9,20 +9,36 @@ export const useUserStore = defineStore(
     const userpic = ref()
     const email = ref()
     const phoneNum = ref()
+    const emailVerified = ref()
     const noUserpic = ref(
-      'https://firebasestorage.googleapis.com/v0/b/fir-test-a43df.appspot.com/o/admin%2FnoUser.png?alt=media&token=66ee6109-50df-4c82-8c4c-9f65705b9c52"'
+      'https://firebasestorage.googleapis.com/v0/b/fir-test-a43df.appspot.com/o/admin%2FnoUser.png?alt=media&token=4f016775-1422-40bf-b548-bf6c749e65c9'
     )
     // 更新用戶名稱與手機號碼
     const upNewuserData = (newName, newphone) => {
       username.value = newName
       phoneNum.value = newphone
     }
-    //更新用戶圖片網址
-    const upPicData = (newPicUrl) => {
-      userpic.value = newPicUrl
+    //更新用戶資訊
+    const upData = (user) => {
+      token.value = user.accessToken
+      username.value = user.displayName
+      email.value = user.email
+      phoneNum.value = user.phoneNumber
+      userpic.value = user.photoURL
+      emailVerified.value = user.emailVerified
+    }
+    // 登出清除資料
+    const SignOutClsData = () => {
+      token.value = ''
+      username.value = ''
+      userpic.value = ''
+      email.value = ''
+      phoneNum.value = ''
+      emailVerified.value = ''
     }
     return {
-      upPicData,
+      SignOutClsData,
+      upData,
       upNewuserData,
       token,
       username,
