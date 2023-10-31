@@ -4,7 +4,6 @@ import { ref } from 'vue'
 export const useUserStore = defineStore(
   'user',
   () => {
-    const Hum = ref()
     const token = ref()
     const username = ref()
     const userpic = ref()
@@ -36,9 +35,6 @@ export const useUserStore = defineStore(
       email.value = ''
       phoneNum.value = ''
     }
-    const countNum = (newdata) => {
-      Hum.value = newdata
-    }
 
     return {
       SignOutClsData,
@@ -50,9 +46,7 @@ export const useUserStore = defineStore(
       email,
       noUserpic,
       phoneNum,
-      EmailVer,
-      Hum,
-      countNum
+      EmailVer
     }
   },
   {

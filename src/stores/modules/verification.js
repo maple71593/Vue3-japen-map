@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useVerStore = defineStore('calibration', () => {
+  const Hum = ref(10)
   const oldPassword = ref('')
   const oldPasswordErrMsg = ref('')
   const email = ref('')
@@ -112,6 +113,10 @@ export const useVerStore = defineStore('calibration', () => {
     doublePasswordErrMsg.value = ''
     oldPassword.value = ''
     oldPasswordErrMsg.value = ''
+    Hum.value = ''
+  }
+  const countNum = (newdata) => {
+    Hum.value = newdata
   }
   return {
     AllClean,
@@ -134,6 +139,8 @@ export const useVerStore = defineStore('calibration', () => {
     doublePasswordErrMsg,
     doublepassword,
     oldPassword,
-    oldPasswordErrMsg
+    oldPasswordErrMsg,
+    Hum,
+    countNum
   }
 })

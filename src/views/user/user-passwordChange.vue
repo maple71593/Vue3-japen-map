@@ -1,5 +1,5 @@
 <script setup>
-import { useVerStore, useUserStore } from '@/stores'
+import { useVerStore } from '@/stores'
 import { ref } from 'vue'
 import {
   getAuth,
@@ -7,24 +7,24 @@ import {
   reauthenticateWithCredential,
   EmailAuthProvider
 } from 'firebase/auth'
-const useStore = useUserStore()
 const useVer = useVerStore()
 const auth = getAuth()
 const user = auth.currentUser
-const check = ref()
-const Num = ref(10)
+const check = ref(true)
+const Num = ref(11)
 
 const overCheck = () => {
-  if (useStore.Hum !== 300) return
   const clstime = setInterval(() => {
-    if (useStore.Hum < 0) {
+    if (Num.value <= 0) {
       clearInterval(clstime)
+      check.value = true
+    } else {
+      Num.value--
+      useVer.countNum(Num.value)
+      console.log(useVer.Hum)
     }
-    Num.value = Num.value - 1
-    useStore.countNum(Num.value)
   }, 1000)
 }
-
 // 進頁面清空帳密欄位相關資料
 useVer.AllClean()
 //重新驗證用戶資料
@@ -50,16 +50,22 @@ const EmailProvider = () => {
 const upDataPassword = () => {
   if (!useVer.ChangePasswordInputCheck()) return
   EmailProvider()
-  if (!check.value) return overCheck(), alert('驗證失敗，請稍後再試')
-  updatePassword(user, useVer.password)
-    .then(() => {
-      alert('更新成功，請重新登入')
-    })
-    .catch((error) => {
-      alert('更新失敗')
-      console.log(error.code)
-      // ...
-    })
+  setTimeout(() => {
+    if (!check.value) {
+      alert('驗證失敗，請稍後再試')
+      overCheck()
+    } else {
+      updatePassword(user, useVer.password)
+        .then(() => {
+          alert('更新成功，請重新登入')
+        })
+        .catch((error) => {
+          alert('更新失敗')
+          console.log(error.code)
+          // ...
+        })
+    }
+  }, 500)
 }
 </script>
 <template>
@@ -104,7 +110,7 @@ const upDataPassword = () => {
     </div>
     <div v-else>
       <button class="btn2" disabled="true">
-        {{ useStore.Hum }}
+        {{ useVer.Hum }}
       </button>
     </div>
     <div>
