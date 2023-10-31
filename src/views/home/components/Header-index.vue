@@ -5,13 +5,13 @@ import { useRouter } from 'vue-router'
 import { signOut } from 'firebase/auth'
 import { useFirebaseAuth } from 'vuefire'
 const userStore = useUserStore()
-const route = useRouter()
+const router = useRouter()
 const auth = useFirebaseAuth()
 const SignOut = () => {
   signOut(auth)
     .then(() => {
       userStore.SignOutClsData()
-      route.push('/home')
+      router.push('/home')
       alert('以登出')
     })
     .catch((error) => {
@@ -28,14 +28,10 @@ const changeshow = () => {
   return false
 }
 // 路由跳轉
-const router = useRouter()
-const toLogin = () => {
-  router.push('/login')
-}
 </script>
 <template>
   <div class="header" :class="{ headREer: show }">
-    <h4 class="logo" @click="$router.push('/')">宏宏旅行社</h4>
+    <h4 class="logo" @click="router.push('/')">宏宏旅行社</h4>
     <ul>
       <li>
         <router-link :to="'/home'">旅遊諮詢</router-link>
@@ -44,7 +40,9 @@ const toLogin = () => {
       <li><router-link :to="'/home'">購物車</router-link></li>
     </ul>
     <div v-if="!userStore.token">
-      <button @click="toLogin" class="btn">會員登入</button>
+      <button @click="router.push('/Login/LoginPage')" class="btn">
+        會員登入
+      </button>
     </div>
     <div
       class="side-userBox"

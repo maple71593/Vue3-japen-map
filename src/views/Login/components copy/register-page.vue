@@ -2,44 +2,43 @@
 import { ref } from 'vue'
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
+  sendEmailVerification,
+  updateProfile
 } from 'firebase/auth'
-import { useFirebaseAuth, getCurrentUser, useFirestore } from 'vuefire'
+import { useFirebaseAuth, useFirestore } from 'vuefire'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores'
 import { doc, setDoc } from 'firebase/firestore'
-const show = ref(false)
 const auth = useFirebaseAuth()
+const UserName = ref('')
 const email = ref('')
 const password = ref('')
 const doublepassword = ref('')
+const EmailErrMsg = ref('')
 const userErrMsg = ref()
 const PasswordErrMsg = ref()
 const doublePasswordErrMsg = ref()
-const getuser = getCurrentUser()
-console.log(getuser)
-
-// 解決更換註冊與登入頁面input還殘留的問題
-const ChangeShow = () => {
-  show.value = !show.value
-  email.value = ''
-  password.value = ''
-  userErrMsg.value = ''
-  PasswordErrMsg.value = ''
-  doublepassword.value = ''
-}
+const router = useRouter()
 // 較驗
 // 正則表達
 const emailRE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 const passwordRE = /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,12}$/
-//帳號較驗
+//姓名較驗
 const userCheck = () => {
-  if (email.value === '') {
-    userErrMsg.value = '請輸入帳號/電子郵件'
-  } else if (!emailRE.test(email.value)) {
-    userErrMsg.value = '請輸入正確的電子郵件格式'
+  if (UserName.value === '') {
+    userErrMsg.value = '請輸入姓名'
   } else {
     userErrMsg.value = ''
+    return true
+  }
+}
+//帳號較驗
+const EmailCheck = () => {
+  if (email.value === '') {
+    EmailErrMsg.value = '請輸入帳號/電子郵件'
+  } else if (!emailRE.test(email.value)) {
+    EmailErrMsg.value = '請輸入正確的電子郵件格式'
+  } else {
+    EmailErrMsg.value = ''
     return true
   }
 }
@@ -65,9 +64,14 @@ const doulblepasswordcheck = () => {
     return true
   }
 }
-// 檢驗帳密三方是否為ture
+// 檢驗帳密四方是否為ture
 const InputCheck = () => {
-  if (userCheck() && passwordcheck() && doulblepasswordcheck()) {
+  if (
+    EmailCheck() &&
+    passwordcheck() &&
+    doulblepasswordcheck() &&
+    userCheck()
+  ) {
     return true
   } else {
     return false
@@ -76,12 +80,27 @@ const InputCheck = () => {
 
 // 新建第一次註冊帳號初始資料
 const db = useFirestore()
-// const washingtonRef = doc(db, 'UserData', email)
 const addFirstData = async () => {
   await setDoc(doc(db, 'UserData', email.value), {
     name: '',
     phoneNum: '',
     pic: ''
+  })
+}
+//新增姓名
+const updateName = () => {
+  updateProfile(auth.currentUser, {
+    displayName: `${UserName.value}`
+  })
+    .then(() => {})
+    .catch(() => {})
+}
+// 傳送電子郵件認證
+const verifyEmail = () => {
+  sendEmailVerification(auth.currentUser).then(() => {
+    // Email verification sent!
+    alert('驗證電子郵件已發送')
+    // ...
   })
 }
 
@@ -93,12 +112,14 @@ const useregister = () => {
   createUserWithEmailAndPassword(auth, email.value, password.value)
     .then(() => {
       addFirstData()
-      ChangeShow()
-      alert('註冊成功')
+      updateName()
+      verifyEmail()
+      router.replace('/Login/EmailCheck')
     })
     .catch((error) => {
       if (error.code === 'auth/email-already-in-use') {
         userErrMsg.value = ''
+        EmailErrMsg.value = ''
         PasswordErrMsg.value = ''
         doublepassword.value = ''
         alert('信箱已被註冊。')
@@ -107,33 +128,26 @@ const useregister = () => {
       // error.message
     })
 }
-// 登入
-const router = useRouter()
-const userstore = useUserStore()
-const useLogin = () => {
-  signInWithEmailAndPassword(auth, email.value, password.value)
-    .then((user) => {
-      alert('登入成功')
-      userstore.upData(user.user)
-      router.push('/')
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-}
 </script>
 <template>
-  <div class="Login-page">
-    <div class="register" v-if="show">
+  <div>
+    <div class="register">
       <div>
-        <h1>加入我們</h1>
+        <h1>註冊會員</h1>
+        <input
+          v-model="UserName"
+          @blur="userCheck"
+          type="text"
+          placeholder="您的姓名"
+        />
+        <p>{{ userErrMsg }}</p>
         <input
           v-model="email"
-          @blur="userCheck"
+          @blur="EmailCheck"
           type="email"
           placeholder="請輸入你的電子郵件"
         />
-        <p>{{ userErrMsg }}</p>
+        <p>{{ EmailErrMsg }}</p>
         <input
           v-model="password"
           @blur="passwordcheck"
@@ -149,101 +163,46 @@ const useLogin = () => {
         />
         <p>{{ doublePasswordErrMsg }}</p>
         <button @click="useregister">註冊</button>
-        <button @click="ChangeShow">已有會員</button>
-      </div>
-    </div>
-    <div class="login" v-else>
-      <div>
-        <h1>歡迎回來</h1>
-        <input
-          v-model="email"
-          type="email"
-          src=""
-          alt=""
-          placeholder="請輸入你的電子郵件"
-        />
-        <p>{{ userErrMsg }}</p>
-        <input
-          v-model="password"
-          type="password"
-          placeholder="請輸入你的密碼"
-        />
-        <p>{{ PasswordErrMsg }}</p>
-        <button @click="useLogin">登入</button>
-        <button @click="ChangeShow">註冊</button>
-        <!-- <ErrorBox v-if="error" :error="error" /> -->
-        <button @click="signinRedirect()">SignIn with Google</button>
+        <button @click="router.push('/Login/LoginPage')">已有會員</button>
       </div>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
-.Login-page {
-  @extend %container-100;
-}
 .register {
   width: 50vw;
-  height: 50vh;
+  min-width: 385px;
+  height: 70vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 3px solid bisque;
+  border: 3px solid rgb(252, 198, 132);
   border-radius: 10px;
   text-align: center;
+  box-sizing: border-box;
   > div {
     input {
-      width: 300px;
+      padding: 5px 10px;
+      width: 320px;
       height: 30px;
-      margin: 10px;
+      margin: 15px;
       border-radius: 10px;
+      border: 1px solid wheat;
       display: block;
+      box-sizing: border-box;
     }
     button {
+      box-sizing: border-box;
       display: block;
-      width: 300px;
+      width: 320px;
       height: 30px;
-      margin: 10px;
+      margin: 15px;
       border-radius: 10px;
+      border: 1px solid wheat;
       background-color: #003ec5df;
       font-size: 15px;
       color: rgb(253, 253, 253);
     }
-    p {
-      color: red;
-      font-size: 13px;
-      text-align: start;
-      margin: 0px 0px 0px 20px;
-    }
-  }
-}
-.login {
-  width: 50vw;
-  height: 50vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 3px solid bisque;
-  border-radius: 10px;
-  text-align: center;
-  > div {
-    input {
-      width: 300px;
-      height: 30px;
-      border-radius: 10px;
-      display: block;
-      margin: 10px;
-    }
-    button {
-      display: block;
-      width: 300px;
-      height: 30px;
-      margin: 10px;
-      border-radius: 10px;
-      background-color: #a0b5e3df;
-      font-size: 15px;
-      color: rgb(253, 253, 253);
-    }
-
     p {
       color: red;
       font-size: 13px;

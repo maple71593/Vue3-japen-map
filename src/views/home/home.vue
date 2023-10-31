@@ -24,7 +24,7 @@ onMounted(() => {
 </template>
 <style>
 * {
-  margin: auto;
+  margin: 0;
   padding: 0;
 }
 

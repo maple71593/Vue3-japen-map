@@ -78,6 +78,7 @@ SetInputValue()
 </script>
 <template>
   <div class="userDataChange">
+    <div><h1>個人資訊</h1></div>
     <div>
       <p>電子信箱:</p>
       <input type="text" v-model="useStore.email" name="" id="" disabled />
@@ -103,30 +104,42 @@ SetInputValue()
       />
       <h6>{{ phoneErrMsg }}</h6>
     </div>
-    <div><button @click="UpLoadData" class="btn">確認</button></div>
+    <div><button @click="UpLoadData" class="btn2">確認</button></div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .userDataChange {
-  margin: 20px;
-  > div {
-    position: relative;
+  > div:nth-child(1) {
+    background-color: aliceblue;
+    padding: 10px;
+    border-radius: 0px 10px 0px 0px;
+  }
+  h1 {
+    color: rgb(0, 50, 50);
+  }
+  > div:nth-child(n + 2) {
     margin: 20px;
+    position: relative;
     p {
       display: inline;
       font-size: 20px;
       margin: 10px;
     }
     input {
-      width: 200px;
+      width: 300px;
       height: 20px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 0px;
       margin: 0;
+      font-size: 20px;
     }
     h6 {
       color: red;
-      bottom: -15px;
+      bottom: -20px;
       left: 105px;
+      font-size: 15px;
       position: absolute;
     }
   }

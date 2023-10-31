@@ -53,15 +53,37 @@ const router = createRouter({
       ]
     },
     { path: '/Search', component: () => import('@/views/search/index.vue') },
-    { path: '/Login', component: () => import('@/views/Login/login-page.vue') }
+    {
+      path: '/Login',
+      component: () => import('@/views/Login/index.vue'),
+      // redirect: '/Login/LoginPage',
+      children: [
+        {
+          path: '/Login/LoginPage',
+          component: () => import('@/views/Login/components/login-page.vue')
+        },
+        {
+          path: '/Login/EmailCheck',
+          component: () => import('@/views/Login/components/Email-check.vue')
+        },
+        {
+          path: '/Login/forgetPassword',
+          component: () =>
+            import('@/views/Login/components/forget-password.vue')
+        },
+        {
+          path: '/Login/register',
+          component: () => import('@/views/Login/components/register-page.vue')
+        }
+      ]
+    }
   ]
 })
 
 router.beforeEach((to) => {
   const useStore = useUserStore()
-  if (useStore.token && to.path === '/login') {
+  if (useStore.token && to.path === '/Login/LoginPage') {
     return '/user/center'
   }
 })
-
 export default router

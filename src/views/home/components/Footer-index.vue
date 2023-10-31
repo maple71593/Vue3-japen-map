@@ -61,8 +61,6 @@
   margin-bottom: 10px;
   border-bottom: 1px solid white;
 }
-.footer-page nav {
-}
 .footer-page nav a {
   display: block;
   color: antiquewhite;

@@ -105,4 +105,46 @@ useBannerBcak()
   background-color: #2980b9;
   transform: translateY(-2px);
 }
+.btn2 {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  background-color: #3498db;
+  color: #fff;
+  border: 2px solid #2980b9;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.btn2:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+.btn3 {
+  display: inline-block;
+  padding: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  background-color: #3498db;
+  color: #fff;
+  border: 2px solid #2980b9;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
+}
+
+.btn3:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
 </style>

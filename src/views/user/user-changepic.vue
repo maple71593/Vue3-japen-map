@@ -30,8 +30,8 @@ const upload = (event) => {
 // Storage相關
 // 拿到storage
 const storage = useFirebaseStorage()
-// 輸入上傳大頭貼或檔案的參數 storageRef(storage, 參數名稱)
-const mountainFileRef = storageRef(storage, userStore.email)
+// 輸入上傳大頭貼或檔案的參數 storageRef(storage, 路徑參數名稱)
+const mountainFileRef = storageRef(storage, `userPic/${userStore.email}`)
 // 獲取上傳大頭貼 與獲得網址
 const UpLoadData = () => {
   if (!filedata.value) return alert('沒有存取到圖片')
@@ -92,6 +92,9 @@ console.log(auth.currentUser)
 <template>
   <div class="change-pic">
     <div>
+      <h1>更換大頭貼</h1>
+    </div>
+    <div>
       <img
         v-if="userStore.userpic || imgUrl"
         :src="imgUrl ? imgUrl : userStore.userpic"
@@ -99,16 +102,40 @@ console.log(auth.currentUser)
       />
       <img v-else :src="userStore.noUserpic" alt="" />
     </div>
-    <input type="file" accept="image/png, image/jpeg" @change="upload" />
-    <button @click="UpLoadData">上傳</button>
+    <input
+      id="upload"
+      type="file"
+      accept="image/png, image/jpeg"
+      @change="upload"
+    />
+    <label type="button" for="upload" class="btn2"> 選擇檔案 </label>
+    <button @click="UpLoadData" class="btn2">上傳</button>
   </div>
 </template>
 <style lang="scss" scoped>
 .change-pic {
   margin: 0;
+  > div:nth-child(1) {
+    background-color: aliceblue;
+    padding: 10px;
+    border-radius: 0px 10px 0px 0px;
+    h1 {
+      color: rgb(0, 50, 50);
+    }
+  }
+  > div:nth-child(2) {
+    margin: 10px;
+  }
   img {
     width: 200px;
     height: 200px;
+    border-radius: 10px;
+  }
+  input[type='file'] {
+    display: none;
+  }
+  label {
+    margin: 10px;
   }
 }
 </style>
