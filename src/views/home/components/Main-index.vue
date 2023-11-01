@@ -66,11 +66,13 @@ useMasterPic()
 <style>
 .main {
   width: 100%;
-  margin: 100px 0px;
+  margin: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .main-box {
   width: 1200px;
-
   display: flex;
   flex-wrap: wrap;
   position: relative;

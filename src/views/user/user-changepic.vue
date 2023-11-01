@@ -35,7 +35,6 @@ const mountainFileRef = storageRef(storage, `userPic/${userStore.email}`)
 // 獲取上傳大頭貼 與獲得網址
 const UpLoadData = () => {
   if (!filedata.value) return alert('沒有存取到圖片')
-  console.log(filedata.value)
   uploadBytes(mountainFileRef, filedata.value).then(() => {
     getPicUrl()
     alert('上傳成功')

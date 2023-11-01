@@ -11,7 +11,7 @@ const SignOut = () => {
   signOut(auth)
     .then(() => {
       userStore.SignOutClsData()
-      router.push('/home')
+      router.replace('/home')
       alert('以登出')
     })
     .catch((error) => {
@@ -27,11 +27,12 @@ const changeshow = () => {
   showUser.value = false
   return false
 }
-// 路由跳轉
 </script>
 <template>
   <div class="header" :class="{ headREer: show }">
-    <h4 class="logo" @click="router.push('/')">宏宏旅行社</h4>
+    <div class="logo">
+      <h4 @click="router.push('/')">宏宏旅行社</h4>
+    </div>
     <ul>
       <li>
         <router-link :to="'/home'">旅遊諮詢</router-link>
@@ -39,7 +40,7 @@ const changeshow = () => {
       <li><router-link :to="'/home'">精選旅程</router-link></li>
       <li><router-link :to="'/home'">購物車</router-link></li>
     </ul>
-    <div v-if="!userStore.token">
+    <div class="Login-btn" v-if="!userStore.token">
       <button @click="router.push('/Login/LoginPage')" class="btn">
         會員登入
       </button>
@@ -50,19 +51,35 @@ const changeshow = () => {
       :class="{ SideUserBox: show ? changeshow() : showUser }"
       @click="showUser = !showUser"
     >
-      <div class="user-show">
+      <div>
         <img
           :src="userStore.userpic ? userStore.userpic : userStore.noUserpic"
           alt=""
         />
       </div>
-      <ul class="user-side-box">
+      <ul>
         <li>
           <router-link :to="'/user/center'"
             ><img
               src="../../../../public/user.png"
               alt=""
             />會員中心</router-link
+          >
+        </li>
+        <li>
+          <router-link :to="'/user/dataChange'"
+            ><img
+              src="../../../../public/userdata.png"
+              alt=""
+            />修改個人資訊</router-link
+          >
+        </li>
+        <li>
+          <router-link :to="'/user/ChangePic'"
+            ><img
+              src="../../../../public/picture.png"
+              alt=""
+            />修改大頭貼</router-link
           >
         </li>
         <li>
@@ -73,14 +90,7 @@ const changeshow = () => {
             />修改密碼</router-link
           >
         </li>
-        <li>
-          <router-link :to="'/user/dataChange'"
-            ><img
-              src="../../../../public/userdata.png"
-              alt=""
-            />修改會員資料</router-link
-          >
-        </li>
+
         <li>
           <router-link @click="SignOut" :to="'/home'"
             ><img
@@ -97,14 +107,15 @@ const changeshow = () => {
 /* header頁首*/
 
 .header {
+  margin: auto;
   height: 100px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   position: fixed;
   background: linear-gradient(to bottom, #474747, transparent);
   top: 0;
   width: 100%;
-  z-index: 100;
+  z-index: 3;
   transition: 1.5s ease-in-out;
   > ul {
     vertical-align: middle;
@@ -162,9 +173,10 @@ const changeshow = () => {
   }
 }
 .headREer {
+  margin: auto;
   height: 100px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   position: fixed;
   background: linear-gradient(to bottom, #474747, transparent);
   top: -100px;
@@ -173,15 +185,23 @@ const changeshow = () => {
 }
 .logo {
   width: 300px;
-  height: 50px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // text-align: center;
   font-size: 50px;
   color: rgb(255, 255, 255);
   cursor: pointer;
 }
+.Login-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .side-userBox {
   width: 15vw;
+  height: 100%;
   transition: 0.2s;
   border-radius: 10px;
   box-sizing: border-box;
@@ -207,17 +227,19 @@ const changeshow = () => {
   }
 }
 .SideUserBox {
-  width: 15vw;
-  background-color: rgb(123, 123, 123);
+  width: 300px;
+  height: 450px;
+  background-color: rgb(218, 218, 218);
   border-radius: 10px;
-  border: 2px solid rebeccapurple;
+  border: 2px solid rgb(255, 255, 255);
   box-sizing: border-box;
-  > div {
+  > div:nth-child(1) {
+    margin: auto;
     width: 80px;
     border-radius: 50%;
     overflow: hidden;
     margin-top: 10px;
-    border: 2px solid rebeccapurple;
+    border: 2px solid rgb(255, 255, 255);
     > img {
       width: 100%;
       cursor: pointer;
@@ -226,24 +248,26 @@ const changeshow = () => {
   ul {
     opacity: 1;
     li {
-      margin-top: 20px;
-      font-size: 20px;
-      list-style: none;
-      padding: 10px;
+      display: block;
       a {
-        color: antiquewhite;
+        display: block;
+        color: #757575;
+        margin-top: 20px;
+        font-size: 20px;
+        list-style: none;
+        padding: 10px;
+      }
+      a:hover {
+        color: rgb(255, 255, 255);
+        padding: 10px;
+        text-shadow: 1px 1px 3px rgb(138, 138, 138);
+        background-color: antiquewhite;
+        border-radius: 10px;
       }
       img {
         margin-right: 10px;
         width: 20px;
       }
-    }
-    li:hover {
-      color: rgb(255, 255, 255);
-      padding: 10px;
-      text-shadow: 1px 1px 3px rgb(0, 0, 0);
-      background-color: antiquewhite;
-      border-radius: 10px;
     }
   }
 }

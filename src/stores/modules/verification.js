@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useVerStore = defineStore('calibration', () => {
-  const Hum = ref(10)
+  const Num = ref(11)
   const oldPassword = ref('')
   const oldPasswordErrMsg = ref('')
   const email = ref('')
@@ -113,11 +113,16 @@ export const useVerStore = defineStore('calibration', () => {
     doublePasswordErrMsg.value = ''
     oldPassword.value = ''
     oldPasswordErrMsg.value = ''
-    Hum.value = ''
   }
-  const countNum = (newdata) => {
-    Hum.value = newdata
+  // 攔截用戶過多請求的倒數
+  const countNum = () => {
+    Num.value = Num.value - 1
   }
+  // 重置用戶過多請求的倒數
+  const REcountNum = () => {
+    Num.value = 11
+  }
+  //重置顯現按鈕
   return {
     AllClean,
     oldpasswordcheck,
@@ -140,7 +145,8 @@ export const useVerStore = defineStore('calibration', () => {
     doublepassword,
     oldPassword,
     oldPasswordErrMsg,
-    Hum,
-    countNum
+    Num,
+    countNum,
+    REcountNum
   }
 })

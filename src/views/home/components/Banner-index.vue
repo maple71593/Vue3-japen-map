@@ -1,15 +1,20 @@
 <script setup>
 import { ref } from 'vue'
-import { GetBannerBcak } from '@/api/home.js'
+import { collection, getDocs } from 'firebase/firestore'
+import { useFirestore } from 'vuefire'
 import Calendar from '@/components/Calendar-index.vue'
 const ChangePageNum = ref(0)
 const show = ref(true)
-const Pic = ref()
+const pic = ref([])
+const db = useFirestore()
+
 const useBannerBcak = async () => {
-  const { data } = await GetBannerBcak()
-  Pic.value = data
+  const querySnapshot = await getDocs(collection(db, 'BannerPic'))
+  querySnapshot.forEach((doc) => {
+    pic.value.push(doc.data())
+  })
   setInterval(() => {
-    ChangePageNum.value !== Pic.value.length - 1
+    ChangePageNum.value !== pic.value.length - 1
       ? ChangePageNum.value++
       : (ChangePageNum.value = 0)
   }, 5000)
@@ -22,7 +27,7 @@ useBannerBcak()
     <transition-group>
       <div
         ref="formRef"
-        v-for="(item, index) in Pic"
+        v-for="(item, index) in pic"
         :key="index"
         class="Img-Box"
         v-show="index === ChangePageNum"
@@ -83,68 +88,5 @@ useBannerBcak()
   top: 35%;
   left: 10%;
   position: absolute;
-}
-.btn {
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 25px;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  background-color: #3498db;
-  color: #fff;
-  border: 2px solid #2980b9;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition:
-    background-color 0.3s,
-    transform 0.3s;
-}
-
-.btn:hover {
-  background-color: #2980b9;
-  transform: translateY(-2px);
-}
-.btn2 {
-  display: inline-block;
-  padding: 10px 20px;
-  font-size: 18px;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  background-color: #3498db;
-  color: #fff;
-  border: 2px solid #2980b9;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition:
-    background-color 0.3s,
-    transform 0.3s;
-}
-
-.btn2:hover {
-  background-color: #2980b9;
-  transform: translateY(-2px);
-}
-.btn3 {
-  display: inline-block;
-  padding: 5px;
-  font-size: 12px;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  background-color: #3498db;
-  color: #fff;
-  border: 2px solid #2980b9;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition:
-    background-color 0.3s,
-    transform 0.3s;
-}
-
-.btn3:hover {
-  background-color: #2980b9;
-  transform: translateY(-2px);
 }
 </style>

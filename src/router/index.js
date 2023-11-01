@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '@/stores'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -80,10 +82,34 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to) => {
-  const useStore = useUserStore()
-  if (useStore.token && to.path === '/Login/LoginPage') {
-    return '/user/center'
-  }
-})
+// router.beforeEach(async (to, from, next) => {
+//   const auth = getAuth()
+//   const useStore = useUserStore()
+
+//   // 创建一个Promise来等待onAuthStateChanged的结果
+//   const authStatePromise = new Promise((resolve) => {
+//     onAuthStateChanged(auth, (user) => {
+//       if (user.accessToken && to.path === '/Login/LoginPage') {
+//         resolve('/user/center')
+//       } else {
+//         resolve(null)
+//       }
+//     })
+//   })
+
+//   // 使用Promise.all等待onAuthStateChanged和其他条件
+//   const [authStateResult, tokenResult] = await Promise.all([
+//     authStatePromise,
+//     useStore.token
+//   ])
+
+//   // 根据结果来决定导航
+//   if (authStateResult) {
+//     next(authStateResult)
+//   } else if (tokenResult && to.path === '/Login/LoginPage') {
+//     next('/user/center')
+//   } else {
+//     next()
+//   }
+// })
 export default router

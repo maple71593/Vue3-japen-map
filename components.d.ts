@@ -9,6 +9,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     CalendarIndex: typeof import('./src/components/Calendar-index.vue')['default']
     FakeHeader: typeof import('./src/components/Fake-Header.vue')['default']
+    MessageBox: typeof import('./src/components/Message-Box.vue')['default']
+    MsgBox: typeof import('./src/components/msg-box.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideComponents: typeof import('./src/components/Side-components.vue')['default']

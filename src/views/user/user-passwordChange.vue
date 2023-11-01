@@ -10,62 +10,56 @@ import {
 const useVer = useVerStore()
 const auth = getAuth()
 const user = auth.currentUser
-const check = ref(true)
 const Num = ref(11)
-
 const overCheck = () => {
   const clstime = setInterval(() => {
-    if (Num.value <= 0) {
+    if (Num.value <= 1) {
       clearInterval(clstime)
-      check.value = true
+      Num.value = 11
+      useVer.REcountNum()
     } else {
       Num.value--
-      useVer.countNum(Num.value)
-      console.log(useVer.Hum)
+      useVer.countNum()
+      console.log(useVer.Num)
     }
   }, 1000)
 }
 // 進頁面清空帳密欄位相關資料
 useVer.AllClean()
 //重新驗證用戶資料
-const EmailProvider = () => {
-  reauthenticateWithCredential(
+const upDataPassword = async () => {
+  if (!useVer.ChangePasswordInputCheck()) return
+  await reauthenticateWithCredential(
     user,
     EmailAuthProvider.credential(user.email, useVer.oldPassword)
     //EmailAuthProvider 相關文檔
     //https://firebase.google.com/docs/reference/js/auth.emailauthprovider.md?hl=zh-cn#emailauthprovidercredential
   )
     .then(() => {
-      check.value = true
       // User re-authenticated.
       console.log('驗證成功')
     })
     .catch((error) => {
-      check.value = false
       if (error.code === 'auth/invalid-login-credentials')
         console.log('身分驗證失敗')
       console.log(error.code)
     })
-}
-const upDataPassword = () => {
-  if (!useVer.ChangePasswordInputCheck()) return
-  EmailProvider()
-  setTimeout(() => {
-    if (!check.value) {
-      alert('驗證失敗，請稍後再試')
-      overCheck()
-    } else {
-      updatePassword(user, useVer.password)
-        .then(() => {
-          alert('更新成功，請重新登入')
-        })
-        .catch((error) => {
-          alert('更新失敗')
-          console.log(error.code)
-          // ...
-        })
-    }
-  }, 500)
+  if (!useVer.NumCheck) {
+    alert('驗證失敗，請稍後再試')
+    Num.value = 11
+    await useVer.REcountNum()
+    overCheck()
+  } else {
+    updatePassword(user, useVer.password)
+      .then(() => {
+        alert('更新成功，請重新登入')
+      })
+      .catch((error) => {
+        alert('更新失敗')
+        console.log(error.code)
+        // ...
+      })
+  }
 }
 </script>
 <template>
@@ -105,16 +99,18 @@ const upDataPassword = () => {
         <h3>{{ useVer.doublePasswordErrMsg }}</h3>
       </div>
     </div>
-    <div v-if="check">
-      <button class="btn2" @click="upDataPassword">送出</button>
-    </div>
-    <div v-else>
-      <button class="btn2" disabled="true">
-        {{ useVer.Hum }}
-      </button>
-    </div>
-    <div>
-      <button class="btn2" @click="useVer.AllClean()">清除</button>
+    <div style="display: flex">
+      <div v-if="useVer.Num === 11">
+        <button class="btn2" @click="upDataPassword">送出</button>
+      </div>
+      <div v-else>
+        <button class="btn-disabled" disabled="true">
+          {{ useVer.Num }}
+        </button>
+      </div>
+      <div>
+        <button class="btn2" @click="useVer.AllClean()">清除</button>
+      </div>
     </div>
   </div>
 </template>
@@ -151,5 +147,21 @@ const upDataPassword = () => {
     padding: 10px;
     border-radius: 0px 10px 0px 0px;
   }
+}
+.btn-disabled {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  background-color: #153143;
+  color: #898989;
+  border: 2px solid #112f42;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition:
+    background-color 0.3s,
+    transform 0.3s;
 }
 </style>

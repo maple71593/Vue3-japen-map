@@ -1,10 +1,14 @@
 <script setup>
 import { ref, defineProps, computed } from 'vue'
-import { GetCardPages } from '@/api/home.js'
-const CardPages = ref()
+import { collection, getDocs } from 'firebase/firestore'
+import { useFirestore } from 'vuefire'
+const CardPages = ref([])
 const uesCardPages = async () => {
-  const { data } = await GetCardPages()
-  CardPages.value = data
+  const db = useFirestore()
+  const querySnapshot = await getDocs(collection(db, 'Content'))
+  querySnapshot.forEach((doc) => {
+    CardPages.value.push(doc.data())
+  })
 }
 //判斷父組件傳遞滾動data是否達到指定值
 uesCardPages()
@@ -25,7 +29,7 @@ const noActivated = computed(() => scrollRef.scrollRef > 900)
         :key="index"
       >
         <h3 class="card2-page-h3">{{ item.title }}</h3>
-        <img :src="item.imageSrc" alt="" />
+        <img :src="item.img" alt="" />
       </div>
     </div>
   </div>
@@ -33,8 +37,7 @@ const noActivated = computed(() => scrollRef.scrollRef > 900)
 <style>
 .content2 {
   width: 1200px;
-  margin-top: 30px;
-  margin-bottom: 100px;
+  margin: 30px auto 100px auto;
   padding-top: 30px;
   text-align: left;
   border-radius: 30px;

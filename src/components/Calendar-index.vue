@@ -305,6 +305,7 @@ const PeolData = (n) => {
 .ManthBox {
   width: 420px;
   display: flex;
+  justify-content: space-around;
   flex-wrap: wrap;
 }
 .datebox {
@@ -313,7 +314,7 @@ const PeolData = (n) => {
   height: 30px;
   box-sizing: border-box;
   display: flex;
-  margin: auto;
+  justify-content: space-around;
   border-radius: 10px;
   cursor: pointer;
 }

@@ -1,35 +1,27 @@
-<script>
+<script setup>
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 import 'swiper/css/effect-coverflow'
 import 'swiper/css/pagination'
 import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules'
-import { GetCardPages } from '@/api/home.js'
-import { ref } from 'vue'
-export default {
-  components: {
-    Swiper,
-    SwiperSlide
-  },
-  props: ['scrollRef'],
-  computed: {
-    BannerBar() {
-      return this.scrollRef.scrollRef > 250
-    }
-  },
-  setup() {
-    const CardPages = ref()
-    const uesCardPages = async () => {
-      const { data } = await GetCardPages()
-      CardPages.value = data
-    }
-    uesCardPages()
-    return {
-      CardPages,
-      modules: [EffectCoverflow, Pagination, Autoplay]
-    }
-  }
+import { ref, computed, defineProps } from 'vue'
+import { collection, getDocs } from 'firebase/firestore'
+import { useFirestore } from 'vuefire'
+//接收滾動數據
+const { scrollRef } = defineProps(['scrollRef'])
+const BannerBar = computed(() => scrollRef.scrollRef > 300)
+// 獲取資料庫數據並存取在content
+const content = ref([])
+const uesCardPages = async () => {
+  const db = useFirestore()
+  const querySnapshot = await getDocs(collection(db, 'Content'))
+  querySnapshot.forEach((doc) => {
+    content.value.push(doc.data())
+  })
 }
+uesCardPages()
+// swiper.js模組
+const modules = [EffectCoverflow, Pagination, Autoplay]
 </script>
 <template>
   <div class="content">
@@ -58,9 +50,9 @@ export default {
       :modules="modules"
       class="mySwiper"
     >
-      <SwiperSlide v-for="(item, index) in CardPages" :key="index">
+      <SwiperSlide v-for="(item, index) in content" :key="index">
         <h3 class="card-page-h3">{{ item.title }}</h3>
-        <img :src="item.imageSrc" alt="" />
+        <img :src="item.img" alt="" />
         <div class="card-page-text">
           <h3>{{ item.content }}</h3>
           <h2>{{ item.amount }}</h2>
@@ -114,6 +106,9 @@ body {
 }
 .content {
   width: 1200px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 100px;
   margin-top: 30px;
   margin-bottom: 100px;
   padding-top: 30px;

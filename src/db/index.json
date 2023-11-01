@@ -126,18 +126,6 @@
     {"id": 2 ,"name":"黃晶雅" ,"img":"https://rmi.nccu.edu.tw/uploads/member_profile/avatar/5d5f558c1d41c81325003526/%E6%9B%BE%E6%AF%93%E8%8B%B1%E8%80%81%E5%B8%AB.jpg" , "test":"規劃旅遊行程有超過20年，超過1000+次出國紀錄，旅行途中總能看見世界的異同，欣賞並尊重多元種族文化之美。", "studying":"紐澳良財經管理學院:產業發展與自然科學士","studying2":"京都大學:自然人文與科學研究所","studying3":"牛津大學:海洋生物學博士","studying4":"日本東京奧運企劃總指揮"},
     {"id": 3 ,"name":"陳泛華" ,"img":"https://rmi.nccu.edu.tw/uploads/member_profile/avatar/55fb03721d41c8652d000081/%E9%84%AD%E5%A3%AB%E5%8D%BF-%E7%B3%BB%E7%B6%B21120927.JPG" ,"test":"因貼心幽默又負責，口碑極佳，擁有一大批死忠客人。憑著一股傻勁與毅力，帶團時幾乎每天比客人早起兩小時在不同城市慢跑，足跡行遍歐美亞非四大洲","studying":"中華科技技術管理學院:社會財經管理學系","studying2":"加拿大泛哥華管理學院:休閒遊憩管理研究所","studying3":"耶魯大學:產業經貿研究學系代理副教授:","studying4":"歐美經貿觀光協會研究員"}
   ],
-  "no":[
-    {"id": 4 ,"name":"吳育群" ,"img":"https://rmi.nccu.edu.tw/uploads/member_profile/avatar/55fb03721d41c8652d00008d/%E8%AC%9D%E6%98%8E%E8%8F%AF-%E7%B3%BB%E7%B6%B21120927.jpg" ,"test":"作為文化人類學專業，我致力於帶領遊客探索不同文化間的奇妙差異與相似" ,"studying":"華盛頓大學:觀光與自然研究學系","studying2":"哥倫多大學:觀光產業發展研究所","studying3":"雪梨大學:旅遊觀光貿易發展學系顧問","studying4":"美國在台協會台北辦事處顧問"},
-    {"id": 5 ,"name":"林建志" ,"img":"https://rmi.nccu.edu.tw/uploads/member_profile/avatar/55fb03721d41c8652d000075/%E6%9C%AA%E5%91%BD%E5%90%8D_-_4.jpg" ,"test":"我是一名生態導遊，喜歡將大自然的奇蹟與環保意識融入我的導覽中，讓您親近自然之美" ,"studying":"北京大學:基礎人文與社會關懷學系","studying2":"首爾大學:產業發展與自然科學研究所","studying3":"亞太金融促進發展協會研究員","studying4":"駐韓國臺北代表部釜山辦事處副理"},
-    {"id": 5 ,"name":"林建志" ,"img":"https://rmi.nccu.edu.tw/uploads/member_profile/avatar/55fb03721d41c8652d000075/%E6%9C%AA%E5%91%BD%E5%90%8D_-_4.jpg" ,"test":"我是一名生態導遊，喜歡將大自然的奇蹟與環保意識融入我的導覽中，讓您親近自然之美" ,"studying":"北京大學:基礎人文與社會關懷學系","studying2":"首爾大學:產業發展與自然科學研究所","studying3":"亞太金融促進發展協會研究員","studying4":"駐韓國臺北代表部釜山辦事處副理"}
-  ],
-  
-  "BannerBcak":[
-    {"id": 1 ,"img":"https://scontent.frmq2-2.fna.fbcdn.net/v/t39.30808-6/387137991_7314121228616731_1212595593490397922_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=5f2048&_nc_ohc=3gc5e3NMv3gAX9B6Tkd&_nc_ht=scontent.frmq2-2.fna&oh=00_AfC4phP62S58Zc1AHGhU-gr3RBLp6DIGJ882Ejd8mVZFRg&oe=652D9288"},
-    {"id": 2 ,"img":"https://scontent.frmq2-2.fna.fbcdn.net/v/t39.30808-6/387137269_7314121621950025_4864729550166405205_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=5f2048&_nc_ohc=MfOATRsU7g4AX9x0i3D&_nc_oc=AQlxI-byk27ILYhwacG4mDOSgzWpWbflr7cxXWDS8Osgjtj60JIAiDx2Qj4SLZu8HaqyhMuz8FIwGeU4RlM_GdGk&_nc_ht=scontent.frmq2-2.fna&oh=00_AfCuYCo8-K4k3Nk-TX_LvZdhudtVhXvTQ7HezSKWDPtoOA&oe=652E3EB3"},
-    {"id": 3 ,"img":"https://scontent.frmq2-1.fna.fbcdn.net/v/t39.30808-6/391750228_7314121241950063_7109786924402376380_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_ohc=1q6NbKhmLVkAX8nv3CX&_nc_ht=scontent.frmq2-1.fna&oh=00_AfCwvCUGXes6iDBCstxB3W-EyzE2tFWcYbUT191zFJhMsQ&oe=652D8399"},
-    {"id": 4 ,"img":"https://scontent.frmq2-1.fna.fbcdn.net/v/t39.30808-6/391758701_7314121151950072_5824683688105121467_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_ohc=KxRvKsDeJKQAX-lW_oN&_nc_ht=scontent.frmq2-1.fna&oh=00_AfBxD42f0aHic-YcbFQbA5ofpnK8TsrpcYVSno4ke_UeDA&oe=652D2508"}
-  ],
   "CardPages":[
     {
       "id":"1",
