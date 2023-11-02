@@ -1,6 +1,28 @@
 <script setup>
-import { useUserStore } from '../../stores'
+import { useFirebaseAuth } from 'vuefire'
+import { sendEmailVerification } from 'firebase/auth'
+import { useUserStore, useComStore } from '../../stores'
+const useCom = useComStore()
 const useStore = useUserStore()
+//發送電子郵件驗證信
+const auth = useFirebaseAuth()
+const getVer = () => {
+  useStore.EmailVer = auth.currentUser.emailVerified
+}
+getVer()
+const SendEmail = async () => {
+  await sendEmailVerification(auth.currentUser)
+    .then(() => {
+      // Email verification sent!
+      useCom.MessageBox('驗證電子郵件已發送', 3)
+      // ...
+    })
+    .catch((err) => {
+      if (err.code === 'auth/too-many-requests')
+        useCom.MessageBox('電子郵件已經發送囉!快去信箱接收', 1)
+      console.log(err.code)
+    })
+}
 </script>
 <template>
   <div class="user-center">
@@ -14,7 +36,8 @@ const useStore = useUserStore()
     <div v-else>
       <img src="../../../public/cross-circle.png" alt="" />
       <h3>Email尚未認證</h3>
-      <button class="btn3">現在馬上認證！</button>
+      <h4>認證完成後，請重新登入</h4>
+      <button @click="SendEmail" class="btn3">現在馬上認證！</button>
     </div>
     <div>
       <p>email : {{ useStore.email }}</p>

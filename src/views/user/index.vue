@@ -3,6 +3,7 @@ import fake from '@/components/fake-Header.vue'
 </script>
 <template>
   <fake></fake>
+  <MessageBox></MessageBox>
   <div class="userCenter">
     <div>
       <ul>

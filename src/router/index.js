@@ -15,10 +15,6 @@ const router = createRouter({
           component: () => import('@/views/home/Home-page.vue')
         },
         {
-          path: '/search',
-          component: () => import('@/views/search/index.vue')
-        },
-        {
           path: '/list-1',
           component: () => import('@/views/search/list-1.vue')
         },
@@ -49,6 +45,25 @@ const router = createRouter({
             {
               path: '/user/ChangePic',
               component: () => import('@/views/user/user-changepic.vue')
+            }
+          ]
+        },
+        {
+          path: '/search',
+          component: () => import('@/views/search/index.vue'),
+          redirect: 'search/Search-Page',
+          children: [
+            {
+              path: '/search/Search-Page',
+              component: () => import('@/views/search/Search-Page.vue')
+            },
+            {
+              path: '/search/Order',
+              component: () => import('@/views/search/Order-index.vue')
+            },
+            {
+              path: '/search/Connection',
+              component: () => import('@/views/search/Connection-index.vue')
             }
           ]
         }

@@ -8,7 +8,8 @@ import {
 import { doc, updateDoc } from 'firebase/firestore'
 import { useFirebaseStorage, useFirebaseAuth, useFirestore } from 'vuefire'
 import { updateProfile } from 'firebase/auth'
-import { useUserStore } from '../../stores'
+import { useUserStore, useComStore } from '../../stores'
+const useCom = useComStore()
 const userStore = useUserStore()
 
 // 上傳圖片到網站
@@ -34,19 +35,17 @@ const storage = useFirebaseStorage()
 const mountainFileRef = storageRef(storage, `userPic/${userStore.email}`)
 // 獲取上傳大頭貼 與獲得網址
 const UpLoadData = () => {
-  if (!filedata.value) return alert('沒有存取到圖片')
+  if (!filedata.value) return useCom.MessageBox('沒有存取到圖片', 2)
   uploadBytes(mountainFileRef, filedata.value).then(() => {
     getPicUrl()
-    alert('上傳成功')
+    useCom.MessageBox('上傳成功', 3)
     imgUrl.value = ''
-    console.log('上傳大頭貼成功')
   })
 }
 // 獲取圖片網址
 const getPicUrl = () => {
   getDownloadURL(mountainFileRef)
     .then((url) => {
-      console.log('獲取圖片網址成功')
       //更新用戶資料
       updatePic(url)
       //更新資料庫資料
@@ -63,18 +62,14 @@ const updatePic = (URL) => {
     photoURL: URL
   })
     .then(() => {
-      console.log('個人資料更新成功')
       getUserData()
     })
-    .catch(() => {
-      console.log('更新用戶名子與照片失敗')
-    })
+    .catch(() => {})
 }
 // 獲取用戶個人資料
 const getUserData = () => {
   if (auth.currentUser !== null) {
     userStore.upData(auth.currentUser)
-    console.log('獲取用戶個人資訊成功')
   }
 }
 //更新資料庫資料
@@ -84,7 +79,6 @@ const upDataPic = async (url) => {
   await updateDoc(washingtonRef, {
     pic: `${url}`
   })
-  console.log('更新資料庫成功')
 }
 console.log(auth.currentUser)
 </script>

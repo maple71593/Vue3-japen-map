@@ -21,9 +21,9 @@ const Totop = () => {
   right: 0;
 }
 .ToTop {
-  width: 100px;
-  height: 100px;
-  line-height: 100px;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
   text-align: center;
   background: radial-gradient(circle, rgb(155, 155, 152), rgb(88, 95, 88));
   cursor: pointer;

@@ -2,20 +2,21 @@
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { useFirebaseAuth } from 'vuefire'
 import { useRouter } from 'vue-router'
-import { useUserStore, useVerStore } from '@/stores'
+import { useUserStore, useVerStore, useComStore } from '@/stores'
+const useCom = useComStore()
 const useVer = useVerStore()
-
 const auth = useFirebaseAuth()
 // 登入
 const router = useRouter()
 const userstore = useUserStore()
 const useLogin = () => {
   if (useVer.email === '' || useVer.password === '')
-    return alert('請輸入帳號或密碼')
-  if (!useVer.SingInInputCheck()) return alert('請依照提示輸入，請用戶再次確認')
+    return useCom.MessageBox('請輸入帳號或密碼', 1)
+  if (!useVer.SingInInputCheck())
+    return useCom.MessageBox('請依照提示輸入，請用戶再次確認', 1)
   signInWithEmailAndPassword(auth, useVer.email, useVer.password)
     .then((user) => {
-      alert('登入成功')
+      useCom.MessageBox('登入成功', 3)
       userstore.upData(user.user)
       useVer.AllClean()
       router.push('/')
@@ -23,7 +24,9 @@ const useLogin = () => {
     .catch((error) => {
       console.log(error.code)
       if (error.code === 'auth/invalid-login-credentials')
-        return useVer.AllClean(), alert('輸入帳號/密碼錯誤')
+        return useVer.AllClean(), useCom.MessageBox('輸入帳號/密碼錯誤', 1)
+      if (error.code === 'auth/invalid-email')
+        return useCom.MessageBox('電子郵件格式錯誤', 1)
     })
 }
 useVer.AllClean()

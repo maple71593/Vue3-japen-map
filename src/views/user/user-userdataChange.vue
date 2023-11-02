@@ -1,9 +1,11 @@
 <script setup>
 import { doc, updateDoc } from 'firebase/firestore'
-import { useUserStore } from '../../stores'
+import {} from '../../stores'
 import { ref } from 'vue'
 import { updateProfile } from 'firebase/auth'
 import { useFirestore, useFirebaseAuth } from 'vuefire'
+import { useComStore, useUserStore } from '../../stores'
+const useCom = useComStore()
 const useStore = useUserStore()
 const { email, upNewuserData, username, phoneNum } = useStore
 const NewName = ref('')
@@ -44,15 +46,15 @@ const twoCheck = () => {
 const db = useFirestore()
 // 需傳遞三個參數 (更新值Picurl , newname ,newphone)
 const UpLoadData = async () => {
-  if (!NewName.value && !Newphone.value) return alert('不得為空')
-  if (!twoCheck()) return alert('有誤')
+  if (!NewName.value && !Newphone.value) return useCom.MessageBox('不得為空', 1)
+  if (!twoCheck()) return useCom.MessageBox('有誤', 1)
   await updateDoc(doc(db, 'UserData', email), {
     name: `${NewName.value}`,
     phoneNum: `${Newphone.value}`
   })
   updatePic()
   upNewuserData(NewName.value, Newphone.value)
-  alert('更新成功')
+  useCom.MessageBox('更新成功', 3)
 }
 // 更新用戶資訊
 const auth = useFirebaseAuth()
@@ -63,10 +65,9 @@ const updatePic = () => {
   })
     .then(() => {
       console.log(Newphone.value)
-      console.log('名子與手機更新成功')
     })
-    .catch(() => {
-      console.log('名子與手機更新失敗')
+    .catch((err) => {
+      console.log(err.code)
     })
 }
 

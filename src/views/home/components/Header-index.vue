@@ -1,21 +1,24 @@
 <script setup>
 import { computed, defineProps, ref } from 'vue'
-import { useUserStore } from '../../../stores'
+import { useUserStore, useComStore } from '../../../stores'
 import { useRouter } from 'vue-router'
 import { signOut } from 'firebase/auth'
 import { useFirebaseAuth } from 'vuefire'
 const userStore = useUserStore()
+const useCom = useComStore()
 const router = useRouter()
 const auth = useFirebaseAuth()
 const SignOut = () => {
   signOut(auth)
     .then(() => {
       userStore.SignOutClsData()
-      router.replace('/home')
-      alert('以登出')
+      useCom.MessageBox('已登出', 3)
+      setTimeout(() => {
+        router.replace('/home')
+      }, 2000)
     })
     .catch((error) => {
-      console.log('登出失敗', error)
+      console.log(error.code)
     })
 }
 // 滾輪監控
@@ -34,11 +37,11 @@ const changeshow = () => {
       <h4 @click="router.push('/')">宏宏旅行社</h4>
     </div>
     <ul>
-      <li>
-        <router-link :to="'/home'">旅遊諮詢</router-link>
-      </li>
       <li><router-link :to="'/home'">精選旅程</router-link></li>
-      <li><router-link :to="'/home'">購物車</router-link></li>
+      <li>
+        <router-link :to="'/search/Connection'">旅遊諮詢</router-link>
+      </li>
+      <li><router-link :to="'/search/Order'">訂單查詢</router-link></li>
     </ul>
     <div class="Login-btn" v-if="!userStore.token">
       <button @click="router.push('/Login/LoginPage')" class="btn">
@@ -57,6 +60,7 @@ const changeshow = () => {
           alt=""
         />
       </div>
+      <h3>歡迎回來，{{ userStore.username }}</h3>
       <ul>
         <li>
           <router-link :to="'/user/center'"
@@ -205,6 +209,10 @@ const changeshow = () => {
   transition: 0.2s;
   border-radius: 10px;
   box-sizing: border-box;
+  h3 {
+    opacity: 0;
+  }
+
   > div {
     width: 80px;
     height: 80px;
@@ -220,19 +228,24 @@ const changeshow = () => {
   }
   ul {
     opacity: 0;
-    li {
-      margin: 10px;
-      font-size: 0;
-    }
   }
 }
 .SideUserBox {
   width: 300px;
-  height: 450px;
+  height: 500px;
   background-color: rgb(218, 218, 218);
   border-radius: 10px;
   border: 2px solid rgb(255, 255, 255);
   box-sizing: border-box;
+  h3 {
+    opacity: 1;
+    color: #474747;
+    margin-top: 10px;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid rgb(151, 151, 151);
+    font-size: 20px;
+  }
   > div:nth-child(1) {
     margin: auto;
     width: 80px;
@@ -249,6 +262,8 @@ const changeshow = () => {
     opacity: 1;
     li {
       display: block;
+      margin: 10px;
+      font-size: 0;
       a {
         display: block;
         color: #757575;

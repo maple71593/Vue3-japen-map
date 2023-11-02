@@ -315,6 +315,7 @@ const PeolData = (n) => {
   box-sizing: border-box;
   display: flex;
   justify-content: space-around;
+  align-items: center;
   border-radius: 10px;
   cursor: pointer;
 }

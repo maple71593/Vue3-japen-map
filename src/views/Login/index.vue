@@ -1,6 +1,7 @@
 <script setup></script>
 <template>
   <div class="Login-page">
+    <MessageBox></MessageBox>
     <router-view></router-view>
   </div>
 </template>

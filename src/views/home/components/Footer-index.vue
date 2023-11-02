@@ -29,13 +29,16 @@
         </nav>
       </div>
       <div class="footer-page">
-        <h3>訂閱我們</h3>
-        <div></div>
+        <h3>開發人員專用</h3>
+        <nav>
+          <a href="#" id="">開發人員</a>
+        </nav>
       </div>
     </div>
   </div>
   <div class="footer-button">
-    ©2001-2023 隱私權政策 版權所有© Wowprime.Corp. All rights reserved.
+    此網頁僅供作品集使用，©2001-2023 隱私權政策 版權所有© Wowprime.Corp. All
+    rights reserved.
   </div>
 </template>
 

@@ -1,16 +1,36 @@
 <script setup>
-import { useVerStore } from '@/stores'
 import { ref } from 'vue'
 import {
   getAuth,
   updatePassword,
   reauthenticateWithCredential,
-  EmailAuthProvider
+  EmailAuthProvider,
+  signOut
 } from 'firebase/auth'
+import { useVerStore, useComStore, useUserStore } from '../../stores'
+import { useRouter } from 'vue-router'
+const useCom = useComStore()
 const useVer = useVerStore()
+const router = useRouter()
+const useStore = useUserStore()
 const auth = getAuth()
 const user = auth.currentUser
 const Num = ref(11)
+// 登出
+const SignOut = () => {
+  signOut(auth)
+    .then(() => {
+      useStore.SignOutClsData()
+      useCom.MessageBox('已登出', 3)
+      setTimeout(() => {
+        router.replace('/home')
+      }, 2000)
+    })
+    .catch((error) => {
+      console.log(error.code)
+    })
+}
+// 錯誤倒數回調
 const overCheck = () => {
   const clstime = setInterval(() => {
     if (Num.value <= 1) {
@@ -37,25 +57,26 @@ const upDataPassword = async () => {
   )
     .then(() => {
       // User re-authenticated.
-      console.log('驗證成功')
+      useVer.NumCheck = true
     })
     .catch((error) => {
+      useVer.NumCheck = false
       if (error.code === 'auth/invalid-login-credentials')
-        console.log('身分驗證失敗')
-      console.log(error.code)
+        console.log(error.code)
     })
   if (!useVer.NumCheck) {
-    alert('驗證失敗，請稍後再試')
+    useCom.MessageBox('驗證失敗，請稍後再試', 1)
     Num.value = 11
     await useVer.REcountNum()
     overCheck()
   } else {
     updatePassword(user, useVer.password)
       .then(() => {
-        alert('更新成功，請重新登入')
+        useCom.MessageBox('更新成功，請重新登入', 3)
+        SignOut()
       })
       .catch((error) => {
-        alert('更新失敗')
+        useCom.MessageBox('更新失敗', 1)
         console.log(error.code)
         // ...
       })
@@ -67,7 +88,7 @@ const upDataPassword = async () => {
     <div>
       <h1>更換密碼</h1>
     </div>
-    <div>
+    <div v-if="useStore.EmailVer">
       <div>
         <h2>舊密碼</h2>
         <input
@@ -98,19 +119,22 @@ const upDataPassword = async () => {
         />
         <h3>{{ useVer.doublePasswordErrMsg }}</h3>
       </div>
+      <div style="display: flex">
+        <div v-if="useVer.Num === 11">
+          <button class="btn2" @click="upDataPassword">送出</button>
+        </div>
+        <div v-else>
+          <button class="btn-disabled" disabled="true">
+            {{ useVer.Num }}
+          </button>
+        </div>
+        <div>
+          <button class="btn2" @click="useVer.AllClean()">清除</button>
+        </div>
+      </div>
     </div>
-    <div style="display: flex">
-      <div v-if="useVer.Num === 11">
-        <button class="btn2" @click="upDataPassword">送出</button>
-      </div>
-      <div v-else>
-        <button class="btn-disabled" disabled="true">
-          {{ useVer.Num }}
-        </button>
-      </div>
-      <div>
-        <button class="btn2" @click="useVer.AllClean()">清除</button>
-      </div>
+    <div v-else>
+      <div>此功能需要驗證電子郵件，請至會員中心驗證</div>
     </div>
   </div>
 </template>

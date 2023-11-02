@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 export const useVerStore = defineStore('calibration', () => {
   const Num = ref(11)
+  const NumCheck = ref()
   const oldPassword = ref('')
   const oldPasswordErrMsg = ref('')
   const email = ref('')
@@ -14,7 +15,7 @@ export const useVerStore = defineStore('calibration', () => {
   const PasswordErrMsg = ref('')
   const doublePasswordErrMsg = ref('')
   // 正則表達
-  const emailRE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  const emailRE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/
   const passwordRE = /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,12}$/
   //姓名較驗
   const userCheck = () => {
@@ -147,6 +148,7 @@ export const useVerStore = defineStore('calibration', () => {
     oldPasswordErrMsg,
     Num,
     countNum,
-    REcountNum
+    REcountNum,
+    NumCheck
   }
 })

@@ -7,8 +7,8 @@ import {
 import { useFirebaseAuth, useFirestore } from 'vuefire'
 import { useRouter } from 'vue-router'
 import { doc, setDoc } from 'firebase/firestore'
-import { useVerStore } from '@/stores'
-
+import { useVerStore, useComStore } from '@/stores'
+const useCom = useComStore()
 const useVer = useVerStore()
 const auth = useFirebaseAuth()
 const router = useRouter()
@@ -33,7 +33,7 @@ const updateName = () => {
 const verifyEmail = () => {
   sendEmailVerification(auth.currentUser).then(() => {
     // Email verification sent!
-    alert('驗證電子郵件已發送')
+    useCom.MessageBox('驗證電子郵件已發送', 3)
     // ...
   })
 }
@@ -41,7 +41,8 @@ const verifyEmail = () => {
 // 註冊
 const useregister = () => {
   // 較驗
-  if (!useVer.RegisterInputCheck()) return alert('請檢查資料是否有誤')
+  if (!useVer.RegisterInputCheck())
+    return useCom.MessageBox('請檢查資料是否有誤', 1)
   // 使用createUserWithEmailAndPassword方法 並將參數傳入
   createUserWithEmailAndPassword(auth, useVer.email, useVer.password)
     .then(() => {
@@ -54,7 +55,7 @@ const useregister = () => {
     .catch((error) => {
       if (error.code === 'auth/email-already-in-use') {
         useVer.AllClean()
-        alert('信箱已被註冊。')
+        useCom.MessageBox('信箱已被註冊。', 1)
       }
       // error.code
       // error.message
@@ -102,6 +103,7 @@ useVer.AllClean()
         <p>{{ useVer.doublePasswordErrMsg }}</p>
         <button @click="useregister">註冊</button>
         <button @click="ChangePahe">已有會員</button>
+        <button @click="router.push('/')">回首頁</button>
       </div>
     </div>
   </div>

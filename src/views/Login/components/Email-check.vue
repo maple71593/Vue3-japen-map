@@ -15,7 +15,6 @@ const changepage = () => {
   })
 }
 changepage()
-// changepage()
 </script>
 <template>
   <div class="emailcheck">
