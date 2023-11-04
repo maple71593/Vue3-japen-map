@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 // 全部演算數據的儲存
 const DateArrayRef = ref({})
 //獲取現在時間 年 月 日
@@ -55,6 +56,9 @@ const ChangeLeft = (num) => {
   left.value = newlaft
 }
 //點擊改變input裡數值
+const ShowCalendar = ref(false)
+const locationShow = ref(false)
+const numShow = ref(false)
 const InpRefPeol = ref()
 const InpRefWhereGo = ref()
 const isCheckStart = ref()
@@ -63,7 +67,7 @@ const InpRefStart = ref()
 const InpRefStartData = ref()
 const InpRefEnd = ref()
 const InpRefEndData = ref()
-const numShow = ref(false)
+
 // 判斷點到的數值
 const GetInputData = (item) => {
   const { year, mon, date, id } = item
@@ -133,6 +137,45 @@ const PeolData = (n) => {
   InpRefPeol.value = n.target.textContent
   numShow.value = false
 }
+//點擊地點設定
+const locationData = (n) => {
+  InpRefWhereGo.value = n.target.textContent
+  locationShow.value = false
+}
+const Blur = () => {
+  let timer = null
+  if (locationShow.value || ShowCalendar.value || numShow.value)
+    timer = setTimeout(() => {
+      locationShow.value = false
+      ShowCalendar.value = false
+      numShow.value = false
+      clearTimeout(timer)
+    }, 100)
+}
+const Focus = (n) => {
+  console.log(n)
+  if (locationShow.value) {
+    ShowCalendar.value = false
+    numShow.value = false
+  } else if (ShowCalendar.value) {
+    locationShow.value = false
+    numShow.value = false
+  } else if (numShow.value) {
+    locationShow.value = false
+    ShowCalendar.value = false
+  }
+}
+const router = useRouter()
+const goSearch = () => {
+  router.push({
+    path: '/search/Search-Page',
+    query: {
+      location: InpRefWhereGo.value,
+      time: InpRefStart.value,
+      people: InpRefPeol.value
+    }
+  })
+}
 </script>
 <template>
   <div class="AllCalender">
@@ -142,6 +185,9 @@ const PeolData = (n) => {
         class="inputTest"
         type="text"
         placeholder="想去哪裡呢"
+        @click="locationShow = true"
+        @focus="Focus"
+        @blur="Blur"
       />
       <input
         v-model="InpRefStart"
@@ -149,6 +195,9 @@ const PeolData = (n) => {
         type="text"
         readonly="readonly"
         placeholder="出發日期"
+        @click="ShowCalendar = true"
+        @focus="Focus"
+        @blur="Blur"
       />
       <input
         v-model="InpRefEnd"
@@ -156,6 +205,9 @@ const PeolData = (n) => {
         readonly="readonly"
         placeholder="結束日期"
         type="text"
+        @click="ShowCalendar = true"
+        @focus="Focus"
+        @blur="Blur"
       />
       <input
         v-model="InpRefPeol"
@@ -163,92 +215,101 @@ const PeolData = (n) => {
         readonly="readonly"
         placeholder="選擇人數"
         type="text"
-        @click="numShow = !numShow"
+        @click="numShow = true"
+        @focus="Focus"
+        @blur="Blur"
       />
+      <div class="location" v-show="locationShow" @click="locationData">
+        <p v-for="(item, index) in 10" :key="index">
+          {{ index + 1 }}
+        </p>
+      </div>
+      <div class="Calender" v-show="ShowCalendar">
+        <div class="btn-Relative">
+          <button class="btnLeft" @click="ChangeLeft(435)">〈</button>
+          <button class="btnRight" @click="ChangeLeft(-435)">〉</button>
+        </div>
+        <div class="calenderCOM">
+          <div
+            class="calender"
+            :style="{ left: left + 'px' }"
+            v-for="(items, indexs) in DateArrayRef"
+            :key="indexs"
+          >
+            <div class="vforbox">
+              <h2>{{ items[15].year }}年{{ items[15].mon }}月</h2>
+              <table class="tablebox">
+                <thead class="ManthBox">
+                  <tr>
+                    <div>日</div>
+                  </tr>
+                  <tr>
+                    <div>一</div>
+                  </tr>
+                  <tr>
+                    <div>二</div>
+                  </tr>
+                  <tr>
+                    <div>三</div>
+                  </tr>
+                  <tr>
+                    <div>四</div>
+                  </tr>
+                  <tr>
+                    <div>五</div>
+                  </tr>
+                  <tr>
+                    <div>六</div>
+                  </tr>
+                </thead>
+                <tbody class="ManthBox">
+                  <tr
+                    @click="GetInputData(item)"
+                    class="datebox"
+                    :class="{
+                      //AI筆記:
+                      //在Vue模板中，如果你没有明確地為某個元素或組件綁定特定的屬性或數據，
+                      // Vue會將該元素的類別和屬性繼承到當前組件的數據中。
+                      // 這可能會導致模板中未明確定義的屬性或類別也會被渲染，
+                      // 具體渲染效果取決於你組件的數據狀態。
+                      // 在你的代碼中，你使用了v-for指令來遍歷DateArrayRef數組，
+                      // 但其中一些項目並未與具體的日期數據綁定，因此它們會繼承StartChecked和EndChecked類別。
+                      // 這是因為在v-for循環中，Vue會儘量渲染所有的項目，即使某些項目在數據中未明確定義。
+                      // 當你未為這些項目提供特定數據時，Vue會默認為它們創建數據，將它們視為未定義的數據項目，
+                      // 因此它們會繼承組件上已定義的屬性或類別。
+                      // 如果你希望這些空格子不繼承StartChecked和EndChecked類別，
+                      // 你可以在v-for中添加條件來檢查是否為有效日期數據，
+                      // 只有在日期數據可用時才應用StartChecked和EndChecked類別。
+                      // 這裡，item.id === isCheckStart && item.id 和 item.id === isCheckedEnd && item.id
+                      // 條件確保只有在item.id存在並與isCheckStart或isCheckedEnd匹配時才應用相應的類別。
+                      // 這將防止空格子繼承這些類別，因為它們的item.id為undefined。
+                      StartChecked: item.id === isCheckStart && item.id,
+                      EndChecked: item.id === isCheckedEnd && item.id,
+                      StartBeforeDay:
+                        item.year <= Year &&
+                        item.mon <= Month &&
+                        item.date < NowDate,
+                      BetweenChecked:
+                        item.id > isCheckStart && item.id < isCheckedEnd
+                    }"
+                    v-for="(item, index) in items"
+                    :key="index"
+                  >
+                    <td>{{ item.date }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="num-box" v-show="numShow">
         <p v-for="(item, index) in 10" :key="index" @click="PeolData">
           {{ index + 1 }}
         </p>
       </div>
       <button @click="reset" class="input-btn">重置</button>
-      <button @click="$router.push('/search')" class="input-btn">搜尋</button>
-    </div>
-    <div class="btn-Relative">
-      <button class="btnLeft" @click="ChangeLeft(435)">〈</button>
-      <button class="btnRight" @click="ChangeLeft(-435)">〉</button>
-    </div>
-    <div class="calenderCOM">
-      <div
-        class="calender"
-        :style="{ left: left + 'px' }"
-        v-for="(items, indexs) in DateArrayRef"
-        :key="indexs"
-      >
-        <div class="vforbox">
-          <h2>{{ items[15].year }}年{{ items[15].mon }}月</h2>
-          <table class="tablebox">
-            <thead class="ManthBox">
-              <tr>
-                <div>日</div>
-              </tr>
-              <tr>
-                <div>一</div>
-              </tr>
-              <tr>
-                <div>二</div>
-              </tr>
-              <tr>
-                <div>三</div>
-              </tr>
-              <tr>
-                <div>四</div>
-              </tr>
-              <tr>
-                <div>五</div>
-              </tr>
-              <tr>
-                <div>六</div>
-              </tr>
-            </thead>
-            <tbody class="ManthBox">
-              <tr
-                @click="GetInputData(item)"
-                class="datebox"
-                :class="{
-                  //AI筆記:
-                  //在Vue模板中，如果你没有明確地為某個元素或組件綁定特定的屬性或數據，
-                  // Vue會將該元素的類別和屬性繼承到當前組件的數據中。
-                  // 這可能會導致模板中未明確定義的屬性或類別也會被渲染，
-                  // 具體渲染效果取決於你組件的數據狀態。
-                  // 在你的代碼中，你使用了v-for指令來遍歷DateArrayRef數組，
-                  // 但其中一些項目並未與具體的日期數據綁定，因此它們會繼承StartChecked和EndChecked類別。
-                  // 這是因為在v-for循環中，Vue會儘量渲染所有的項目，即使某些項目在數據中未明確定義。
-                  // 當你未為這些項目提供特定數據時，Vue會默認為它們創建數據，將它們視為未定義的數據項目，
-                  // 因此它們會繼承組件上已定義的屬性或類別。
-                  // 如果你希望這些空格子不繼承StartChecked和EndChecked類別，
-                  // 你可以在v-for中添加條件來檢查是否為有效日期數據，
-                  // 只有在日期數據可用時才應用StartChecked和EndChecked類別。
-                  // 這裡，item.id === isCheckStart && item.id 和 item.id === isCheckedEnd && item.id
-                  // 條件確保只有在item.id存在並與isCheckStart或isCheckedEnd匹配時才應用相應的類別。
-                  // 這將防止空格子繼承這些類別，因為它們的item.id為undefined。
-                  StartChecked: item.id === isCheckStart && item.id,
-                  EndChecked: item.id === isCheckedEnd && item.id,
-                  StartBeforeDay:
-                    item.year <= Year &&
-                    item.mon <= Month &&
-                    item.date < NowDate,
-                  BetweenChecked:
-                    item.id > isCheckStart && item.id < isCheckedEnd
-                }"
-                v-for="(item, index) in items"
-                :key="index"
-              >
-                <td>{{ item.date }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <button @click="goSearch" class="input-btn">搜尋</button>
     </div>
   </div>
 </template>
@@ -256,7 +317,7 @@ const PeolData = (n) => {
 <style>
 .AllCalender {
   width: 100vw;
-  max-width: 880px;
+  max-width: 80vw;
 }
 /* 處理input */
 .inputTest {
@@ -264,12 +325,18 @@ const PeolData = (n) => {
   padding-left: 10px;
   margin-left: 10px;
   margin-bottom: 10px;
-  width: 165px;
+  width: 250px;
   height: 40px;
   font-size: 20px;
+  border: 0px;
   border-radius: 10px;
 }
 /* 月曆外圍(可顯現範圍) */
+.Calender {
+  left: 85px;
+  position: absolute;
+  z-index: 10;
+}
 .calenderCOM {
   width: 870px;
   height: 260px;
@@ -289,7 +356,7 @@ const PeolData = (n) => {
   text-align: center;
   border-radius: 10px;
   margin-right: 10px;
-  background-color: #f37e7e;
+  background-color: #f37e7ebd;
   color: rgb(255, 255, 255);
   box-sizing: border-box;
 }
@@ -409,7 +476,7 @@ const PeolData = (n) => {
   font-weight: bold;
   transition: background-color 0.3s ease;
   top: 100px;
-  right: -60px;
+  left: 880px;
   position: absolute;
 }
 .btnRight:hover {
@@ -443,11 +510,11 @@ const PeolData = (n) => {
   position: relative;
 }
 .num-box {
-  width: 165px;
+  width: 250px;
   background-color: #fff;
   top: 45px;
   border-radius: 10px;
-  left: 535px;
+  left: 790px;
   text-align: center;
   position: absolute;
   z-index: 10;
@@ -458,6 +525,27 @@ const PeolData = (n) => {
   cursor: pointer;
 }
 .num-box p:hover {
+  margin: 10px 0px;
+  font-size: 20px;
+  box-shadow: 0px 0px 10px;
+  cursor: pointer;
+}
+.location {
+  width: 250px;
+  background-color: #fff;
+  top: 45px;
+  border-radius: 10px;
+  left: 10px;
+  text-align: center;
+  position: absolute;
+  z-index: 10;
+}
+.location p {
+  margin: 10px 0px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.location p:hover {
   margin: 10px 0px;
   font-size: 20px;
   box-shadow: 0px 0px 10px;

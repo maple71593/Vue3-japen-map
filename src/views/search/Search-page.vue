@@ -1,35 +1,45 @@
 <script setup>
 import Calendar from '@/components/Calendar-index.vue'
-import { getSecrchData } from '@/api/home.js'
 import { ref } from 'vue'
-const show = ref(false)
-const SearchData = ref()
-const useSecrchData = async () => {
-  const { data } = await getSecrchData()
-  SearchData.value = data
+import { useFirestore } from 'vuefire'
+import { collection, query, where, getDocs } from 'firebase/firestore'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const SeachData = ref(route.query.location)
+const db = useFirestore()
+const SearchData = ref([])
+const getdata = async () => {
+  const citiesRef = collection(db, 'Plan')
+  const q = query(citiesRef, where('location', '==', `${SeachData.value}`))
+  const querySnapshot = await getDocs(q)
+  querySnapshot.forEach((doc) => {
+    console.log(doc.id, ' => ', doc.data())
+    SearchData.value.push(doc.data())
+  })
 }
-useSecrchData()
+getdata()
+console.log(SearchData.value)
+const show = ref(false)
 </script>
 <template>
   <div>
     <div class="search-container">
-      <div v-if="show">
+      <div v-if="!SearchData">
+        <div class="search-result">
+          <h2>搜尋結果</h2>
+          <h1>沒有找到滿意的結果嗎</h1>
+          <button class="btn" @click="show = !show">換個條件搜尋看看!</button>
+        </div>
+      </div>
+      <div class="search-All-page" v-else>
         <Calendar></Calendar>
-        <button @click="show = !show" class="btn">返回</button>
-      </div>
-      <div class="search-result" v-else>
-        <h2>搜尋結果</h2>
-        <h1>沒有找到滿意的結果嗎</h1>
-        <button class="btn" @click="show = !show">換個條件搜尋看看!</button>
-      </div>
-      <div class="search-All-page">
         <div
           class="search-page"
           v-for="(item, index) in SearchData"
           :key="index"
         >
           <div class="search-page-img">
-            <img :src="item.imageSrc" alt="" />
+            <img :src="item.img" alt="" />
           </div>
           <div class="search-page-text">
             <h2>{{ item.title }}</h2>
@@ -59,6 +69,9 @@ useSecrchData()
 }
 .search-header {
   width: 100vw;
+}
+.search-All-page {
+  margin-top: 50px;
 }
 .search-page {
   display: flex;
