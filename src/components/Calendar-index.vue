@@ -1,6 +1,13 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { useUserStore, useComStore } from '@/stores'
+import { useFirestore } from 'vuefire'
+import { collection, query, getDocs, where } from 'firebase/firestore'
+const useStore = useUserStore()
+const useCom = useComStore()
+const router = useRouter()
+const route = useRoute()
 // 全部演算數據的儲存
 const DateArrayRef = ref({})
 //獲取現在時間 年 月 日
@@ -59,16 +66,16 @@ const ChangeLeft = (num) => {
 const ShowCalendar = ref(false)
 const locationShow = ref(false)
 const numShow = ref(false)
-const InpRefPeol = ref()
-const InpRefWhereGo = ref()
+const InpRefPeol = ref(route.query.people ? route.query.people : null)
+const InpRefWhereGo = ref(route.query.location ? route.query.location : null)
 const isCheckStart = ref()
 const isCheckedEnd = ref()
-const InpRefStart = ref()
+const InpRefStart = ref(route.query.StartTime ? route.query.StartTime : null)
 const InpRefStartData = ref()
-const InpRefEnd = ref()
+const InpRefEnd = ref(route.query.EndTime ? route.query.EndTime : null)
 const InpRefEndData = ref()
 
-// 判斷點到的數值
+// 日歷判斷點到的數值
 const GetInputData = (item) => {
   const { year, mon, date, id } = item
   //第一層判斷(是否點到空的區域與過去的日期)
@@ -152,8 +159,7 @@ const Blur = () => {
       clearTimeout(timer)
     }, 100)
 }
-const Focus = (n) => {
-  console.log(n)
+const Focus = () => {
   if (locationShow.value) {
     ShowCalendar.value = false
     numShow.value = false
@@ -165,16 +171,93 @@ const Focus = (n) => {
     ShowCalendar.value = false
   }
 }
-const router = useRouter()
-const goSearch = () => {
-  router.push({
+// 歷史紀錄判斷
+const GetUseLocation = () => {
+  // 防止空值傳入歷史紀錄
+  if (!InpRefWhereGo.value) return
+  //當歷史紀錄為空時
+  if (!useStore.uselocation) {
+    useStore.uselocation.unshift(InpRefWhereGo.value)
+    //當歷史紀錄有5則的時候
+  } else if (useStore.uselocation.length >= 5) {
+    // 查找新值的索引
+    const index = useStore.uselocation.indexOf(InpRefWhereGo.value)
+    //如果記錄裡面有值跟新值相同時
+    if (index !== -1) {
+      useStore.uselocation.splice(index, 1) // 從原數组中移除新值
+      useStore.uselocation.unshift(InpRefWhereGo.value) // 將新值添加到數组的最前方
+      //如果記錄裡面沒有值跟新值相同時
+    } else {
+      // 刪除最後一個值
+      useStore.uselocation.pop()
+      // 將新值添加到數组的最前方
+      useStore.uselocation.unshift(InpRefWhereGo.value)
+    }
+  } else {
+    // 查找新值的索引
+    const index = useStore.uselocation.indexOf(InpRefWhereGo.value)
+    if (index !== -1) {
+      useStore.uselocation.splice(index, 1) // 從原數组中移除新值
+      useStore.uselocation.unshift(InpRefWhereGo.value)
+      // 將新值添加到數组的最前方
+    } else {
+      useStore.uselocation.unshift(InpRefWhereGo.value)
+    }
+  }
+}
+// 歷史紀錄刪除
+const cleanStory = (Loc) => {
+  console.log(Loc)
+  console.log('執行了')
+  const newLoc = useStore.uselocation.filter((item) => item !== Loc)
+  useStore.uselocation = newLoc
+  console.log(useStore.uselocation)
+}
+const db = useFirestore()
+// 獲取精選地點
+const city = ref([])
+const getcitydata = async () => {
+  const q = query(collection(db, 'cities'))
+  const querySnapshot = await getDocs(q)
+  querySnapshot.forEach((doc) => {
+    city.value.push(doc.id)
+  })
+}
+getcitydata()
+// 執行搜索函數
+// const SeachData = ref(route.query.location)
+const getdata = async () => {
+  const citiesRef = collection(db, 'Plan')
+  const q = query(
+    citiesRef,
+    where('location', '==', `${InpRefWhereGo.value.trim()}`)
+  )
+  const querySnapshot = await getDocs(q)
+  querySnapshot.forEach((doc) => {
+    console.log(doc.id, ' => ', doc.data())
+    useCom.SearchData.push(doc.data())
+  })
+}
+// 去搜尋頁面
+const goSearch = async () => {
+  // 防止點擊歷史紀錄時出現空格
+  InpRefWhereGo.value = InpRefWhereGo.value.trim()
+  //清除搜索紀錄data
+  useCom.CleanSearchData()
+  // 歷史紀錄判斷(新增歷史紀錄)
+  GetUseLocation()
+  //跳轉路由
+  await router.push({
     path: '/search/Search-Page',
     query: {
       location: InpRefWhereGo.value,
-      time: InpRefStart.value,
+      StartTime: InpRefStart.value,
+      EndTime: InpRefEnd.value,
       people: InpRefPeol.value
     }
   })
+  //獲取搜索Data
+  await getdata()
 }
 </script>
 <template>
@@ -220,9 +303,27 @@ const goSearch = () => {
         @blur="Blur"
       />
       <div class="location" v-show="locationShow" @click="locationData">
-        <p v-for="(item, index) in 10" :key="index">
-          {{ index + 1 }}
-        </p>
+        <div v-show="useStore.uselocation.length > 0">
+          <h3 @click.stop>歷史搜尋</h3>
+          <div
+            class="location-story"
+            v-for="(item, index) in useStore.uselocation"
+            :key="index"
+          >
+            <p>
+              <img src="../../public/marker.png" alt="" />{{ item }}
+              <button class="storyBtn" @click.stop="cleanStory(item)">
+                <img src="../../public/rectangle-xmark.png" alt="" />
+              </button>
+            </p>
+          </div>
+        </div>
+        <div>
+          <h3 @click.stop>精選地點</h3>
+          <p v-for="(item, index) in city" :key="index">
+            <img src="../../public/marker.png" alt="" />{{ item }}
+          </p>
+        </div>
       </div>
       <div class="Calender" v-show="ShowCalendar">
         <div class="btn-Relative">
@@ -303,6 +404,7 @@ const goSearch = () => {
           </div>
         </div>
       </div>
+
       <div class="num-box" v-show="numShow">
         <p v-for="(item, index) in 10" :key="index" @click="PeolData">
           {{ index + 1 }}
@@ -325,6 +427,7 @@ const goSearch = () => {
   padding-left: 10px;
   margin-left: 10px;
   margin-bottom: 10px;
+  box-shadow: 2px 2px 4px rgb(24, 5, 43);
   width: 250px;
   height: 40px;
   font-size: 20px;
@@ -539,16 +642,34 @@ const goSearch = () => {
   text-align: center;
   position: absolute;
   z-index: 10;
+  text-align: start;
 }
 .location p {
-  margin: 10px 0px;
+  width: 100%;
+  display: block;
+  padding: 10px 0px;
   font-size: 20px;
   cursor: pointer;
 }
 .location p:hover {
-  margin: 10px 0px;
+  padding: 10px 0px;
   font-size: 20px;
   box-shadow: 0px 0px 10px;
   cursor: pointer;
+}
+.location p img {
+  margin-left: 10px;
+  width: 20px;
+  height: 20px;
+}
+.storyBtn {
+  width: 35px;
+  height: 35px;
+  background-color: white;
+  padding-right: 20px;
+  font-size: 20px;
+  border: 0px;
+  margin: auto;
+  float: right;
 }
 </style>

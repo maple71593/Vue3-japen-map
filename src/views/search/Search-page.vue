@@ -1,41 +1,23 @@
 <script setup>
 import Calendar from '@/components/Calendar-index.vue'
-import { ref } from 'vue'
-import { useFirestore } from 'vuefire'
-import { collection, query, where, getDocs } from 'firebase/firestore'
-import { useRoute } from 'vue-router'
-const route = useRoute()
-const SeachData = ref(route.query.location)
-const db = useFirestore()
-const SearchData = ref([])
-const getdata = async () => {
-  const citiesRef = collection(db, 'Plan')
-  const q = query(citiesRef, where('location', '==', `${SeachData.value}`))
-  const querySnapshot = await getDocs(q)
-  querySnapshot.forEach((doc) => {
-    console.log(doc.id, ' => ', doc.data())
-    SearchData.value.push(doc.data())
-  })
-}
-getdata()
-console.log(SearchData.value)
-const show = ref(false)
+import { useComStore } from '../../stores'
+const useCom = useComStore()
+console.log(useCom.SearchData)
 </script>
 <template>
   <div>
     <div class="search-container">
-      <div v-if="!SearchData">
+      <Calendar></Calendar>
+      <div v-if="!useCom.SearchData">
         <div class="search-result">
           <h2>搜尋結果</h2>
           <h1>沒有找到滿意的結果嗎</h1>
-          <button class="btn" @click="show = !show">換個條件搜尋看看!</button>
         </div>
       </div>
       <div class="search-All-page" v-else>
-        <Calendar></Calendar>
         <div
           class="search-page"
-          v-for="(item, index) in SearchData"
+          v-for="(item, index) in useCom.SearchData"
           :key="index"
         >
           <div class="search-page-img">

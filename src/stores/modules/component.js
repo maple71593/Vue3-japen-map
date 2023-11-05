@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 export const useComStore = defineStore('components', () => {
+  const SearchData = ref([])
   const Message = ref()
   const MsgType = ref()
   let timer = null
@@ -19,5 +20,15 @@ export const useComStore = defineStore('components', () => {
     Message.value = ''
     MsgType.value = ''
   }
-  return { Message, MsgType, MessageBox, MessageClose }
+  const CleanSearchData = () => {
+    SearchData.value = []
+  }
+  return {
+    Message,
+    MsgType,
+    MessageBox,
+    MessageClose,
+    SearchData,
+    CleanSearchData
+  }
 })
