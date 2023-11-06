@@ -9,7 +9,8 @@ const useCom = useComStore()
 const router = useRouter()
 const route = useRoute()
 // 全部演算數據的儲存
-const DateArrayRef = ref({})
+const DateArrayRef = ref([])
+console.log(DateArrayRef.value)
 //獲取現在時間 年 月 日
 const Now = new Date()
 const Year = Now.getFullYear()
@@ -57,8 +58,8 @@ for (let i = 0; i <= 12; i++) {
 //改變月曆輪播的方向
 const left = ref(0)
 const ChangeLeft = (num) => {
-  if (left.value === 0 && num === 435) return
-  if (left.value === -4785 && num === -435) return
+  if (left.value === 0 && num === 365) return
+  if (left.value === -4015 && num === -365) return
   const newlaft = left.value + num
   left.value = newlaft
 }
@@ -70,9 +71,17 @@ const InpRefPeol = ref(route.query.people ? route.query.people : null)
 const InpRefWhereGo = ref(route.query.location ? route.query.location : null)
 const isCheckStart = ref()
 const isCheckedEnd = ref()
-const InpRefStart = ref(route.query.StartTime ? route.query.StartTime : null)
+const InpRefStart = ref(
+  route.query.StartTime
+    ? route.query.StartTime.replace(/(\d{4})(\d{2})(\d{2})/, '$1/$2/$3')
+    : null
+)
 const InpRefStartData = ref()
-const InpRefEnd = ref(route.query.EndTime ? route.query.EndTime : null)
+const InpRefEnd = ref(
+  route.query.EndTime
+    ? route.query.EndTime.replace(/(\d{4})(\d{2})(\d{2})/, '$1/$2/$3')
+    : null
+)
 const InpRefEndData = ref()
 
 // 日歷判斷點到的數值
@@ -138,6 +147,9 @@ const reset = () => {
   InpRefEnd.value = ''
   InpRefEndData.value = ''
   left.value = 0
+  ShowCalendar.value = false
+  numShow.value = false
+  locationShow.value = false
 }
 // 點擊人數設定
 const PeolData = (n) => {
@@ -149,6 +161,7 @@ const locationData = (n) => {
   InpRefWhereGo.value = n.target.textContent
   locationShow.value = false
 }
+// 失焦設定
 const Blur = () => {
   let timer = null
   if (locationShow.value || ShowCalendar.value || numShow.value)
@@ -157,19 +170,23 @@ const Blur = () => {
       ShowCalendar.value = false
       numShow.value = false
       clearTimeout(timer)
-    }, 100)
+    }, 300)
 }
-const Focus = () => {
-  if (locationShow.value) {
-    ShowCalendar.value = false
-    numShow.value = false
-  } else if (ShowCalendar.value) {
-    locationShow.value = false
-    numShow.value = false
-  } else if (numShow.value) {
-    locationShow.value = false
-    ShowCalendar.value = false
-  }
+//互關功能
+const checklocationShow = () => {
+  locationShow.value = !locationShow.value
+  ShowCalendar.value = false
+  numShow.value = false
+}
+const checkShowCalendar = () => {
+  ShowCalendar.value = !ShowCalendar.value
+  numShow.value = false
+  locationShow.value = false
+}
+const checknumShow = () => {
+  numShow.value = !numShow.value
+  ShowCalendar.value = false
+  locationShow.value = false
 }
 // 歷史紀錄判斷
 const GetUseLocation = () => {
@@ -213,6 +230,7 @@ const cleanStory = (Loc) => {
   useStore.uselocation = newLoc
   console.log(useStore.uselocation)
 }
+
 const db = useFirestore()
 // 獲取精選地點
 const city = ref([])
@@ -248,11 +266,11 @@ const goSearch = async () => {
   GetUseLocation()
   //跳轉路由
   await router.push({
-    path: '/search/Search-Page',
+    path: '/Search-Page',
     query: {
       location: InpRefWhereGo.value,
-      StartTime: InpRefStart.value,
-      EndTime: InpRefEnd.value,
+      StartTime: InpRefStartData.value,
+      EndTime: InpRefEndData.value,
       people: InpRefPeol.value
     }
   })
@@ -268,9 +286,7 @@ const goSearch = async () => {
         class="inputTest"
         type="text"
         placeholder="想去哪裡呢"
-        @click="locationShow = true"
-        @focus="Focus"
-        @blur="Blur"
+        @click="checklocationShow"
       />
       <input
         v-model="InpRefStart"
@@ -278,9 +294,7 @@ const goSearch = async () => {
         type="text"
         readonly="readonly"
         placeholder="出發日期"
-        @click="ShowCalendar = true"
-        @focus="Focus"
-        @blur="Blur"
+        @click="checkShowCalendar"
       />
       <input
         v-model="InpRefEnd"
@@ -288,9 +302,7 @@ const goSearch = async () => {
         readonly="readonly"
         placeholder="結束日期"
         type="text"
-        @click="ShowCalendar = true"
-        @focus="Focus"
-        @blur="Blur"
+        @click="checkShowCalendar"
       />
       <input
         v-model="InpRefPeol"
@@ -298,13 +310,12 @@ const goSearch = async () => {
         readonly="readonly"
         placeholder="選擇人數"
         type="text"
-        @click="numShow = true"
-        @focus="Focus"
+        @click="checknumShow"
         @blur="Blur"
       />
       <div class="location" v-show="locationShow" @click="locationData">
         <div v-show="useStore.uselocation.length > 0">
-          <h3 @click.stop>歷史搜尋</h3>
+          <h3 style="margin: 10px" @click.stop>歷史搜尋</h3>
           <div
             class="location-story"
             v-for="(item, index) in useStore.uselocation"
@@ -319,7 +330,7 @@ const goSearch = async () => {
           </div>
         </div>
         <div>
-          <h3 @click.stop>精選地點</h3>
+          <h3 style="margin: 10px" @click.stop>精選地點</h3>
           <p v-for="(item, index) in city" :key="index">
             <img src="../../public/marker.png" alt="" />{{ item }}
           </p>
@@ -327,8 +338,8 @@ const goSearch = async () => {
       </div>
       <div class="Calender" v-show="ShowCalendar">
         <div class="btn-Relative">
-          <button class="btnLeft" @click="ChangeLeft(435)">〈</button>
-          <button class="btnRight" @click="ChangeLeft(-435)">〉</button>
+          <button class="btnLeft" @click="ChangeLeft(365)">〈</button>
+          <button class="btnRight" @click="ChangeLeft(-365)">〉</button>
         </div>
         <div class="calenderCOM">
           <div
@@ -363,7 +374,7 @@ const goSearch = async () => {
                     <div>六</div>
                   </tr>
                 </thead>
-                <tbody class="ManthBox">
+                <tbody class="ManthsBox">
                   <tr
                     @click="GetInputData(item)"
                     class="datebox"
@@ -436,12 +447,12 @@ const goSearch = async () => {
 }
 /* 月曆外圍(可顯現範圍) */
 .Calender {
-  left: 85px;
+  left: 155px;
   position: absolute;
   z-index: 10;
 }
 .calenderCOM {
-  width: 870px;
+  width: 730px;
   height: 260px;
   margin-left: 10px;
   overflow: hidden;
@@ -455,12 +466,14 @@ const goSearch = async () => {
 }
 /* 月曆範圍(內部) */
 .vforbox {
-  width: 425px;
+  width: 355px;
   text-align: center;
   border-radius: 10px;
   margin-right: 10px;
-  background-color: #f37e7ebd;
-  color: rgb(255, 255, 255);
+  background-color: #ffffff;
+  /* background-color: #f37e7ebd; */
+  color: rgba(110, 110, 110, 0.913);
+  text-shadow: 1px 1px 3px;
   box-sizing: border-box;
 }
 .vforbox h2 {
@@ -473,14 +486,22 @@ const goSearch = async () => {
   font-size: 20px;
 }
 .ManthBox {
-  width: 420px;
+  width: 350px;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+  font-weight: 750;
+}
+.ManthsBox {
+  width: 350px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  font-weight: 500;
 }
 .datebox {
   border: 1px solid rgb(225, 225, 225);
-  width: 60px;
+  width: 50px;
   height: 30px;
   box-sizing: border-box;
   display: flex;
@@ -491,32 +512,40 @@ const goSearch = async () => {
 }
 .StartChecked {
   border: 1px solid rgb(225, 225, 225);
-  width: 60px;
+  width: 50px;
   height: 30px;
   box-sizing: border-box;
-  background-color: #1e87d7;
+  /* background-color: #1e87d7; */
+  background-color: #3498db;
+  color: #fff;
+  text-shadow: 0px 0px 0px;
   display: flex;
   margin: auto;
   border-radius: 10px;
   cursor: pointer;
+  font-weight: 750;
 }
 .EndChecked {
   border: 1px solid rgb(225, 225, 225);
-  width: 60px;
+  width: 50px;
   height: 30px;
   box-sizing: border-box;
-  background-color: #386281;
+  color: #fff;
+  text-shadow: 0px 0px 0px;
+  background-color: #3498db;
   display: flex;
   margin: auto;
   border-radius: 10px;
   cursor: pointer;
+  font-weight: 750;
 }
 .BetweenChecked {
   border: 1px solid rgb(225, 225, 225);
-  width: 60px;
+  width: 50px;
   height: 30px;
   box-sizing: border-box;
-  background-color: #e95b5b;
+  /* background-color: #e95b5b; */
+  background-color: #d7d7d7c8;
   display: flex;
   margin: auto;
   border-radius: 10px;
@@ -524,11 +553,11 @@ const goSearch = async () => {
 }
 .StartBeforeDay {
   border: 1px solid rgb(225, 225, 225);
-  color: rgb(224, 161, 161);
-  width: 60px;
+  color: rgba(215, 215, 215, 0.975);
+  width: 50px;
   height: 30px;
   box-sizing: border-box;
-  background-color: #e87b7b;
+  /* background-color: #edececc8; */
   display: flex;
   margin: auto;
   border-radius: 10px;
@@ -579,7 +608,7 @@ const goSearch = async () => {
   font-weight: bold;
   transition: background-color 0.3s ease;
   top: 100px;
-  left: 880px;
+  left: 750px;
   position: absolute;
 }
 .btnRight:hover {
@@ -654,7 +683,7 @@ const goSearch = async () => {
 .location p:hover {
   padding: 10px 0px;
   font-size: 20px;
-  box-shadow: 0px 0px 10px;
+  box-shadow: 0px 1px 5px;
   cursor: pointer;
 }
 .location p img {
@@ -665,7 +694,7 @@ const goSearch = async () => {
 .storyBtn {
   width: 35px;
   height: 35px;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0);
   padding-right: 20px;
   font-size: 20px;
   border: 0px;

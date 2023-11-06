@@ -2,9 +2,7 @@
 import { ref } from 'vue'
 import { collection, getDocs } from 'firebase/firestore'
 import { useFirestore } from 'vuefire'
-import Calendar from '@/components/Calendar-index.vue'
 const ChangePageNum = ref(0)
-const show = ref(true)
 const pic = ref([])
 const db = useFirestore()
 
@@ -35,15 +33,9 @@ useBannerBcak()
         <img class="ImgBoxIMG" :src="item.img" alt="" />
       </div>
     </transition-group>
-    <div class="gotravel" v-if="show">
+    <div class="gotravel">
       <h1>有多久沒出門旅行</h1>
       <h2>不如現在就走</h2>
-      <button @click="show = !show" class="btn">出發</button>
-    </div>
-    <div class="test-box" v-else>
-      <Calendar></Calendar>
-      <br />
-      <button @click="show = !show" class="btn">再想想</button>
     </div>
   </div>
 </template>

@@ -4,6 +4,7 @@ import { useUserStore, useComStore } from '../../../stores'
 import { useRouter } from 'vue-router'
 import { signOut } from 'firebase/auth'
 import { useFirebaseAuth } from 'vuefire'
+
 const userStore = useUserStore()
 const useCom = useComStore()
 const router = useRouter()
@@ -37,11 +38,11 @@ const changeshow = () => {
       <h4 @click="router.push('/')">宏宏旅行社</h4>
     </div>
     <ul>
-      <li><router-link :to="'/home'">精選旅程</router-link></li>
+      <li><router-link :to="'/Choice'">精選旅程</router-link></li>
       <li>
-        <router-link :to="'/search/Connection'">旅遊諮詢</router-link>
+        <router-link :to="'/Connection'">旅遊諮詢</router-link>
       </li>
-      <li><router-link :to="'/search/Order'">訂單查詢</router-link></li>
+      <li><router-link :to="'/Order'">訂單查詢</router-link></li>
     </ul>
     <div class="Login-btn" v-if="!userStore.token">
       <button @click="router.push('/Login/LoginPage')" class="btn">
@@ -211,6 +212,7 @@ const changeshow = () => {
   box-sizing: border-box;
   h3 {
     opacity: 0;
+    display: none;
   }
 
   > div {
@@ -228,6 +230,7 @@ const changeshow = () => {
   }
   ul {
     opacity: 0;
+    display: none;
   }
 }
 .SideUserBox {
@@ -239,6 +242,7 @@ const changeshow = () => {
   box-sizing: border-box;
   h3 {
     opacity: 1;
+    display: block;
     color: #474747;
     margin-top: 10px;
     text-align: center;
@@ -260,6 +264,7 @@ const changeshow = () => {
   }
   ul {
     opacity: 1;
+    display: block;
     li {
       display: block;
       margin: 10px;

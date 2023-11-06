@@ -1,8 +1,5 @@
-<script setup>
-import fake from '@/components/fake-Header.vue'
-</script>
+<script setup></script>
 <template>
-  <fake></fake>
   <MessageBox></MessageBox>
   <div class="userCenter">
     <div>

@@ -27,6 +27,22 @@ const router = createRouter({
           component: () => import('@/views/search/list-3.vue')
         },
         {
+          path: '/Search-Page',
+          component: () => import('@/views/search/Search-Page.vue')
+        },
+        {
+          path: '/Order',
+          component: () => import('@/views/search/Order-index.vue')
+        },
+        {
+          path: '/Connection',
+          component: () => import('@/views/search/Connection-index.vue')
+        },
+        {
+          path: '/Choice',
+          component: () => import('@/views/search/Choice-index.vue')
+        },
+        {
           path: '/user',
           component: () => import('@/views/user/index.vue'),
           children: [
@@ -52,20 +68,7 @@ const router = createRouter({
           path: '/search',
           component: () => import('@/views/search/index.vue'),
           redirect: 'search/Search-Page',
-          children: [
-            {
-              path: '/search/Search-Page',
-              component: () => import('@/views/search/Search-Page.vue')
-            },
-            {
-              path: '/search/Order',
-              component: () => import('@/views/search/Order-index.vue')
-            },
-            {
-              path: '/search/Connection',
-              component: () => import('@/views/search/Connection-index.vue')
-            }
-          ]
+          children: []
         }
       ]
     },

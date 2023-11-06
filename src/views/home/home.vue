@@ -1,7 +1,11 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import Header from '@/views/home/components/header-index.vue'
+import { useRoute } from 'vue-router'
 import Side from '@//components/Side-components.vue'
+import Calendar from '@/components/Calendar-index.vue'
+import FakeHeader from '@/components/Fake-Header.vue'
+const route = useRoute()
 // 監聽滾動屬性 並附值給ref
 const scrollRef = ref()
 // 監聽屬性邏輯
@@ -18,6 +22,11 @@ onMounted(() => {
 <template>
   <div>
     <Header :scrollRef="scrollRef"></Header>
+    <FakeHeader></FakeHeader>
+    <Calendar
+      style="margin: 10px auto; z-index: 10"
+      v-show="route.path === '/home' || route.path === '/Search-Page'"
+    ></Calendar>
     <router-view :scrollRef="scrollRef"></router-view>
     <Side></Side>
   </div>
