@@ -31,7 +31,7 @@
       <div class="footer-page">
         <h3>開發人員專用</h3>
         <nav>
-          <a href="#" id="">開發人員</a>
+          <a href="/list-3" id="">開發人員</a>
         </nav>
       </div>
     </div>

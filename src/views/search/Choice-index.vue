@@ -26,7 +26,13 @@ getdata()
             <img :src="item.img" alt="" />
           </div>
           <div class="search-page-text">
-            <h2>{{ item.title }}</h2>
+            <h2
+              @click="
+                $router.push({ path: '/list-page', query: { id: item.id } })
+              "
+            >
+              {{ item.title }}
+            </h2>
             <h5>{{ item.content1 }}</h5>
             <h5>{{ item.content2 }}</h5>
             <h5>{{ item.content3 }}</h5>

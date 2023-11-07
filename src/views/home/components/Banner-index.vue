@@ -19,7 +19,6 @@ const useBannerBcak = async () => {
 }
 useBannerBcak()
 </script>
-
 <template>
   <div class="banner-change">
     <transition-group>

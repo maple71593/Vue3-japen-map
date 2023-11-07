@@ -21,7 +21,7 @@ const SignOut = () => {
   signOut(auth)
     .then(() => {
       useStore.SignOutClsData()
-      useCom.MessageBox('已登出', 3)
+      useCom.MessageBox('更新成功，請重新登入', 3)
       setTimeout(() => {
         router.replace('/home')
       }, 2000)
@@ -72,7 +72,6 @@ const upDataPassword = async () => {
   } else {
     updatePassword(user, useVer.password)
       .then(() => {
-        useCom.MessageBox('更新成功，請重新登入', 3)
         SignOut()
       })
       .catch((error) => {
@@ -93,7 +92,7 @@ const upDataPassword = async () => {
         <h2>舊密碼</h2>
         <input
           v-model="useVer.oldPassword"
-          type="text"
+          type="password"
           placeholder="請輸入舊密碼"
           @blur="useVer.oldpasswordcheck"
         />
@@ -103,7 +102,7 @@ const upDataPassword = async () => {
         <h2>新密碼</h2>
         <input
           v-model="useVer.password"
-          type="text"
+          type="password"
           placeholder="請輸入新密碼"
           @blur="useVer.passwordcheck"
         />
@@ -113,7 +112,7 @@ const upDataPassword = async () => {
         <h2>再次確認密碼</h2>
         <input
           v-model="useVer.doublepassword"
-          type="text"
+          type="password"
           placeholder="請再次輸入新密碼"
           @blur="useVer.doulblepasswordcheck"
         />

@@ -14,7 +14,7 @@ const BannerBar = computed(() => scrollRef.scrollRef > 300)
 const content = ref([])
 const uesCardPages = async () => {
   const db = useFirestore()
-  const querySnapshot = await getDocs(collection(db, 'Content'))
+  const querySnapshot = await getDocs(collection(db, 'Plan'))
   querySnapshot.forEach((doc) => {
     content.value.push(doc.data())
   })
@@ -51,10 +51,11 @@ const modules = [EffectCoverflow, Pagination, Autoplay]
       class="mySwiper"
     >
       <SwiperSlide v-for="(item, index) in content" :key="index">
-        <h3 class="card-page-h3">{{ item.title }}</h3>
+        <h3 class="card-page-h3">{{ item.location }}</h3>
         <img :src="item.img" alt="" />
         <div class="card-page-text">
-          <h3>{{ item.content }}</h3>
+          <h3>{{ item.title }}</h3>
+          <h3>{{ item.content1 }}</h3>
           <h2>{{ item.amount }}</h2>
         </div>
       </SwiperSlide>

@@ -10,7 +10,6 @@ const router = useRouter()
 const route = useRoute()
 // 全部演算數據的儲存
 const DateArrayRef = ref([])
-console.log(DateArrayRef.value)
 //獲取現在時間 年 月 日
 const Now = new Date()
 const Year = Now.getFullYear()
