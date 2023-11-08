@@ -28,7 +28,7 @@ getdata()
           <div class="search-page-text">
             <h2
               @click="
-                $router.push({ path: '/list-page', query: { id: item.id } })
+                $router.push({ path: '/list-index', query: { id: item.id } })
               "
             >
               {{ item.title }}

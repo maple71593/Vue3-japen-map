@@ -4,12 +4,13 @@ import { useUserStore, useComStore } from '../../../stores'
 import { useRouter } from 'vue-router'
 import { signOut } from 'firebase/auth'
 import { useFirebaseAuth } from 'vuefire'
-
+const showMenu = ref(false)
 const userStore = useUserStore()
 const useCom = useComStore()
 const router = useRouter()
 const auth = useFirebaseAuth()
 const SignOut = () => {
+  showMenu.value = false
   signOut(auth)
     .then(() => {
       userStore.SignOutClsData()
@@ -44,6 +45,7 @@ const changeshow = () => {
       </li>
       <li><router-link :to="'/Order'">訂單查詢</router-link></li>
     </ul>
+
     <div class="Login-btn" v-if="!userStore.token">
       <button @click="router.push('/Login/LoginPage')" class="btn">
         會員登入
@@ -106,11 +108,111 @@ const changeshow = () => {
         </li>
       </ul>
     </div>
+    <div class="menu">
+      <img
+        @click="showMenu = !showMenu"
+        src="./../../../../public/menu-burger.png"
+        alt=""
+      />
+    </div>
+    <div class="menu-list" v-show="showMenu">
+      <ul>
+        <li v-if="!userStore.token">
+          <router-link
+            :to="{ path: '/Login/LoginPage' }"
+            @click="showMenu = false"
+            >還沒登入嗎</router-link
+          >
+        </li>
+        <li v-else>歡迎回來{{ userStore.username }}</li>
+        <li>
+          <router-link :to="'/Choice'" @click="showMenu = false"
+            ><img
+              src="../../../../public/globe.png"
+              alt=""
+            />精選旅程</router-link
+          >
+        </li>
+        <li>
+          <router-link :to="'/Connection'" @click="showMenu = false"
+            ><img
+              src="../../../../public/comment.png"
+              alt=""
+            />旅遊諮詢</router-link
+          >
+        </li>
+        <li>
+          <router-link :to="'/Order'" @click="showMenu = false"
+            ><img
+              src="../../../../public/search.png"
+              alt=""
+            />訂單查詢</router-link
+          >
+        </li>
+      </ul>
+      <ul v-show="userStore.token">
+        <li>
+          <router-link :to="'/user/center'" @click="showMenu = false"
+            ><img
+              src="../../../../public/user.png"
+              alt=""
+            />會員中心</router-link
+          >
+        </li>
+        <li>
+          <router-link :to="'/user/dataChange'" @click="showMenu = false"
+            ><img
+              src="../../../../public/userdata.png"
+              alt=""
+            />修改個人資訊</router-link
+          >
+        </li>
+        <li>
+          <router-link :to="'/user/ChangePic'" @click="showMenu = false"
+            ><img
+              src="../../../../public/picture.png"
+              alt=""
+            />修改大頭貼</router-link
+          >
+        </li>
+        <li>
+          <router-link :to="'/user/passwordChange'" @click="showMenu = false"
+            ><img
+              src="../../../../public/password.png"
+              alt=""
+            />修改密碼</router-link
+          >
+        </li>
+        <li>
+          <router-link @click="SignOut" :to="'/home'"
+            ><img
+              src="../../../../public/loginout.png"
+              alt=""
+            />登出</router-link
+          >
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
 /* header頁首*/
+@mixin pc {
+  @media (min-width: 1001px) {
+    @content;
+  }
+}
 
+@mixin pad {
+  @media (max-width: 1000px) {
+    @content;
+  }
+}
+@mixin phone {
+  @media (max-width: 420px) {
+    @content;
+  }
+}
 .header {
   margin: auto;
   height: 100px;
@@ -119,12 +221,24 @@ const changeshow = () => {
   position: fixed;
   background: linear-gradient(to bottom, #474747, transparent);
   top: 0;
-  width: 100%;
+  width: 100vw;
   z-index: 3;
-  transition: 1.5s ease-in-out;
+  transition: 1s ease-in-out;
+  @include phone {
+    height: 50px;
+    justify-content: space-between;
+  }
+  button {
+    @include phone {
+      display: none;
+    }
+  }
   > ul {
     vertical-align: middle;
     display: flex;
+    @include phone {
+      display: none;
+    }
     > li {
       list-style-type: none;
       padding: 10px;
@@ -136,6 +250,9 @@ const changeshow = () => {
         text-align: center;
         color: rgb(255, 255, 255);
         position: relative;
+        @include phone {
+          font-size: 10px;
+        }
       }
       > a:hover {
         font-size: 25px;
@@ -177,6 +294,36 @@ const changeshow = () => {
     }
   }
 }
+.menu {
+  display: none;
+  @include phone {
+    display: block;
+    background-color: #62d17e;
+    padding: 0px 5px;
+    border-radius: 10px;
+  }
+  img {
+    width: 40px;
+    margin-top: 5px;
+  }
+}
+.menu-list {
+  top: 50px;
+  left: 0px;
+  position: absolute;
+  background-color: #62d17e;
+  width: 100vw;
+  img {
+    margin: 0px 10px;
+  }
+  ul {
+    list-style: none; /* 移除列表项的默认样式 */
+    li {
+      margin: 30px;
+      font-size: 30px;
+    }
+  }
+}
 .headREer {
   margin: auto;
   height: 100px;
@@ -197,6 +344,10 @@ const changeshow = () => {
   font-size: 50px;
   color: rgb(255, 255, 255);
   cursor: pointer;
+  @include phone {
+    font-size: 25px;
+    width: 150px;
+  }
 }
 .Login-btn {
   display: flex;
@@ -210,6 +361,9 @@ const changeshow = () => {
   transition: 0.2s;
   border-radius: 10px;
   box-sizing: border-box;
+  @include phone {
+    display: none;
+  }
   h3 {
     opacity: 0;
     display: none;

@@ -10,7 +10,7 @@ const scrollRef = defineProps(['scrollRef'])
 <template>
   <div>
     <MessageBox></MessageBox>
-    <Banner style="position: relative; top: -75px; z-index: -1"></Banner>
+    <Banner></Banner>
     <Content :scrollRef="scrollRef"></Content>
     <ContentIndex :scrollRef="scrollRef"></ContentIndex>
     <!-- <Main :scrollRef="scrollRef"></Main> -->

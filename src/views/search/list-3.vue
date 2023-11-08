@@ -157,6 +157,36 @@ const clsAll = () => {
           </div>
         </div>
       </div>
+      <h1>預覽商品頁</h1>
+      <div class="list-page-admin">
+        <div>
+          <div>
+            <h2>{{ title }}</h2>
+          </div>
+          <div>
+            <div>
+              <img :src="imgUrl ? imgUrl : fakePic" alt="" />
+            </div>
+            <div>
+              <h2>行程介紹</h2>
+              <h3>產品編號:{{ id }}</h3>
+              <h3>剩餘:{{ last }}</h3>
+              <h3>出發日期:{{ time }}</h3>
+              <h3>航班:{{ airplane }}</h3>
+              <div>
+                <h4>{{ notice1 }}</h4>
+                <h4>{{ notice2 }}</h4>
+                <h4>{{ notice3 }}</h4>
+                <h4>{{ notice4 }}</h4>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3>{{ amount }}</h3>
+            <button class="btn2">手刀報名</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div style="display: flex">
       <div>
@@ -289,5 +319,82 @@ table {
 }
 input[type='file'] {
   display: none;
+}
+.list-page-admin {
+  width: 100%;
+  height: 400px;
+  margin: auto;
+  display: flex;
+  border-radius: 10px;
+  margin-top: 20px;
+  background-color: white;
+  > div:nth-child(1) {
+    width: 100%;
+    border-radius: 10px;
+
+    > div:nth-child(1) {
+      background-color: rgb(166, 166, 180);
+      height: 50px;
+      line-height: 50px;
+      color: antiquewhite;
+      border-radius: 10px 10px 0px 0px;
+      > h2 {
+        margin-left: 20px;
+      }
+    }
+    > div:nth-child(2) {
+      display: flex;
+      > div:nth-child(1) {
+        width: 50%;
+        img {
+          width: 100%;
+        }
+      }
+      > div:nth-child(2) {
+        width: 50%;
+        color: rgb(90, 90, 90);
+        background-color: rgb(255, 255, 255);
+        h3 {
+          margin-left: 10px;
+          margin-top: 10px;
+          font-size: 20px;
+        }
+        > h2 {
+          margin-left: 10px;
+          margin-top: 10px;
+        }
+        > div {
+          margin-top: 10px;
+          h4 {
+            display: inline;
+            background-color: rgb(111, 228, 119);
+            border-radius: 25px;
+            padding: 10px;
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+    > div:nth-child(3) {
+      font-size: 30px;
+      color: rgb(95, 95, 95);
+      text-align: end;
+      h3 {
+        display: inline;
+        // margin-right: 20px;
+        margin: 10px;
+      }
+      h3::before {
+        content: '$';
+      }
+      h3::after {
+        content: '人/起';
+        font-size: 20px;
+      }
+      button {
+        margin: 10px;
+      }
+    }
+  }
 }
 </style>

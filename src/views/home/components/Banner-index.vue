@@ -38,15 +38,66 @@ useBannerBcak()
     </div>
   </div>
 </template>
-<style>
+<style lang="scss" scoped>
+@mixin pad {
+  @media (max-width: 1000px) {
+    @content;
+  }
+}
+@mixin phone {
+  @media (max-width: 420px) {
+    @content;
+  }
+}
 /* banner 輪播圖*/
 .banner-change {
-  width: 100%;
+  width: 100vw;
   height: 800px;
-  min-width: 380px;
-  background-color: rgb(131, 131, 131);
   box-sizing: border-box;
   position: relative;
+  top: -75px;
+  z-index: -1;
+  @include phone {
+    top: -270px;
+  }
+}
+.Img-Box {
+  @include phone {
+    width: 100vw;
+    overflow: hidden;
+  }
+}
+.ImgBoxIMG {
+  width: 100vw;
+  height: 100%;
+  position: absolute;
+  @include phone {
+    width: 100%;
+    bottom: 0;
+    overflow: hidden;
+  }
+}
+.gotravel {
+  color: #fff;
+  font-size: 40px;
+  top: 35%;
+  left: 10%;
+  position: absolute;
+  h1 {
+    @include phone {
+      font-size: 30px;
+    }
+  }
+  h2 {
+    @include phone {
+      font-size: 25px;
+    }
+  }
+}
+.test-box {
+  top: 35%;
+  left: 10%;
+  position: absolute;
 }
 .v-enter-active,
 .v-leave-active {
@@ -61,23 +112,5 @@ useBannerBcak()
 .v-enter-to,
 .v-leave-from {
   opacity: 1;
-}
-.ImgBoxIMG {
-  width: 100vw;
-  min-width: 380px;
-  height: 100%;
-  position: absolute;
-}
-.gotravel {
-  color: #fff;
-  font-size: 40px;
-  top: 35%;
-  left: 10%;
-  position: absolute;
-}
-.test-box {
-  top: 35%;
-  left: 10%;
-  position: absolute;
 }
 </style>

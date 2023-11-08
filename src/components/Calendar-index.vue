@@ -223,8 +223,6 @@ const GetUseLocation = () => {
 }
 // 歷史紀錄刪除
 const cleanStory = (Loc) => {
-  console.log(Loc)
-  console.log('執行了')
   const newLoc = useStore.uselocation.filter((item) => item !== Loc)
   useStore.uselocation = newLoc
   console.log(useStore.uselocation)
@@ -242,7 +240,6 @@ const getcitydata = async () => {
 }
 getcitydata()
 // 執行搜索函數
-// const SeachData = ref(route.query.location)
 const getdata = async () => {
   const citiesRef = collection(db, 'Plan')
   const q = query(
@@ -257,6 +254,10 @@ const getdata = async () => {
 }
 // 去搜尋頁面
 const goSearch = async () => {
+  //關閉未關閉的日歷/搜尋/人數
+  ShowCalendar.value = false
+  locationShow.value = false
+  numShow.value = false
   // 防止點擊歷史紀錄時出現空格
   InpRefWhereGo.value = InpRefWhereGo.value.trim()
   //清除搜索紀錄data

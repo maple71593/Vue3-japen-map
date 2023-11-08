@@ -7,6 +7,7 @@ import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules'
 import { ref, computed, defineProps } from 'vue'
 import { collection, getDocs } from 'firebase/firestore'
 import { useFirestore } from 'vuefire'
+
 //接收滾動數據
 const { scrollRef } = defineProps(['scrollRef'])
 const BannerBar = computed(() => scrollRef.scrollRef > 300)
@@ -52,9 +53,15 @@ const modules = [EffectCoverflow, Pagination, Autoplay]
     >
       <SwiperSlide v-for="(item, index) in content" :key="index">
         <h3 class="card-page-h3">{{ item.location }}</h3>
-        <img :src="item.img" alt="" />
+        <img
+          :src="item.img"
+          alt=""
+          @click="$router.push({ path: '/list-index', query: { id: item.id } })"
+        />
         <div class="card-page-text">
-          <h3>{{ item.title }}</h3>
+          <h3>
+            {{ item.title }}
+          </h3>
           <h3>{{ item.content1 }}</h3>
           <h2>{{ item.amount }}</h2>
         </div>

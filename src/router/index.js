@@ -27,8 +27,8 @@ const router = createRouter({
           component: () => import('@/views/search/list-3.vue')
         },
         {
-          path: '/list-page',
-          component: () => import('@/views/search/list-page.vue')
+          path: '/list-index',
+          component: () => import('@/views/search/list-index.vue')
         },
         {
           path: '/Search-Page',
