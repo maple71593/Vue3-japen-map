@@ -1,11 +1,12 @@
 <script setup>
 import { ref, defineProps, computed } from 'vue'
-import { collection, getDocs } from 'firebase/firestore'
+import { collection, getDocs, limit, query } from 'firebase/firestore'
 import { useFirestore } from 'vuefire'
 const CardPages = ref([])
 const uesCardPages = async () => {
   const db = useFirestore()
-  const querySnapshot = await getDocs(collection(db, 'Content'))
+  const limitedQuery = query(collection(db, 'Plan'), limit(8))
+  const querySnapshot = await getDocs(limitedQuery)
   querySnapshot.forEach((doc) => {
     CardPages.value.push(doc.data())
   })
@@ -22,15 +23,17 @@ const noActivated = computed(() => scrollRef.scrollRef > 900)
     <div class="content2-p" :class="{ contentp: BannerBar }">想去哪裡</div>
     <div class="content2-after" :class="{ contentafter: BannerBar }"></div>
     <div class="card2">
-      <div
-        class="card2-page"
-        :class="{ cardpage: noActivated }"
+      <router-link
         v-for="(item, index) in CardPages"
+        :to="{ path: '/list-index', query: { id: item.id } }"
         :key="index"
       >
-        <h3 class="card2-page-h3">{{ item.title }}</h3>
-        <img :src="item.img" alt="" />
-      </div>
+        <div class="card2-page" :class="{ cardpage: noActivated }">
+          <h3 class="card2-page-h3">{{ item.location }}</h3>
+          <img :src="item.img" alt="" />
+          <h4 class="card2-page-h4-title">{{ item.title }}</h4>
+        </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -93,7 +96,6 @@ const noActivated = computed(() => scrollRef.scrollRef > 900)
   margin: 10px;
   font-size: 20px;
   text-shadow: 10px;
-  background-color: rgb(198, 198, 198);
   border-radius: 10px;
   bottom: -50px;
   right: 0px;
@@ -130,6 +132,12 @@ const noActivated = computed(() => scrollRef.scrollRef > 900)
   color: rgb(193, 193, 193);
   transition: 0.2s;
   text-shadow: 1px 1px 1px black;
+}
+.card2-page-h4-title {
+  position: absolute;
+  bottom: 0;
+  color: aliceblue;
+  background-color: rgba(0, 0, 0, 0.29);
 }
 .cardpage:hover .card2-page-h3 {
   position: absolute;

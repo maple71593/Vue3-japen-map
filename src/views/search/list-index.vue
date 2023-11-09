@@ -1,21 +1,36 @@
 <script setup>
 import { useRoute } from 'vue-router'
-import { collection, query, where, getDocs } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  setDoc,
+  increment
+} from 'firebase/firestore'
 import { useFirestore } from 'vuefire'
 import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '../../stores'
+const useStore = useUserStore()
+const router = useRouter()
 const db = useFirestore()
 const route = useRoute()
 const data = ref({})
+const newdata = ref({})
 const cityData = ref([])
+// 監聽router數據變化，有變化就重新渲染Data
 watch(
   () => route.query.id,
   () => {
     getdata()
-    console.log('watch執行')
   }
 )
+//搜尋函數，獲取數據
 const getdata = async () => {
-  console.log('執行了初始化')
   const q = query(
     collection(db, 'Plan'),
     where('id', '==', `${route.query.id}`)
@@ -24,6 +39,7 @@ const getdata = async () => {
   data.value = {}
   querySnapshot.forEach((doc) => {
     data.value = doc.data()
+    newdata.value = data.value.time.toDate().toLocaleDateString()
   })
   const p = query(
     collection(db, 'Plan'),
@@ -34,11 +50,50 @@ const getdata = async () => {
   querySnapshot2.forEach((doc) => {
     cityData.value.push(doc.data())
   })
-  console.log(cityData.value)
-  console.log('執行了getdata')
 }
-console.log('一進頁面執行')
 getdata()
+//跳轉購物車頁面
+
+const toCart = async () => {
+  // 查詢購物車
+  const docRef = doc(
+    db,
+    `/UserData/${useStore.email}/cart`,
+    `${data.value.title}`
+  )
+  const docSnap = await getDoc(docRef)
+  //docSnap.exists(true/false) 可以判斷是否存在資料
+  //當資料存在時，就更新data, 當資料不存在時就新增data
+  if (docSnap.exists()) {
+    // 更新購物車
+    const updataCart = doc(
+      db,
+      `/UserData/${useStore.email}/cart`,
+      `${data.value.title}`
+    )
+    await updateDoc(updataCart, {
+      //increment(增加數字)
+      people: increment(1)
+    })
+  } else {
+    //新增購物車
+    const newCartRef = doc(
+      db,
+      `/UserData/${useStore.email}/cart`,
+      `${data.value.title}`
+    )
+
+    await setDoc(newCartRef, {
+      id: data.value.id,
+      title: data.value.title,
+      orderType: '購物車',
+      pay: '未付款',
+      people: 1,
+      amount: data.value.amount
+    })
+  }
+  router.push({ path: '/cart', query: { id: route.query.id } })
+}
 </script>
 <template>
   <div class="list-page">
@@ -54,7 +109,7 @@ getdata()
           <h2>行程介紹</h2>
           <h3>產品編號:{{ data.id }}</h3>
           <h3>剩餘:{{ data.last }}</h3>
-          <h3>出發日期:{{ data.time }}</h3>
+          <h3>出發日期:{{ newdata }}</h3>
           <h3>航班:{{ data.airplane }}</h3>
           <div>
             <h4>{{ data.notice1 }}</h4>
@@ -66,7 +121,7 @@ getdata()
       </div>
       <div>
         <h3>{{ data.amount }}</h3>
-        <button class="btn2">手刀報名</button>
+        <button @click="toCart" class="btn2">手刀報名</button>
       </div>
     </div>
     <div>

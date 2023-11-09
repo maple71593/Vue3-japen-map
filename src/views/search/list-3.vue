@@ -1,7 +1,7 @@
 <script setup>
 import { useFirestore, useFirebaseStorage } from 'vuefire'
 import { ref } from 'vue'
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, addDoc, Timestamp } from 'firebase/firestore'
 import {
   ref as storageRef,
   uploadBytes,
@@ -27,31 +27,36 @@ const notice1 = ref()
 const notice2 = ref()
 const notice3 = ref()
 const notice4 = ref()
-
 const fakePic =
   'https://firebasestorage.googleapis.com/v0/b/fir-test-a43df.appspot.com/o/admin%2Ftype3album_blank.png?alt=media&token=5117bf23-ff11-48b2-a3c1-bf65fc57a92c'
 // 上傳資料庫
 const db = useFirestore()
+const check = () => {
+  console.log(new Date(time.value))
+}
+
 const upDataPic = async (rul) => {
+  // time.value =
+  // endtime.value =
   await addDoc(collection(db, 'Plan'), {
-    id: `${id.value}`,
-    title: `${title.value}`,
-    time: `${time.value}`,
-    endtime: `${endtime.value}`,
-    last: `${last.value}`,
-    location: `${location.value}`,
-    airplane: `${airplane.value}`,
-    amount: `${amount.value}`,
-    content1: `${content1.value}`,
-    content2: `${content2.value}`,
-    content3: `${content3.value}`,
-    content4: `${content4.value}`,
-    content5: `${content5.value}`,
-    content6: `${content6.value}`,
-    notice1: `${notice1.value}`,
-    notice2: `${notice2.value}`,
-    notice3: `${notice3.value}`,
-    notice4: `${notice4.value}`,
+    id: id.value,
+    title: title.value,
+    time: Timestamp.fromDate(new Date(time.value)),
+    endtime: Timestamp.fromDate(new Date(endtime.value)),
+    last: last.value,
+    location: location.value,
+    airplane: airplane.value,
+    amount: amount.value,
+    content1: content1.value ? content1.value : null,
+    content2: content2.value ? content2.value : null,
+    content3: content3.value ? content3.value : null,
+    content4: content4.value ? content4.value : null,
+    content5: content5.value ? content5.value : null,
+    content6: content6.value ? content6.value : null,
+    notice1: notice1.value ? notice1.value : null,
+    notice2: notice2.value ? notice2.value : null,
+    notice3: notice3.value ? notice3.value : null,
+    notice4: notice4.value ? notice4.value : null,
     img: rul
   })
 }
@@ -195,9 +200,9 @@ const clsAll = () => {
         <h3>商品名稱(標題)</h3>
         <input v-model="title" type="text" placeholder="請輸入商品名稱" />
         <h3>出發時間</h3>
-        <input v-model="time" type="text" placeholder="請輸入出發時間" />
+        <input v-model="time" type="date" placeholder="請輸入出發時間" />
         <h3>結束時間</h3>
-        <input v-model="endtime" type="text" placeholder="請輸入結束時間" />
+        <input v-model="endtime" type="date" placeholder="請輸入結束時間" />
         <h3>初始剩餘數量</h3>
         <input v-model="last" type="text" placeholder="請輸入數量" />
         <h3>旅遊地點</h3>
@@ -238,6 +243,7 @@ const clsAll = () => {
         <label type="button" for="upload" class="btn2"> 選擇檔案 </label>
         <button @click="UpLoadData" class="btn2">上傳</button>
         <button @click="clsAll" class="btn2">清空</button>
+        <button @click="check">實驗</button>
       </div>
     </div>
   </div>
@@ -249,7 +255,7 @@ const clsAll = () => {
   align-items: center;
   input {
     display: block;
-    width: 400px;
+    width: 300px;
     height: 30px;
   }
 }
@@ -322,6 +328,7 @@ input[type='file'] {
 }
 .list-page-admin {
   width: 100%;
+  max-width: 800px;
   height: 400px;
   margin: auto;
   display: flex;
@@ -371,6 +378,7 @@ input[type='file'] {
             border-radius: 25px;
             padding: 10px;
             margin-left: 5px;
+            box-sizing: border-box;
           }
         }
       }

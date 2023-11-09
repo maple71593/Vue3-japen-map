@@ -3,7 +3,13 @@ import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore, useComStore } from '@/stores'
 import { useFirestore } from 'vuefire'
-import { collection, query, getDocs, where } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  getDocs,
+  where,
+  Timestamp
+} from 'firebase/firestore'
 const useStore = useUserStore()
 const useCom = useComStore()
 const router = useRouter()
@@ -70,17 +76,9 @@ const InpRefPeol = ref(route.query.people ? route.query.people : null)
 const InpRefWhereGo = ref(route.query.location ? route.query.location : null)
 const isCheckStart = ref()
 const isCheckedEnd = ref()
-const InpRefStart = ref(
-  route.query.StartTime
-    ? route.query.StartTime.replace(/(\d{4})(\d{2})(\d{2})/, '$1/$2/$3')
-    : null
-)
+const InpRefStart = ref(route.query.StartTime ? route.query.StartTime : null)
 const InpRefStartData = ref()
-const InpRefEnd = ref(
-  route.query.EndTime
-    ? route.query.EndTime.replace(/(\d{4})(\d{2})(\d{2})/, '$1/$2/$3')
-    : null
-)
+const InpRefEnd = ref(route.query.EndTime ? route.query.EndTime : null)
 const InpRefEndData = ref()
 
 // 日歷判斷點到的數值
@@ -89,7 +87,7 @@ const GetInputData = (item) => {
   //第一層判斷(是否點到空的區域與過去的日期)
   if (year === undefined && mon === undefined && date === undefined) return
   if (year <= Year && mon <= Month && date < NowDate) return
-  const checkedDay = [year, mon, date].join('/')
+  const checkedDay = [year, mon, date].join('-')
   // 第一層判斷 (判斷開始日期是否有值)
   if (InpRefStart.value) {
     //第二層判斷(是否選到出發日 選中出發日就重製)
@@ -241,10 +239,16 @@ const getcitydata = async () => {
 getcitydata()
 // 執行搜索函數
 const getdata = async () => {
+  console.log(InpRefStart.value)
+  console.log(new Date(InpRefStart.value))
   const citiesRef = collection(db, 'Plan')
+  const startTimestamp = Timestamp.fromDate(new Date(InpRefStart.value))
+  const endTimestamp = Timestamp.fromDate(new Date(InpRefEnd.value))
   const q = query(
     citiesRef,
-    where('location', '==', `${InpRefWhereGo.value.trim()}`)
+    where('location', '==', `${InpRefWhereGo.value.trim()}`),
+    where('time', '>=', startTimestamp),
+    where('time', '<=', endTimestamp)
   )
   const querySnapshot = await getDocs(q)
   querySnapshot.forEach((doc) => {
@@ -269,8 +273,8 @@ const goSearch = async () => {
     path: '/Search-Page',
     query: {
       location: InpRefWhereGo.value,
-      StartTime: InpRefStartData.value,
-      EndTime: InpRefEndData.value,
+      StartTime: InpRefStart.value,
+      EndTime: InpRefEnd.value,
       people: InpRefPeol.value
     }
   })

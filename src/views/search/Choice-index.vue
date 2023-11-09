@@ -60,8 +60,6 @@ getdata()
 .search-header {
   width: 100vw;
 }
-.search-All-page {
-}
 .search-page {
   display: flex;
   flex-wrap: nowrap;

@@ -15,7 +15,7 @@ const useCom = useComStore()
       </tr>
       <tr v-for="(item, index) in useCom.SearchData" :key="index">
         <td>{{ item.id }}</td>
-        <td>{{ item.time }}</td>
+        <td>{{ item.time.toDate().toLocaleDateString() }}</td>
         <td>
           <router-link :to="{ path: '/list-index', query: { id: item.id } }">{{
             item.title

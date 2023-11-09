@@ -44,6 +44,10 @@ const changeshow = () => {
         <router-link :to="'/Connection'">旅遊諮詢</router-link>
       </li>
       <li><router-link :to="'/Order'">訂單查詢</router-link></li>
+      <li>
+        <router-link :to="'/Cart'">購物車 </router-link>
+      </li>
+      <p v-show="userStore.CartNum">{{ userStore.CartNum }}</p>
     </ul>
 
     <div class="Login-btn" v-if="!userStore.token">
@@ -149,6 +153,14 @@ const changeshow = () => {
             />訂單查詢</router-link
           >
         </li>
+        <li>
+          <router-link :to="'/Cart'"
+            ><img
+              src="../../../../public/shopping-cart.png"
+              alt=""
+            />購物車</router-link
+          >
+        </li>
       </ul>
       <ul v-show="userStore.token">
         <li>
@@ -239,6 +251,22 @@ const changeshow = () => {
     @include phone {
       display: none;
     }
+    p {
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      color: aliceblue;
+      background-color: red;
+      border: 1px solid white;
+      padding: 3px;
+      top: 20px;
+      left: -25px;
+      border-radius: 25px;
+      font-size: 15px;
+      position: relative;
+    }
+
     > li {
       list-style-type: none;
       padding: 10px;
