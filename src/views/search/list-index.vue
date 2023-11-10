@@ -14,7 +14,8 @@ import {
 import { useFirestore } from 'vuefire'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '../../stores'
+import { useUserStore, useComStore } from '../../stores'
+const useCom = useComStore()
 const useStore = useUserStore()
 const router = useRouter()
 const db = useFirestore()
@@ -56,46 +57,56 @@ getdata()
 
 const toCart = async () => {
   // 查詢購物車
-  const docRef = doc(
-    db,
-    `/UserData/${useStore.email}/cart`,
-    `${data.value.title}`
-  )
-  const docSnap = await getDoc(docRef)
-  //docSnap.exists(true/false) 可以判斷是否存在資料
-  //當資料存在時，就更新data, 當資料不存在時就新增data
-  if (docSnap.exists()) {
-    // 更新購物車
-    const updataCart = doc(
-      db,
-      `/UserData/${useStore.email}/cart`,
-      `${data.value.title}`
-    )
-    await updateDoc(updataCart, {
-      //increment(增加數字)
-      people: increment(1)
-    })
+  if (!useStore.token) {
+    useCom.MessageBox('請先登入會員', 2)
+    setTimeout(() => {
+      router.push('/Login/LoginPage')
+    }, 2000)
   } else {
-    //新增購物車
-    const newCartRef = doc(
+    const docRef = doc(
       db,
       `/UserData/${useStore.email}/cart`,
       `${data.value.title}`
     )
-
-    await setDoc(newCartRef, {
-      id: data.value.id,
-      title: data.value.title,
-      orderType: '購物車',
-      pay: '未付款',
-      people: 1,
-      amount: data.value.amount
-    })
+    const docSnap = await getDoc(docRef)
+    //docSnap.exists(true/false) 可以判斷是否存在資料
+    //當資料存在時，就更新data, 當資料不存在時就新增data
+    if (docSnap.exists()) {
+      // 更新購物車
+      const updataCart = doc(
+        db,
+        `/UserData/${useStore.email}/cart`,
+        `${data.value.title}`
+      )
+      await updateDoc(updataCart, {
+        //increment(增加數字)
+        people: increment(1)
+      })
+    } else {
+      //新增購物車
+      const newCartRef = doc(
+        db,
+        `/UserData/${useStore.email}/cart`,
+        `${data.value.title}`
+      )
+      await setDoc(newCartRef, {
+        id: data.value.id,
+        title: data.value.title,
+        img: data.value.img,
+        amount: data.value.amount,
+        people: 1,
+        total: data.value.amount
+      })
+    }
+    useCom.MessageBox('新增購物車成功', 3)
+    setTimeout(() => {
+      router.push({ path: '/cart', query: { id: route.query.id } })
+    }, 2000)
   }
-  router.push({ path: '/cart', query: { id: route.query.id } })
 }
 </script>
 <template>
+  <MessageBox></MessageBox>
   <div class="list-page">
     <div>
       <div>

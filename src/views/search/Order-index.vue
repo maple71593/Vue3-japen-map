@@ -1,45 +1,109 @@
-<script setup></script>
+<script setup>
+import { collection, query, getDocs, getDoc, doc } from 'firebase/firestore'
+import { useFirestore } from 'vuefire'
+import { useUserStore, useComStore } from '@/stores'
+import { ref } from 'vue'
+const useStore = useUserStore()
+const useCom = useComStore()
+const db = useFirestore()
+const orderData = ref()
+const orderNum = ref()
+const Email = ref()
+const order = ref([])
+const UserOrder = ref({})
+const searchDate = ref({})
+// 獲取用戶的訂單號碼
+const getUserOrder = async () => {
+  if (useStore.token) {
+    const docRef = doc(db, 'UserData', `${useStore.email}`)
+    const docSnap = await getDoc(docRef)
+    UserOrder.value = docSnap.data().order
+  }
+}
+getUserOrder()
+//獲取用戶訂單資訊
+const getUserOrderData = async () => {
+  if (useStore.token) {
+    const q = query(
+      collection(
+        db,
+        `UserData/${useStore.email}/Order/${orderData.value}/Order`
+      )
+    )
+    const querySnapshot = await getDocs(q)
+    querySnapshot.forEach((doc) => {
+      order.value.push(doc.data())
+    })
+    const docRef = doc(
+      db,
+      `/UserData/${useStore.email}/Order`,
+      `${orderData.value}`
+    )
+    const docSnap = await getDoc(docRef)
+    searchDate.value = docSnap.data()
+  }
+}
+//輸入電子郵件跟訂單編號的查詢
+const getData = async () => {
+  if (Email.value === '' || orderNum.value === '')
+    return useCom.MessageBox('請輸入指定資料', 1)
+  const docRef = doc(db, `/UserData/${Email.value}/Order`, `${orderNum.value}`)
+  const docSnap = await getDoc(docRef)
+  searchDate.value = docSnap.data()
+}
+// 清空數據
+const clean = () => {
+  Email.value = ''
+  orderNum.value = ''
+  order.value = []
+  searchDate.value = {}
+}
+</script>
 <template>
+  <MessageBox></MessageBox>
   <div class="order-page">
     <div>
       <img src="../../../public/document.png" alt="" />
       <h1>訂單查詢:</h1>
     </div>
     <div>
+      <div v-if="UserOrder.length > 0">
+        <label for="dropdown">選擇資料：</label>
+        <select id="dropdown" v-model="orderData" @change="getUserOrderData">
+          <option v-for="(item, index) in UserOrder" :key="index" :value="item">
+            {{ item }}
+          </option>
+        </select>
+      </div>
+      <div>
+        <h3>E-mail:</h3>
+        <input type="text" v-model="Email" />
+      </div>
       <div>
         <h3>訂單編號:</h3>
-        <input type="text" name="" id="" />
+        <input type="text" v-model="orderNum" />
       </div>
       <div>
-        <h3>訂單密碼:</h3>
-        <input type="text" />
+        <button @click="getData" class="btn3">查詢</button>
       </div>
       <div>
-        <button class="btn3">查詢</button>
-      </div>
-      <div>
-        <button class="btn3">清空</button>
+        <button @click="clean" class="btn3">清空</button>
       </div>
     </div>
     <table>
       <tr>
         <th>訂單編號</th>
         <th>訂單時間</th>
-        <th>產品名稱</th>
         <th>訂單狀態</th>
-        <th>付款狀態</th>
         <th>總金額</th>
-        <th>已付金額</th>
-        <th>應付金額</th>
+        <th>操作</th>
       </tr>
-      <tr v-if="false">
+      <tr>
+        <td>{{ searchDate.order }}</td>
+        <td>{{ searchDate.time }}</td>
+        <td>{{ searchDate.state }}</td>
+        <td>{{ searchDate.total }}</td>
         <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr v-else>
-        <td>查無資料</td>
       </tr>
     </table>
   </div>

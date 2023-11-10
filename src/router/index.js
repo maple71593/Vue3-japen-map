@@ -75,12 +75,6 @@ const router = createRouter({
               component: () => import('@/views/user/user-changepic.vue')
             }
           ]
-        },
-        {
-          path: '/search',
-          component: () => import('@/views/search/index.vue'),
-          redirect: 'search/Search-Page',
-          children: []
         }
       ]
     },

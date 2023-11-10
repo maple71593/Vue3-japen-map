@@ -16,8 +16,7 @@ const router = useRouter()
 const db = useFirestore()
 const addFirstData = async () => {
   await setDoc(doc(db, 'UserData', useVer.email), {
-    name: '',
-    phoneNum: '',
+    order: [],
     pic: ''
   })
 }

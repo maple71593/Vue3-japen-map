@@ -112,7 +112,8 @@ const useCom = useComStore()
 }
 .ComH4 {
   margin-left: 20px;
-  color: rgb(128, 128, 128);
+  color: rgb(249, 249, 249);
+  text-shadow: 1px 1px 1px rgb(126, 126, 126);
 }
 .ComImg {
   margin-left: 10px;
