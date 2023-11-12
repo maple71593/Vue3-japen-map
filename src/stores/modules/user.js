@@ -13,8 +13,13 @@ export const useUserStore = defineStore(
     const noUserpic = ref(
       'https://firebasestorage.googleapis.com/v0/b/fir-test-a43df.appspot.com/o/admin%2FnoUser.png?alt=media&token=4f016775-1422-40bf-b548-bf6c749e65c9'
     )
+    const LoadingPic = ref(
+      'https://firebasestorage.googleapis.com/v0/b/fir-test-a43df.appspot.com/o/admin%2FLoading.gif?alt=media&token=f261c14b-5d66-41eb-866b-fb1ef8f67f0e'
+    )
     const uselocation = ref([])
     const CartNum = ref()
+    const UserCart = ref([])
+    const Total = ref()
     // 更新用戶名稱與手機號碼
     const upNewuserData = (newName, newphone) => {
       username.value = newName
@@ -37,6 +42,8 @@ export const useUserStore = defineStore(
       email.value = ''
       phoneNum.value = ''
       CartNum.value = ''
+      UserCart.value = ''
+      Total.value = ''
     }
 
     return {
@@ -51,7 +58,10 @@ export const useUserStore = defineStore(
       phoneNum,
       EmailVer,
       uselocation,
-      CartNum
+      CartNum,
+      UserCart,
+      Total,
+      LoadingPic
     }
   },
   {

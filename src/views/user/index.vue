@@ -1,5 +1,6 @@
 <script setup></script>
 <template>
+  <Loading-page></Loading-page>
   <MessageBox></MessageBox>
   <div class="userCenter">
     <div>
@@ -35,7 +36,9 @@
         </li>
       </ul>
     </div>
-    <div><router-view></router-view></div>
+    <div>
+      <transition appear><router-view></router-view></transition>
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>

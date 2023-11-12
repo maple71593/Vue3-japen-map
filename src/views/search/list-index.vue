@@ -99,60 +99,59 @@ const toCart = async () => {
       })
     }
     useCom.MessageBox('新增購物車成功', 3)
-    setTimeout(() => {
-      router.push({ path: '/cart', query: { id: route.query.id } })
-    }, 2000)
   }
 }
 </script>
 <template>
   <MessageBox></MessageBox>
-  <div class="list-page">
-    <div>
-      <div>
-        <h2>{{ data.title }}</h2>
-      </div>
+  <transition appear>
+    <div class="list-page">
       <div>
         <div>
-          <img :src="data.img" alt="" />
+          <h2>{{ data.title }}</h2>
         </div>
         <div>
-          <h2>行程介紹</h2>
-          <h3>產品編號:{{ data.id }}</h3>
-          <h3>剩餘:{{ data.last }}</h3>
-          <h3>出發日期:{{ newdata }}</h3>
-          <h3>航班:{{ data.airplane }}</h3>
           <div>
-            <h4>{{ data.notice1 }}</h4>
-            <h4>{{ data.notice2 }}</h4>
-            <h4>{{ data.notice3 }}</h4>
-            <h4>{{ data.notice4 }}</h4>
+            <img :src="data.img" alt="" />
+          </div>
+          <div>
+            <h2>行程介紹</h2>
+            <h3>產品編號:{{ data.id }}</h3>
+            <h3>剩餘:{{ data.last }}</h3>
+            <h3>出發日期:{{ newdata }}</h3>
+            <h3>航班:{{ data.airplane }}</h3>
+            <div>
+              <h4>{{ data.notice1 }}</h4>
+              <h4>{{ data.notice2 }}</h4>
+              <h4>{{ data.notice3 }}</h4>
+              <h4>{{ data.notice4 }}</h4>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3>{{ data.amount }}</h3>
+          <button @click="toCart" class="btn2">手刀報名</button>
+        </div>
+      </div>
+      <div>
+        <h3>千萬別錯過</h3>
+        <div>
+          <div v-for="(item, index) in cityData" :key="index">
+            <div>
+              <h3>
+                <router-link
+                  @click="getdata"
+                  :to="{ path: '/list-index', query: { id: item.id } }"
+                  >{{ item.title }}</router-link
+                >
+              </h3>
+              <div><img :src="item.img" alt="" /></div>
+            </div>
           </div>
         </div>
       </div>
-      <div>
-        <h3>{{ data.amount }}</h3>
-        <button @click="toCart" class="btn2">手刀報名</button>
-      </div>
     </div>
-    <div>
-      <h3>千萬別錯過</h3>
-      <div>
-        <div v-for="(item, index) in cityData" :key="index">
-          <div>
-            <h3>
-              <router-link
-                @click="getdata"
-                :to="{ path: '/list-index', query: { id: item.id } }"
-                >{{ item.title }}</router-link
-              >
-            </h3>
-            <div><img :src="item.img" alt="" /></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  </transition>
 </template>
 <style lang="scss" scoped>
 .list-page {

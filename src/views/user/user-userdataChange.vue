@@ -7,13 +7,10 @@ import { useFirestore, useFirebaseAuth } from 'vuefire'
 import { useComStore, useUserStore } from '../../stores'
 const useCom = useComStore()
 const useStore = useUserStore()
-const { email, upNewuserData, username, phoneNum } = useStore
+const { email, upNewuserData, username } = useStore
 const NewName = ref('')
-const Newphone = ref('')
 const nameErrMsg = ref('')
-const phoneErrMsg = ref('')
 const nameRegex = /^[A-Za-z\u4e00-\u9fa5]+$/
-const phoneRegex = /^(09)[0-9]{8}$/
 const nameCheck = () => {
   if (NewName.value === '') {
     nameErrMsg.value = '請輸入名稱'
@@ -24,48 +21,26 @@ const nameCheck = () => {
     return true
   }
 }
-const phoneCheck = () => {
-  if (Newphone.value === '') {
-    phoneErrMsg.value = '請輸入手機號碼'
-  } else if (!phoneRegex.test(Newphone.value)) {
-    phoneErrMsg.value = '請輸入正確的手機號碼格式'
-  } else {
-    phoneErrMsg.value = ''
-    return true
-  }
-}
-const twoCheck = () => {
-  if (phoneCheck() && nameCheck()) {
-    return true
-  } else {
-    return false
-  }
-}
 // Firestore相關
 // 將取得的資料更新上Firestore資料庫
 const db = useFirestore()
 // 需傳遞三個參數 (更新值Picurl , newname ,newphone)
 const UpLoadData = async () => {
-  if (!NewName.value && !Newphone.value) return useCom.MessageBox('不得為空', 1)
-  if (!twoCheck()) return useCom.MessageBox('有誤', 1)
+  if (!NewName.value) return useCom.MessageBox('不得為空', 1)
   await updateDoc(doc(db, 'UserData', email), {
-    name: `${NewName.value}`,
-    phoneNum: `${Newphone.value}`
+    name: `${NewName.value}`
   })
   updatePic()
-  upNewuserData(NewName.value, Newphone.value)
+  upNewuserData(NewName.value)
   useCom.MessageBox('更新成功', 3)
 }
 // 更新用戶資訊
 const auth = useFirebaseAuth()
 const updatePic = () => {
   updateProfile(auth.currentUser, {
-    displayName: `${NewName.value}`,
-    phoneNumber: `${Newphone.value}`
+    displayName: `${NewName.value}`
   })
-    .then(() => {
-      console.log(Newphone.value)
-    })
+    .then(() => {})
     .catch((err) => {
       console.log(err.code)
     })
@@ -73,7 +48,6 @@ const updatePic = () => {
 
 const SetInputValue = () => {
   NewName.value = username
-  Newphone.value = phoneNum
 }
 SetInputValue()
 </script>
@@ -93,17 +67,6 @@ SetInputValue()
         @blur="nameCheck"
       />
       <h6>{{ nameErrMsg }}</h6>
-    </div>
-    <div>
-      <p>用戶手機:</p>
-      <input
-        type="text"
-        v-model="Newphone"
-        placeholder="功能無法完全儲存，請用戶注意"
-        maxlength="10"
-        @blur="phoneCheck"
-      />
-      <h6>{{ phoneErrMsg }}</h6>
     </div>
     <div><button @click="UpLoadData" class="btn2">確認</button></div>
   </div>

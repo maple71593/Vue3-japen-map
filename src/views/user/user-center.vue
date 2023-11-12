@@ -42,7 +42,6 @@ const SendEmail = async () => {
     <div>
       <p>email : {{ useStore.email }}</p>
       <p>姓名 : {{ useStore.username }}</p>
-      <p>電話 : {{ useStore.phoneNum }}功能停用</p>
     </div>
   </div>
 </template>

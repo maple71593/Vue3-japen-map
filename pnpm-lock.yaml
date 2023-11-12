@@ -5,6 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@emailjs/browser':
+    specifier: ^3.11.0
+    version: 3.11.0
+  '@vueuse/core':
+    specifier: ^10.6.0
+    version: 10.6.0(vue@3.3.4)
   axios:
     specifier: ^1.5.1
     version: 1.5.1
@@ -32,6 +38,9 @@ dependencies:
   vue:
     specifier: ^3.3.4
     version: 3.3.4
+  vue-loading-overlay:
+    specifier: ^6.0.3
+    version: 6.0.3(vue@3.3.4)
   vue-router:
     specifier: ^4.2.4
     version: 4.2.5(vue@3.3.4)
@@ -63,7 +72,7 @@ devDependencies:
     version: 1.69.4
   unplugin-auto-import:
     specifier: ^0.16.6
-    version: 0.16.6
+    version: 0.16.6(@vueuse/core@10.6.0)
   unplugin-vue-components:
     specifier: ^0.25.2
     version: 0.25.2(vue@3.3.4)
@@ -103,6 +112,11 @@ packages:
       '@babel/helper-string-parser': 7.22.5
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
+
+  /@emailjs/browser@3.11.0:
+    resolution: {integrity: sha512-RkY3FKZ3fPdK++OeF46mRTFpmmQWCHUVHZH209P3NE4D5sg2Atg7S2wa3gw5062Gl4clt4Wn5SyC4WhlVZC5pA==}
+    engines: {node: '>=14.0.0'}
+    dev: false
 
   /@esbuild/android-arm64@0.18.20:
     resolution: {integrity: sha512-Nz4rJcchGDtENV0eMKUNa6L12zz2zBDXuhj/Vjh18zGqB44Bi7MBMSXjgunJgjRhCmKOjnPuZp4Mb6OKqtMHLQ==}
@@ -943,6 +957,9 @@ packages:
     resolution: {integrity: sha512-+68kP9yzs4LMp7VNh8gdzMSPZFL44MLGqiHWvttYJe+6qnuVr4Ek9wSBQoveqY/r+LwjCcU29kNVkidwim+kYA==}
     dev: false
 
+  /@types/web-bluetooth@0.0.20:
+    resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
+
   /@typescript-eslint/parser@5.62.0(eslint@8.51.0)(typescript@4.9.5):
     resolution: {integrity: sha512-VlJEV0fOQ7BExOsHYAGrgbEiZoi8D+Bl2+f6V2RrXerRSylnp+ZBHmPvaIa8cz0Ajx7WO7Z5RqfgYg7ED1nRhA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -1106,6 +1123,28 @@ packages:
 
   /@vue/shared@3.3.4:
     resolution: {integrity: sha512-7OjdcV8vQ74eiz1TZLzZP4JwqM5fA94K6yntPS5Z25r9HDuGNzaGdgvwKYq6S+MxwF0TFRwe50fIR/MYnakdkQ==}
+
+  /@vueuse/core@10.6.0(vue@3.3.4):
+    resolution: {integrity: sha512-+Yee+g9+9BEbvkyGdn4Bf4yZx9EfocAytpV2ZlrlP7xcz+qznLmZIDqDroTvc5vtMkWZicisgEv8dt3+jL+HQg==}
+    dependencies:
+      '@types/web-bluetooth': 0.0.20
+      '@vueuse/metadata': 10.6.0
+      '@vueuse/shared': 10.6.0(vue@3.3.4)
+      vue-demi: 0.14.6(vue@3.3.4)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+
+  /@vueuse/metadata@10.6.0:
+    resolution: {integrity: sha512-mzKHkHoiK6xVz01VzQjM2l6ofUanEaofgEGPgDHcAzlvOTccPRTIdEuzneOUTYxgfm1vkDikS6rtrEw/NYlaTQ==}
+
+  /@vueuse/shared@10.6.0(vue@3.3.4):
+    resolution: {integrity: sha512-0t4MVE18sO+/4Gh0jfeOXBTjKeV4606N9kIrDOLPjFl8Rwnlodn+QC5A4LfJuysK7aOsTMjF3KnzNeueaI0xlQ==}
+    dependencies:
+      vue-demi: 0.14.6(vue@3.3.4)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
 
   /acorn-jsx@5.3.2(acorn@8.10.0):
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -2640,7 +2679,7 @@ packages:
       - rollup
     dev: true
 
-  /unplugin-auto-import@0.16.6:
+  /unplugin-auto-import@0.16.6(@vueuse/core@10.6.0):
     resolution: {integrity: sha512-M+YIITkx3C/Hg38hp8HmswP5mShUUyJOzpifv7RTlAbeFlO2Tyw0pwrogSSxnipHDPTtI8VHFBpkYkNKzYSuyA==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -2654,6 +2693,7 @@ packages:
     dependencies:
       '@antfu/utils': 0.7.6
       '@rollup/pluginutils': 5.0.5
+      '@vueuse/core': 10.6.0(vue@3.3.4)
       fast-glob: 3.3.1
       local-pkg: 0.4.3
       magic-string: 0.30.4
@@ -2780,7 +2820,6 @@ packages:
         optional: true
     dependencies:
       vue: 3.3.4
-    dev: false
 
   /vue-eslint-parser@8.3.0(eslint@8.51.0):
     resolution: {integrity: sha512-dzHGG3+sYwSf6zFBa0Gi9ZDshD7+ad14DGOdTLjruRVgZXe2J+DcZ9iUhyR48z5g1PqRa20yt3Njna/veLJL/g==}
@@ -2817,6 +2856,15 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /vue-loading-overlay@6.0.3(vue@3.3.4):
+    resolution: {integrity: sha512-Ab0hqnVKasVS2mNUo8Wkm95mSbk5fXp/karZmMou5yP0hTUOox/kZuBLNwgzJ4kFP829wFJl7O7FN1Dr0kRaVQ==}
+    engines: {node: '>=12.13.0'}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      vue: 3.3.4
+    dev: false
 
   /vue-router@4.2.5(vue@3.3.4):
     resolution: {integrity: sha512-DIUpKcyg4+PTQKfFPX88UWhlagBEBEfJ5A8XDXRJLUnZOvcpMF8o/dnL90vpVkGaPbjvXazV/rC1qBKrZlFugw==}

@@ -1,8 +1,11 @@
 <script setup></script>
 <template>
   <div class="Login-page">
+    <Loading-page></Loading-page>
     <MessageBox></MessageBox>
-    <router-view></router-view>
+    <transition appear>
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 <style lang="scss" scoped>

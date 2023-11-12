@@ -17,14 +17,15 @@ const auth = getAuth()
 const user = auth.currentUser
 const Num = ref(11)
 // 登出
-const SignOut = () => {
-  signOut(auth)
+const SignOut = async () => {
+  await signOut(auth)
     .then(() => {
       useStore.SignOutClsData()
+      router.replace('/home')
       useCom.MessageBox('更新成功，請重新登入', 3)
       setTimeout(() => {
-        router.replace('/home')
-      }, 2000)
+        useCom.isLoading = false
+      }, 1000)
     })
     .catch((error) => {
       console.log(error.code)
@@ -49,6 +50,7 @@ useVer.AllClean()
 //重新驗證用戶資料
 const upDataPassword = async () => {
   if (!useVer.ChangePasswordInputCheck()) return
+  useCom.isLoading = true
   await reauthenticateWithCredential(
     user,
     EmailAuthProvider.credential(user.email, useVer.oldPassword)
@@ -67,8 +69,11 @@ const upDataPassword = async () => {
   if (!useVer.NumCheck) {
     useCom.MessageBox('驗證失敗，請稍後再試', 1)
     Num.value = 11
-    await useVer.REcountNum()
+    useVer.REcountNum()
     overCheck()
+    setTimeout(() => {
+      useCom.isLoading = false
+    }, 500)
   } else {
     updatePassword(user, useVer.password)
       .then(() => {

@@ -4,13 +4,13 @@ import 'swiper/css'
 import 'swiper/css/effect-coverflow'
 import 'swiper/css/pagination'
 import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules'
-import { ref, computed, defineProps } from 'vue'
+import { ref, computed } from 'vue'
 import { collection, getDocs } from 'firebase/firestore'
 import { useFirestore } from 'vuefire'
-
+import { useUserStore } from '../../../stores'
+const useStore = useUserStore()
 //接收滾動數據
-const { scrollRef } = defineProps(['scrollRef'])
-const BannerBar = computed(() => scrollRef.scrollRef > 300)
+const BannerBar = computed(() => useStore.scrollRef > 300)
 // 獲取資料庫數據並存取在content
 const content = ref([])
 const uesCardPages = async () => {
@@ -26,7 +26,7 @@ const modules = [EffectCoverflow, Pagination, Autoplay]
 </script>
 <template>
   <div class="content">
-    <div>
+    <div style="margin: auto">
       <div class="content-p" :class="{ contentp: BannerBar }">精選旅程</div>
       <div class="content-after" :class="{ contentafter: BannerBar }"></div>
     </div>
@@ -70,7 +70,7 @@ const modules = [EffectCoverflow, Pagination, Autoplay]
   </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
 #app {
   height: 100%;
 }
@@ -97,6 +97,9 @@ body {
   width: 70%;
   padding-top: 50px;
   padding-bottom: 50px;
+  @include phone {
+    width: 100%;
+  }
 }
 
 .swiper-slide {
@@ -118,11 +121,16 @@ body {
   margin-left: auto;
   margin-bottom: 100px;
   margin-top: 30px;
-  margin-bottom: 100px;
   padding-top: 30px;
   text-align: left;
   border-radius: 30px;
   display: flex;
+  @include phone {
+    display: block;
+    width: 80vw;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
 }
 
 /* 控制文字標題 */

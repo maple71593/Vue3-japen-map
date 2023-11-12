@@ -4,6 +4,8 @@ export const useComStore = defineStore('components', () => {
   const SearchData = ref([])
   const Message = ref()
   const MsgType = ref()
+  const isLoading = ref(false)
+  const scrollRef = ref()
   let timer = null
   const MessageBox = (Msg, Type) => {
     Message.value = Msg
@@ -29,6 +31,8 @@ export const useComStore = defineStore('components', () => {
     MessageBox,
     MessageClose,
     SearchData,
-    CleanSearchData
+    CleanSearchData,
+    isLoading,
+    scrollRef
   }
 })

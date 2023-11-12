@@ -1,14 +1,26 @@
 <script setup>
-import { getMasterPic } from '@/api/home.js'
-import { computed, ref, defineProps } from 'vue'
-const { scrollRef } = defineProps(['scrollRef'])
-const Mixshow = computed(() => scrollRef.scrollRef > 1700)
+// import { getMasterPic } from '@/api/home.js'
+import { computed, ref } from 'vue'
+import { useUserStore } from '../../../stores'
+import { collection, query, getDocs } from 'firebase/firestore'
+import { useFirestore } from 'vuefire'
+const db = useFirestore()
+const useStore = useUserStore()
+const Mixshow = computed(() => useStore.scrollRef > 1700)
 const pic = ref([])
 const useMasterPic = async () => {
-  const { data } = await getMasterPic()
-  pic.value = data
+  const q = query(collection(db, 'master'))
+  const querySnapshot = await getDocs(q)
+  querySnapshot.forEach((doc) => {
+    pic.value.push(doc.data())
+  })
 }
 useMasterPic()
+// const useMasterPic = async () => {
+//   const { data } = await getMasterPic()
+//   pic.value = data
+// }
+// useMasterPic()
 // 實驗用數據(取隨機數去判斷回傳數值並加載)
 // //儲存已經存在的隨機數
 // const reant = ref([])
@@ -45,6 +57,10 @@ useMasterPic()
 <template>
   <div class="main">
     <div class="main-box" :class="{ mainbox: Mixshow }">
+      <div style="margin: auto">
+        <div class="content-p" :class="{ contentp: Mixshow }">專業團隊</div>
+        <div class="content-after" :class="{ contentafter: Mixshow }"></div>
+      </div>
       <div class="master" v-for="item in pic" :key="item.id">
         <div class="master-testBox">
           <h2>{{ item.name }}</h2>
@@ -52,21 +68,17 @@ useMasterPic()
           <h3>{{ item.studying2 }}</h3>
           <h3>{{ item.studying3 }}</h3>
           <h3>{{ item.studying4 }}</h3>
-          <p>{{ item.test }}</p>
+          <p>{{ item.text }}</p>
         </div>
         <img :src="item.img" alt="" />
-      </div>
-      <div>
-        <div class="content-p" :class="{ contentp: Mixshow }">專業團隊</div>
-        <div class="content-after" :class="{ contentafter: Mixshow }"></div>
       </div>
     </div>
   </div>
 </template>
-<style>
+<style lang="scss" scoped>
 .main {
   width: 100%;
-  margin: 100px;
+  margin: 50px auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -135,22 +147,19 @@ useMasterPic()
   width: 270px;
   height: 400px;
   position: relative;
+  margin: 10px;
   text-align: center;
   transition: 1s;
+  @include phone {
+    margin: auto;
+    margin-bottom: 30px;
+  }
 }
 .master:hover {
   position: relative;
   text-align: center;
   z-index: 2;
 }
-/* 控制下面v-for最後兩個的高度 讓他們有重疊的感覺 */
-/* .main-box div:nth-child(6) {
-  margin-top: -20%;
-}
-.main-box div:nth-child(7) {
-  margin-top: -20%;
-} */
-/* 控制for的裡面的文字盒子樣式 */
 .master-testBox {
   font-size: 12px;
   opacity: 0;

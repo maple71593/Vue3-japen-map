@@ -31,7 +31,7 @@
       <div class="footer-page">
         <h3>開發人員專用</h3>
         <nav>
-          <a href="/list-3" id="">開發人員</a>
+          <a href="/admin-EnterData" id="">開發人員</a>
         </nav>
       </div>
     </div>
@@ -42,17 +42,23 @@
   </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .footer {
   width: 100vw;
   min-width: 1200px;
   background-color: rgb(172, 172, 172);
+  @include phone {
+    min-width: 400px;
+  }
 }
 .footer-width {
   width: 1200px;
   display: flex;
   margin: auto;
   box-sizing: border-box;
+  @include phone {
+    width: 100vw;
+  }
 }
 
 .footer-page {

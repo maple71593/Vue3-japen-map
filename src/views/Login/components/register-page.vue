@@ -42,6 +42,7 @@ const useregister = () => {
   // 較驗
   if (!useVer.RegisterInputCheck())
     return useCom.MessageBox('請檢查資料是否有誤', 1)
+  useCom.isLoading = true
   // 使用createUserWithEmailAndPassword方法 並將參數傳入
   createUserWithEmailAndPassword(auth, useVer.email, useVer.password)
     .then(() => {
@@ -49,11 +50,15 @@ const useregister = () => {
       updateName()
       verifyEmail()
       useVer.AllClean()
-      router.replace('/Login/EmailCheck')
+      setTimeout(() => {
+        useCom.isLoading = false
+        router.replace('/Login/EmailCheck')
+      }, 500)
     })
     .catch((error) => {
       if (error.code === 'auth/email-already-in-use') {
         useVer.AllClean()
+        useCom.isLoading = false
         useCom.MessageBox('信箱已被註冊。', 1)
       }
       // error.code

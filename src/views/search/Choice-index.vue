@@ -18,33 +18,35 @@ const getdata = async () => {
 getdata()
 </script>
 <template>
-  <div>
-    <div class="search-container">
-      <div class="search-All-page">
-        <div class="search-page" v-for="(item, index) in Choice" :key="index">
-          <div class="search-page-img">
-            <img :src="item.img" alt="" />
-          </div>
-          <div class="search-page-text">
-            <h2
-              @click="
-                $router.push({ path: '/list-index', query: { id: item.id } })
-              "
-            >
-              {{ item.title }}
-            </h2>
-            <h5>{{ item.content1 }}</h5>
-            <h5>{{ item.content2 }}</h5>
-            <h5>{{ item.content3 }}</h5>
-            <h5>{{ item.content4 }}</h5>
-            <h5>{{ item.content5 }}</h5>
-            <h5>{{ item.content6 }}</h5>
-            <h3>{{ item.amount }}</h3>
+  <transition appear>
+    <div>
+      <div class="search-container">
+        <div class="search-All-page">
+          <div class="search-page" v-for="(item, index) in Choice" :key="index">
+            <div class="search-page-img">
+              <img :src="item.img" alt="" />
+            </div>
+            <div class="search-page-text">
+              <h2
+                @click="
+                  $router.push({ path: '/list-index', query: { id: item.id } })
+                "
+              >
+                {{ item.title }}
+              </h2>
+              <h5>{{ item.content1 }}</h5>
+              <h5>{{ item.content2 }}</h5>
+              <h5>{{ item.content3 }}</h5>
+              <h5>{{ item.content4 }}</h5>
+              <h5>{{ item.content5 }}</h5>
+              <h5>{{ item.content6 }}</h5>
+              <h3>{{ item.amount }}</h3>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 <style>
 /* 版芯 */
@@ -104,5 +106,19 @@ getdata()
   content: '起';
   font-size: 25px;
   color: rgb(25, 19, 59);
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 1s;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.v-enter-to,
+.v-leave-from {
+  opacity: 1;
 }
 </style>

@@ -14,14 +14,19 @@ const useLogin = () => {
     return useCom.MessageBox('請輸入帳號或密碼', 1)
   if (!useVer.SingInInputCheck())
     return useCom.MessageBox('請依照提示輸入，請用戶再次確認', 1)
+  useCom.isLoading = true
   signInWithEmailAndPassword(auth, useVer.email, useVer.password)
     .then((user) => {
-      useCom.MessageBox('登入成功', 3)
       userstore.upData(user.user)
       useVer.AllClean()
+      setTimeout(() => {
+        useCom.MessageBox('登入成功', 3)
+        useCom.isLoading = false
+      }, 500)
       router.push('/')
     })
     .catch((error) => {
+      useCom.isLoading = false
       console.log(error.code)
       if (error.code === 'auth/invalid-login-credentials')
         return useVer.AllClean(), useCom.MessageBox('輸入帳號/密碼錯誤', 1)

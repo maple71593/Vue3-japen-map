@@ -4,13 +4,13 @@ import { useFirestore } from 'vuefire'
 import { useUserStore, useComStore } from '../../stores'
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import emailjs from '@emailjs/browser'
 const useCom = useComStore()
 const route = useRoute()
 const router = useRouter()
 const useStore = useUserStore()
 const db = useFirestore()
 const OrderData = ref([])
-console.log()
 const total = ref(0)
 const GetData = async () => {
   const querySnapshot = await getDocs(
@@ -23,94 +23,120 @@ const GetData = async () => {
 }
 GetData()
 const PayEnd = async () => {
+  useCom.isLoading = true
   await updateDoc(
     doc(db, `/UserData/${useStore.email}/Order`, `${route.query.UID}`),
     {
       state: '已付款'
     }
   )
+  sendEmail()
   router.replace('/')
-  useCom.MessageBox('付款成功!', 3)
+  setTimeout(() => {
+    useCom.isLoading = false
+    useCom.MessageBox('付款成功!', 3)
+  }, 500)
+}
+
+const sendEmail = () => {
+  let templateParams = {
+    to_name: useStore.username,
+    to_email: useStore.email,
+    message: route.query.UID
+  }
+  let Public = 'PKdYIFmAKtd-J7yZO'
+  let template = 'template_6ey0kbr'
+  let Server = 'service_kc6bj89'
+  emailjs.send(Server, template, templateParams, Public).then(
+    (result) => {
+      console.log('SUCCESS!', result.text)
+    },
+    (error) => {
+      console.log('FAILED...', error.text)
+    }
+  )
 }
 </script>
 <template>
   <MessageBox></MessageBox>
-  <div class="Pay-page">
-    <div>
-      <img src="../../../public/usd-circle.png" alt="" />
-      <h1>付款頁面 :</h1>
-    </div>
-    <div>
+  <transition appear>
+    <div class="Pay-page">
       <div>
-        <div><h1>請輸入資料</h1></div>
-        <div>
-          <h3>訂單編號 : {{ route.query.UID }}</h3>
-          <h3>請輸入卡號</h3>
-
-          <input
-            type="text"
-            name="pan_no1"
-            size="4"
-            value=""
-            maxlength="4"
-            onKeyUp="setBlur(this,'pan_no2');"
-          />-
-          <input
-            type="text"
-            name="pan_no2"
-            size="4"
-            value=""
-            maxlength="4"
-            onKeyUp="setBlur(this,'pan_no3');"
-          />-
-          <input
-            type="text"
-            name="pan_no3"
-            size="4"
-            value=""
-            maxlength="4"
-            onKeyUp="setBlur(this,'pan_no4');"
-          />-
-          <input type="text" name="pan_no4" size="4" value="" maxlength="4" />
-          <h3>信用卡背面後三碼檢查碼 :</h3>
-          <input
-            type="text"
-            name="pan_no3"
-            size="3"
-            value=""
-            maxlength="3"
-            onKeyUp="setBlur(this,'pan_no4');"
-          />
-          <h3>信用卡有效日期</h3>
-          <input type="text" size="4" value="" maxlength="4" />年
-          <input type="text" size="4" value="" maxlength="2" />月
-        </div>
+        <img src="../../../public/usd-circle.png" alt="" />
+        <h1>付款頁面 :</h1>
       </div>
       <div>
         <div>
-          <div><h3>請確認以下資料</h3></div>
+          <div><h1>請輸入資料</h1></div>
           <div>
-            <table>
-              <tr>
-                <th>產品名稱</th>
-                <th>人數</th>
-                <th>小計</th>
-              </tr>
-              <tr v-for="(item, index) in OrderData" :key="index">
-                <td>{{ item.title }}</td>
-                <td>{{ item.people }}</td>
-                <td>{{ item.total * item.people }}</td>
-              </tr>
-            </table>
+            <h3>訂單編號 : {{ route.query.UID }}</h3>
+            <h3>請輸入卡號</h3>
+
+            <input
+              type="text"
+              name="pan_no1"
+              size="4"
+              value=""
+              maxlength="4"
+              onKeyUp="setBlur(this,'pan_no2');"
+            />-
+            <input
+              type="text"
+              name="pan_no2"
+              size="4"
+              value=""
+              maxlength="4"
+              onKeyUp="setBlur(this,'pan_no3');"
+            />-
+            <input
+              type="text"
+              name="pan_no3"
+              size="4"
+              value=""
+              maxlength="4"
+              onKeyUp="setBlur(this,'pan_no4');"
+            />-
+            <input type="text" name="pan_no4" size="4" value="" maxlength="4" />
+            <h3>信用卡背面後三碼檢查碼 :</h3>
+            <input
+              type="text"
+              name="pan_no3"
+              size="3"
+              value=""
+              maxlength="3"
+              onKeyUp="setBlur(this,'pan_no4');"
+            />
+            <h3>信用卡有效日期</h3>
+            <input type="text" size="4" value="" maxlength="4" />年
+            <input type="text" size="4" value="" maxlength="2" />月
           </div>
         </div>
         <div>
-          <p>總計 : {{ total }} 元</p>
-          <button @click="PayEnd" class="btn2">付款</button>
+          <div>
+            <div><h3>請確認以下資料</h3></div>
+            <div>
+              <table>
+                <tr>
+                  <th>產品名稱</th>
+                  <th>人數</th>
+                  <th>小計</th>
+                </tr>
+                <tr v-for="(item, index) in OrderData" :key="index">
+                  <td>{{ item.title }}</td>
+                  <td>{{ item.people }}</td>
+                  <td>{{ item.total * item.people }}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div>
+            <p>總計 : {{ total }} 元</p>
+            <button @click="PayEnd" class="btn2">付款</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </transition>
 </template>
 <style lang="scss" scoped>
 .Pay-page {

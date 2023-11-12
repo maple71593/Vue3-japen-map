@@ -11,7 +11,7 @@ import { updateProfile } from 'firebase/auth'
 import { useUserStore, useComStore } from '../../stores'
 const useCom = useComStore()
 const userStore = useUserStore()
-
+const showLoading = ref(false)
 // 上傳圖片到網站
 const filedata = ref()
 const imgUrl = ref()
@@ -36,11 +36,15 @@ const mountainFileRef = storageRef(storage, `userPic/${userStore.email}`)
 // 獲取上傳大頭貼 與獲得網址
 const UpLoadData = () => {
   if (!filedata.value) return useCom.MessageBox('沒有存取到圖片', 2)
+  showLoading.value = true
   uploadBytes(mountainFileRef, filedata.value).then(() => {
     getPicUrl()
     useCom.MessageBox('上傳成功', 3)
     imgUrl.value = ''
   })
+  setTimeout(() => {
+    showLoading.value = false
+  }, 1500)
 }
 // 獲取圖片網址
 const getPicUrl = () => {
@@ -81,6 +85,13 @@ const upDataPic = async (url) => {
   })
 }
 console.log(auth.currentUser)
+const Pic = () => {
+  if (userStore.userpic || imgUrl.value) {
+    return imgUrl.value ? imgUrl.value : userStore.userpic
+  } else {
+    return userStore.noUserpic
+  }
+}
 </script>
 <template>
   <div class="change-pic">
@@ -88,12 +99,14 @@ console.log(auth.currentUser)
       <h1>更換大頭貼</h1>
     </div>
     <div>
-      <img
+      <!-- <img
         v-if="userStore.userpic || imgUrl"
         :src="imgUrl ? imgUrl : userStore.userpic"
         alt=""
       />
-      <img v-else :src="userStore.noUserpic" alt="" />
+      <img v-else :src="userStore.noUserpic" alt="" /> -->
+      <img v-if="!showLoading" :src="Pic()" alt="" />
+      <img v-else :src="userStore.LoadingPic" alt="" />
     </div>
     <input
       id="upload"

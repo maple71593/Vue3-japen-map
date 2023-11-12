@@ -8,12 +8,24 @@ const Totop = () => {
 </script>
 <template>
   <div class="side-pom">
-    <div></div>
-    <div></div>
-    <div class="ToTop" @click="Totop">Top</div>
+    <div class="ToTop" @click="Totop">
+      <img src="./../../public/exit.png" alt="" />
+    </div>
+    <div class="ToTop">
+      <img src="./../../public/line.png" alt="" />
+    </div>
+    <div class="ToTop">
+      <img src="./../../public/facebook.png" alt="" />
+    </div>
+    <div class="ToTop">
+      <img src="./../../public/facebook-messenger.png" alt="" />
+    </div>
+    <div class="ToTop">
+      <img src="./../../public/instagram.png" alt="" />
+    </div>
   </div>
 </template>
-<style>
+<style lang="scss" scoped>
 .side-pom {
   margin: 2%;
   position: fixed;
@@ -21,12 +33,17 @@ const Totop = () => {
   right: 0;
 }
 .ToTop {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   line-height: 50px;
+  margin: 10px;
   text-align: center;
-  background: radial-gradient(circle, rgb(155, 155, 152), rgb(88, 95, 88));
+  background-color: whitesmoke;
   cursor: pointer;
   border-radius: 50%;
+  img {
+    width: 40px;
+    height: 40px;
+  }
 }
 </style>

@@ -55,58 +55,65 @@ const getData = async () => {
 const clean = () => {
   Email.value = ''
   orderNum.value = ''
+  orderData.value = ''
   order.value = []
   searchDate.value = {}
 }
 </script>
 <template>
   <MessageBox></MessageBox>
-  <div class="order-page">
-    <div>
-      <img src="../../../public/document.png" alt="" />
-      <h1>訂單查詢:</h1>
+  <transition appear>
+    <div class="order-page">
+      <div>
+        <img src="../../../public/document.png" alt="" />
+        <h1>訂單查詢:</h1>
+      </div>
+      <div>
+        <div v-if="UserOrder.length > 0">
+          <label for="dropdown">選擇資料：</label>
+          <select id="dropdown" v-model="orderData" @change="getUserOrderData">
+            <option
+              v-for="(item, index) in UserOrder"
+              :key="index"
+              :value="item"
+            >
+              {{ item }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <h3>E-mail:</h3>
+          <input type="text" v-model="Email" />
+        </div>
+        <div>
+          <h3>訂單編號:</h3>
+          <input type="text" v-model="orderNum" />
+        </div>
+        <div>
+          <button @click="getData" class="btn3">查詢</button>
+        </div>
+        <div>
+          <button @click="clean" class="btn3">清空</button>
+        </div>
+      </div>
+      <table>
+        <tr>
+          <th>訂單編號</th>
+          <th>訂單時間</th>
+          <th>訂單狀態</th>
+          <th>總金額</th>
+          <th>操作</th>
+        </tr>
+        <tr>
+          <td>{{ searchDate.order }}</td>
+          <td>{{ searchDate.time }}</td>
+          <td>{{ searchDate.state }}</td>
+          <td>{{ searchDate.total }}</td>
+          <td></td>
+        </tr>
+      </table>
     </div>
-    <div>
-      <div v-if="UserOrder.length > 0">
-        <label for="dropdown">選擇資料：</label>
-        <select id="dropdown" v-model="orderData" @change="getUserOrderData">
-          <option v-for="(item, index) in UserOrder" :key="index" :value="item">
-            {{ item }}
-          </option>
-        </select>
-      </div>
-      <div>
-        <h3>E-mail:</h3>
-        <input type="text" v-model="Email" />
-      </div>
-      <div>
-        <h3>訂單編號:</h3>
-        <input type="text" v-model="orderNum" />
-      </div>
-      <div>
-        <button @click="getData" class="btn3">查詢</button>
-      </div>
-      <div>
-        <button @click="clean" class="btn3">清空</button>
-      </div>
-    </div>
-    <table>
-      <tr>
-        <th>訂單編號</th>
-        <th>訂單時間</th>
-        <th>訂單狀態</th>
-        <th>總金額</th>
-        <th>操作</th>
-      </tr>
-      <tr>
-        <td>{{ searchDate.order }}</td>
-        <td>{{ searchDate.time }}</td>
-        <td>{{ searchDate.state }}</td>
-        <td>{{ searchDate.total }}</td>
-        <td></td>
-      </tr>
-    </table>
-  </div>
+  </transition>
 </template>
 <style lang="scss" scoped>
 .order-page {
@@ -162,6 +169,9 @@ const clean = () => {
     border: 1px solid black;
     th {
       background-color: bisque;
+    }
+    td {
+      text-align: center;
     }
   }
 }

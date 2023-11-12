@@ -35,7 +35,8 @@ const useCom = useComStore()
 </template>
 <style scoped>
 .Msg-Box {
-  width: 300px;
+  max-width: 380px;
+  min-width: 300px;
   height: 30px;
   display: flex;
   justify-content: space-between;
@@ -52,7 +53,8 @@ const useCom = useComStore()
   transition: 1s;
 }
 .MsgBoxSuc {
-  width: 300px;
+  max-width: 380px;
+  min-width: 300px;
   height: 30px;
   display: flex;
   background-color: rgb(127, 255, 104);
@@ -69,7 +71,8 @@ const useCom = useComStore()
   border: 2px solid white;
 }
 .MsgBoxErr {
-  width: 300px;
+  max-width: 380px;
+  min-width: 300px;
   height: 30px;
   display: flex;
   background-color: rgb(255, 99, 99);
@@ -86,7 +89,8 @@ const useCom = useComStore()
   border: 2px solid rgb(255, 174, 174);
 }
 .MsgBoxExc {
-  width: 300px;
+  max-width: 380px;
+  min-width: 300px;
   height: 30px;
   display: flex;
   background-color: rgb(255, 247, 99);

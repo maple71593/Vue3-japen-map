@@ -3,23 +3,46 @@ import { computed, defineProps, ref } from 'vue'
 import { useUserStore, useComStore } from '../../../stores'
 import { useRouter } from 'vue-router'
 import { signOut } from 'firebase/auth'
-import { useFirebaseAuth } from 'vuefire'
+import { useFirebaseAuth, useFirestore } from 'vuefire'
+import { collection, query, onSnapshot } from 'firebase/firestore'
+const db = useFirestore()
 const showMenu = ref(false)
-const userStore = useUserStore()
+const useStore = useUserStore()
 const useCom = useComStore()
 const router = useRouter()
 const auth = useFirebaseAuth()
-const SignOut = () => {
+if (useStore.token) {
+  const q = query(collection(db, `/UserData/${useStore.email}/cart`))
+  onSnapshot(q, (querySnapshot) => {
+    let userCart = []
+    let total = []
+    querySnapshot.forEach((doc) => {
+      userCart.push(doc.data())
+      total.push(doc.data().people * doc.data().amount)
+    })
+    useStore.UserCart = userCart
+    useStore.CartNum = userCart.length
+    useStore.Total = total.reduce((total, num) => {
+      return total + num
+    })
+  })
+}
+const SignOut = async () => {
+  useCom.isLoading = true
   showMenu.value = false
-  signOut(auth)
+  await signOut(auth)
     .then(() => {
-      userStore.SignOutClsData()
-      useCom.MessageBox('已登出', 3)
+      useStore.SignOutClsData()
       setTimeout(() => {
-        router.replace('/home')
-      }, 2000)
+        useCom.isLoading = false
+        useCom.MessageBox('已登出', 3)
+        router.replace('/')
+      }, 1000)
     })
     .catch((error) => {
+      setTimeout(() => {
+        useCom.isLoading = false
+      }, 1000)
       console.log(error.code)
     })
 }
@@ -34,6 +57,7 @@ const changeshow = () => {
 }
 </script>
 <template>
+  <Loading-page></Loading-page>
   <div class="header" :class="{ headREer: show }">
     <div class="logo">
       <h4 @click="router.push('/')">宏宏旅行社</h4>
@@ -47,10 +71,10 @@ const changeshow = () => {
       <li>
         <router-link :to="'/Cart'">購物車 </router-link>
       </li>
-      <p v-show="userStore.CartNum">{{ userStore.CartNum }}</p>
+      <p v-show="useStore.CartNum">{{ useStore.CartNum }}</p>
     </ul>
 
-    <div class="Login-btn" v-if="!userStore.token">
+    <div class="Login-btn" v-if="!useStore.token">
       <button @click="router.push('/Login/LoginPage')" class="btn">
         會員登入
       </button>
@@ -63,11 +87,11 @@ const changeshow = () => {
     >
       <div>
         <img
-          :src="userStore.userpic ? userStore.userpic : userStore.noUserpic"
+          :src="useStore.userpic ? useStore.userpic : useStore.noUserpic"
           alt=""
         />
       </div>
-      <h3>歡迎回來，{{ userStore.username }}</h3>
+      <h3>歡迎回來，{{ useStore.username }}</h3>
       <ul>
         <li>
           <router-link :to="'/user/center'"
@@ -121,14 +145,14 @@ const changeshow = () => {
     </div>
     <div class="menu-list" v-show="showMenu">
       <ul>
-        <li v-if="!userStore.token">
+        <li v-if="!useStore.token">
           <router-link
             :to="{ path: '/Login/LoginPage' }"
             @click="showMenu = false"
             >還沒登入嗎</router-link
           >
         </li>
-        <li v-else>歡迎回來{{ userStore.username }}</li>
+        <li v-else>歡迎回來{{ useStore.username }}</li>
         <li>
           <router-link :to="'/Choice'" @click="showMenu = false"
             ><img
@@ -162,7 +186,7 @@ const changeshow = () => {
           >
         </li>
       </ul>
-      <ul v-show="userStore.token">
+      <ul v-show="useStore.token">
         <li>
           <router-link :to="'/user/center'" @click="showMenu = false"
             ><img
@@ -340,12 +364,13 @@ const changeshow = () => {
   left: 0px;
   position: absolute;
   background-color: #62d17e;
+  border-radius: 10px 0px 20px 20px;
   width: 100vw;
   img {
     margin: 0px 10px;
   }
   ul {
-    list-style: none; /* 移除列表项的默认样式 */
+    list-style: none;
     li {
       margin: 30px;
       font-size: 30px;
@@ -368,7 +393,6 @@ const changeshow = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  // text-align: center;
   font-size: 50px;
   color: rgb(255, 255, 255);
   cursor: pointer;

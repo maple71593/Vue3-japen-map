@@ -1,7 +1,8 @@
 <script setup>
-import { ref, defineProps, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { collection, getDocs, limit, query } from 'firebase/firestore'
 import { useFirestore } from 'vuefire'
+import { useUserStore } from '../../../stores'
 const CardPages = ref([])
 const uesCardPages = async () => {
   const db = useFirestore()
@@ -11,11 +12,11 @@ const uesCardPages = async () => {
     CardPages.value.push(doc.data())
   })
 }
-//判斷父組件傳遞滾動data是否達到指定值
 uesCardPages()
-const { scrollRef } = defineProps(['scrollRef'])
-const BannerBar = computed(() => scrollRef.scrollRef > 800)
-const noActivated = computed(() => scrollRef.scrollRef > 900)
+//判斷父組件傳遞滾動data是否達到指定值
+const useStore = useUserStore()
+const BannerBar = computed(() => useStore.scrollRef > 800)
+const noActivated = computed(() => useStore.scrollRef > 900)
 </script>
 
 <template>
@@ -37,13 +38,16 @@ const noActivated = computed(() => scrollRef.scrollRef > 900)
     </div>
   </div>
 </template>
-<style>
+<style lang="scss" scoped>
 .content2 {
   width: 1200px;
   margin: 30px auto 100px auto;
   padding-top: 30px;
   text-align: left;
   border-radius: 30px;
+  @include phone {
+    width: 80%;
+  }
 }
 
 /* 控制文字標題 */
@@ -89,6 +93,10 @@ const noActivated = computed(() => scrollRef.scrollRef > 900)
   width: 1200px;
   display: flex;
   flex-wrap: wrap;
+  @include phone {
+    width: 100%;
+    display: block;
+  }
 }
 /* 卡片控制 */
 .card2-page {

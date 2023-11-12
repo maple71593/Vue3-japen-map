@@ -55,6 +55,10 @@ const router = createRouter({
           component: () => import('@/views/pay/pay-page.vue')
         },
         {
+          path: '/admin-EnterData',
+          component: () => import('@/views/search/admin-EnterData.vue')
+        },
+        {
           path: '/user',
           component: () => import('@/views/user/index.vue'),
           children: [
@@ -78,7 +82,6 @@ const router = createRouter({
         }
       ]
     },
-    { path: '/Search', component: () => import('@/views/search/index.vue') },
     {
       path: '/Login',
       component: () => import('@/views/Login/index.vue'),
@@ -93,7 +96,7 @@ const router = createRouter({
           component: () => import('@/views/Login/components/Email-check.vue')
         },
         {
-          path: '/Login/forgetPassword',
+          path: '/Login/ForgetPassword',
           component: () =>
             import('@/views/Login/components/forget-password.vue')
         },

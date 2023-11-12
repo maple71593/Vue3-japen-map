@@ -1,8 +1,6 @@
 <script setup>
 import {
   collection,
-  query,
-  onSnapshot,
   doc,
   addDoc,
   updateDoc,
@@ -18,28 +16,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const useCom = useComStore()
 const useStore = useUserStore()
-const UserCart = ref([])
-const Total = ref()
 const db = useFirestore()
-const GetCartData = () => {
-  if (useStore.token) {
-    const q = query(collection(db, `/UserData/${useStore.email}/cart`))
-    onSnapshot(q, (querySnapshot) => {
-      let userCart = []
-      let total = []
-      querySnapshot.forEach((doc) => {
-        userCart.push(doc.data())
-        total.push(doc.data().people * doc.data().amount)
-      })
-      UserCart.value = userCart
-      useStore.CartNum = userCart.length
-      Total.value = total.reduce((total, num) => {
-        return total + num
-      })
-    })
-  }
-}
-GetCartData()
 // 增加人數
 const addPeo = async (item) => {
   const updataCart = doc(db, `/UserData/${useStore.email}/cart`, `${item}`)
@@ -76,6 +53,7 @@ const UserOrder = ref()
 const orderUID = ref()
 const DatabaseAllUID = ref()
 const goPay = async () => {
+  useCom.isLoading = true
   useCom.MessageBox('前往結帳頁面', 3)
   //新增資料庫訂單總數
   const washingtonRef = doc(db, 'Database', 'order')
@@ -99,7 +77,7 @@ const goPay = async () => {
     order: UserOrder.value
   })
   // 新增資料至訂單資料庫
-  UserCart.value.forEach(async (item) => {
+  useStore.UserCart.forEach(async (item) => {
     await addDoc(
       collection(
         db,
@@ -115,68 +93,77 @@ const goPay = async () => {
       order: orderUID.value,
       time: currentTime,
       state: '未付款',
-      total: Total.value
+      total: useStore.Total
     }
   )
   //刪除全數購物車
-  UserCart.value.forEach(async (item) => {
+  useStore.UserCart.forEach(async (item) => {
     await deleteDoc(doc(db, `/UserData/${useStore.email}/cart`, item.title))
   })
   router.push({
     path: '/pay',
     query: { UID: orderUID.value }
   })
+  setTimeout(() => {
+    useCom.isLoading = false
+  }, 100)
 }
 </script>
 <template>
   <MessageBox></MessageBox>
-  <div class="Cart-page">
-    <div>
-      <img src="../../../public/shopping-cart.png" alt="" />
-      <h1>我的購物車:</h1>
-    </div>
-    <table>
-      <tr>
-        <th>行程編號</th>
-        <th>產品名稱</th>
-        <th>單價</th>
-        <th>數量</th>
-        <th>小計</th>
-        <th>操作</th>
-      </tr>
-      <tr v-for="(item, index) in UserCart" :key="index" v-show="UserCart">
-        <td>{{ item.id }}</td>
-        <td>
-          <img :src="item.img" alt="" />
-          <p>{{ item.title }}</p>
-        </td>
-        <td>{{ item.amount }}</td>
-        <td>
-          <button @click="reducePeo(item.title, item.people)">-</button>
-          <p>{{ item.people }}</p>
-          <button @click="addPeo(item.title)">+</button>
-        </td>
-        <td>{{ item.amount * item.people }}</td>
-        <td><button @click="Delete(item.title)">刪除</button></td>
-      </tr>
-    </table>
-    <div class="nullCart" v-show="UserCart.length <= 0">
-      <img src="./../../../public/none.2de70258.png" alt="" />
-      <h2>空空如也</h2>
-    </div>
-    <br />
-    <hr />
-    <br />
-    <div class="CartTotal" v-show="!UserCart.length <= 0">
+  <transition appear>
+    <div class="Cart-page">
       <div>
-        <h1>共計 {{ UserCart.length }} 個行程</h1>
+        <img src="../../../public/shopping-cart.png" alt="" />
+        <h1>我的購物車:</h1>
       </div>
-      <div>
-        <h1>總金額 : {{ Total }}$</h1>
+      <table>
+        <tr>
+          <th>行程編號</th>
+          <th>產品名稱</th>
+          <th>單價</th>
+          <th>數量</th>
+          <th>小計</th>
+          <th>操作</th>
+        </tr>
+        <tr
+          v-for="(item, index) in useStore.UserCart"
+          :key="index"
+          v-show="useStore.UserCart"
+        >
+          <td>{{ item.id }}</td>
+          <td>
+            <img :src="item.img" alt="" />
+            <p>{{ item.title }}</p>
+          </td>
+          <td>{{ item.amount }}</td>
+          <td>
+            <button @click="reducePeo(item.title, item.people)">-</button>
+            <p>{{ item.people }}</p>
+            <button @click="addPeo(item.title)">+</button>
+          </td>
+          <td>{{ item.amount * item.people }}</td>
+          <td><button @click="Delete(item.title)">刪除</button></td>
+        </tr>
+      </table>
+      <div class="nullCart" v-show="useStore.UserCart.length <= 0">
+        <img src="./../../../public/none.2de70258.png" alt="" />
+        <h2>空空如也</h2>
       </div>
-      <button @click="goPay" class="btn">去結帳</button>
+      <br />
+      <hr />
+      <br />
+      <div class="CartTotal" v-show="!useStore.UserCart.length <= 0">
+        <div>
+          <h1>共計 {{ useStore.UserCart.length }} 個行程</h1>
+        </div>
+        <div>
+          <h1>總金額 : {{ useStore.Total }}$</h1>
+        </div>
+        <button @click="goPay" class="btn">去結帳</button>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 <style lang="scss" scoped>
 .Cart-page {
@@ -285,5 +272,20 @@ const goPay = async () => {
     width: 300px;
     height: 300px;
   }
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 1s;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.v-enter-to,
+.v-leave-from {
+  opacity: 1;
 }
 </style>

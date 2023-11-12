@@ -1,17 +1,17 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import Header from '@/views/home/components/header-index.vue'
 import { useRoute } from 'vue-router'
+import { useUserStore } from '../../stores'
 import Side from '@//components/Side-components.vue'
 import Calendar from '@/components/Calendar-index.vue'
 import FakeHeader from '@/components/Fake-Header.vue'
+const useStore = useUserStore()
 const route = useRoute()
-// 監聽滾動屬性 並附值給ref
-const scrollRef = ref()
 // 監聽屬性邏輯
 const handleScroll = () => {
   const scrollY = window.scrollY
-  scrollRef.value = scrollY
+  useStore.scrollRef = scrollY
 }
 handleScroll()
 // 掛載監聽屬性
@@ -27,7 +27,7 @@ onMounted(() => {
       style="margin: 10px auto; z-index: 10"
       v-show="route.path === '/home' || route.path === '/Search-Page'"
     ></Calendar>
-    <router-view :scrollRef="scrollRef"></router-view>
+    <router-view></router-view>
     <Side></Side>
   </div>
 </template>
