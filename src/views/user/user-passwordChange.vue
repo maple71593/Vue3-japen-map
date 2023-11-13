@@ -153,12 +153,20 @@ const upDataPassword = async () => {
     border: 0px;
     margin: 0;
     font-size: 20px;
+    @include phone {
+      width: 90%;
+      height: 15px;
+      font-size: 15px;
+    }
   }
   h2 {
     margin: 5px;
   }
   h1 {
     color: rgb(0, 50, 50);
+    @include phone {
+      font-size: 20px;
+    }
   }
   h3 {
     color: red;

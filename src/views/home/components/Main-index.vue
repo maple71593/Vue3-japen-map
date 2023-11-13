@@ -51,8 +51,6 @@ useMasterPic()
 //   }, 500)
 // }
 // getpic()
-
-// console.log(pic.value)
 </script>
 <template>
   <div class="main">

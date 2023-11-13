@@ -44,6 +44,9 @@ const useCom = useComStore()
     td {
       font-size: 20px;
       color: rgb(96, 96, 96);
+      @include phone {
+        font-size: 15px;
+      }
     }
   }
 }

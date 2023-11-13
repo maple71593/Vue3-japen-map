@@ -44,9 +44,9 @@ const sendEmail = () => {
     to_email: useStore.email,
     message: route.query.UID
   }
-  let Public = 'PKdYIFmAKtd-J7yZO'
-  let template = 'template_6ey0kbr'
-  let Server = 'service_kc6bj89'
+  let Public = import.meta.env.VITE_VUE_APP_PAY_PUBLIC_KEY
+  let template = import.meta.env.VITE_VUE_APP_PAY_TEMPLATE_KEY
+  let Server = import.meta.env.VITE_VUE_APP_PAY_SERVICE_KEY
   emailjs.send(Server, template, templateParams, Public).then(
     (result) => {
       console.log('SUCCESS!', result.text)

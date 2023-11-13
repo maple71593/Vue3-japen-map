@@ -165,7 +165,9 @@ const toCart = async () => {
   > div:nth-child(1) {
     width: 75%;
     border-radius: 10px;
-
+    @include phone {
+      width: 100%;
+    }
     > div:nth-child(1) {
       background-color: rgb(166, 166, 180);
       height: 50px;
@@ -178,8 +180,14 @@ const toCart = async () => {
     }
     > div:nth-child(2) {
       display: flex;
+      @include phone {
+        display: block;
+      }
       > div:nth-child(1) {
         width: 50%;
+        @include phone {
+          width: 100%;
+        }
         img {
           width: 100%;
         }
@@ -188,6 +196,9 @@ const toCart = async () => {
         width: 50%;
         color: rgb(90, 90, 90);
         background-color: rgb(255, 255, 255);
+        @include phone {
+          width: 100%;
+        }
         h3 {
           margin-left: 10px;
           margin-top: 10px;
@@ -205,6 +216,9 @@ const toCart = async () => {
             border-radius: 25px;
             padding: 10px;
             margin-left: 5px;
+            @include phone {
+              font-size: 12px;
+            }
           }
         }
       }
@@ -215,7 +229,6 @@ const toCart = async () => {
       text-align: end;
       h3 {
         display: inline;
-        // margin-right: 20px;
         margin: 10px;
       }
       h3::before {
@@ -235,6 +248,9 @@ const toCart = async () => {
     height: 100%;
     background-color: rgb(133, 133, 255);
     border-radius: 10px;
+    @include phone {
+      display: none;
+    }
     > h3 {
       height: 50px;
       line-height: 50px;

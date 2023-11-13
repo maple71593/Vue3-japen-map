@@ -35,15 +35,22 @@ const Totop = () => {
 .ToTop {
   width: 40px;
   height: 40px;
-  line-height: 50px;
   margin: 10px;
   text-align: center;
   background-color: whitesmoke;
   cursor: pointer;
   border-radius: 50%;
+  @include phone {
+    width: 30px;
+    height: 30px;
+  }
   img {
     width: 40px;
     height: 40px;
+    @include phone {
+      width: 30px;
+      height: 30px;
+    }
   }
 }
 </style>

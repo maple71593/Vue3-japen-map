@@ -48,14 +48,19 @@ const SendEmail = async () => {
 <style lang="scss" scoped>
 .user-center {
   box-sizing: border-box;
-
   h1 {
     color: rgb(0, 50, 50);
+    @include phone {
+      font-size: 20px;
+    }
   }
   p {
     font-size: 20px;
     padding: 10px;
     color: rgb(32, 32, 32);
+    @include phone {
+      font-size: 15px;
+    }
   }
   img {
     width: 18px;

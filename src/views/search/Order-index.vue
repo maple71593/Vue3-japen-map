@@ -89,10 +89,10 @@ const clean = () => {
           <h3>訂單編號:</h3>
           <input type="text" v-model="orderNum" />
         </div>
-        <div>
+        <div class="order-btn">
           <button @click="getData" class="btn3">查詢</button>
         </div>
-        <div>
+        <div class="order-btn">
           <button @click="clean" class="btn3">清空</button>
         </div>
       </div>
@@ -121,7 +121,6 @@ const clean = () => {
   border-radius: 10px;
   margin-top: 30px;
   width: 80vw;
-  height: 80vh;
   button {
     margin-left: 20px;
     width: 60px;
@@ -150,6 +149,13 @@ const clean = () => {
     justify-content: start;
     align-items: center;
     background-color: aliceblue;
+    @include phone {
+      display: block;
+      height: 100%;
+    }
+    div {
+      padding-top: 10px;
+    }
     h3 {
       margin: 0px 10px;
       display: inline-block;
@@ -172,6 +178,16 @@ const clean = () => {
     }
     td {
       text-align: center;
+    }
+  }
+}
+.order-btn {
+  @include phone {
+    display: inline;
+  }
+  button {
+    @include phone {
+      margin: 10px;
     }
   }
 }

@@ -81,6 +81,9 @@ SetInputValue()
   }
   h1 {
     color: rgb(0, 50, 50);
+    @include phone {
+      font-size: 20px;
+    }
   }
   > div:nth-child(n + 2) {
     margin: 20px;
@@ -98,6 +101,11 @@ SetInputValue()
       border: 0px;
       margin: 0;
       font-size: 20px;
+      @include phone {
+        width: 90%;
+        height: 15px;
+        font-size: 15px;
+      }
     }
     h6 {
       color: red;

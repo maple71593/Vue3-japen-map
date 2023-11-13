@@ -31,10 +31,6 @@ const fakePic =
   'https://firebasestorage.googleapis.com/v0/b/fir-test-a43df.appspot.com/o/admin%2Ftype3album_blank.png?alt=media&token=5117bf23-ff11-48b2-a3c1-bf65fc57a92c'
 // 上傳資料庫
 const db = useFirestore()
-const check = () => {
-  console.log(new Date(time.value))
-}
-
 const upDataPic = async (rul) => {
   // time.value =
   // endtime.value =

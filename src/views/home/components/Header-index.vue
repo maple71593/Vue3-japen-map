@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineProps, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useUserStore, useComStore } from '../../../stores'
 import { useRouter } from 'vue-router'
 import { signOut } from 'firebase/auth'
@@ -47,8 +47,7 @@ const SignOut = async () => {
     })
 }
 // 滾輪監控
-const scrollRef = defineProps(['scrollRef'])
-const show = computed(() => scrollRef.scrollRef > 800)
+const show = computed(() => useStore.scrollRef > 800)
 //隱藏會員div
 const showUser = ref(false)
 const changeshow = () => {
@@ -178,7 +177,7 @@ const changeshow = () => {
           >
         </li>
         <li>
-          <router-link :to="'/Cart'"
+          <router-link :to="'/Cart'" @click="showMenu = false"
             ><img
               src="../../../../public/shopping-cart.png"
               alt=""
@@ -233,22 +232,6 @@ const changeshow = () => {
 </template>
 <style lang="scss" scoped>
 /* header頁首*/
-@mixin pc {
-  @media (min-width: 1001px) {
-    @content;
-  }
-}
-
-@mixin pad {
-  @media (max-width: 1000px) {
-    @content;
-  }
-}
-@mixin phone {
-  @media (max-width: 420px) {
-    @content;
-  }
-}
 .header {
   margin: auto;
   height: 100px;
@@ -372,7 +355,7 @@ const changeshow = () => {
   ul {
     list-style: none;
     li {
-      margin: 30px;
+      margin: 20px;
       font-size: 30px;
     }
   }

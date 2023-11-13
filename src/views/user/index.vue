@@ -47,6 +47,9 @@
   font-size: 28px;
   padding: 10px;
   transition: 0.2s;
+  @include phone {
+    font-size: 0px;
+  }
 }
 .custom-link {
   color: #6c4949;
@@ -64,6 +67,10 @@
   background-color: rgb(253, 253, 253);
   position: absolute;
   transition: 0.5s;
+  @include phone {
+    bottom: -10px;
+    left: -10px;
+  }
 }
 .custom-link:hover::before {
   content: '';
@@ -74,6 +81,10 @@
   opacity: 1;
   background-color: rgb(245, 245, 245);
   position: absolute;
+  @include phone {
+    bottom: -10px;
+    left: 0px;
+  }
 }
 .userCenter {
   margin: auto;
@@ -91,20 +102,30 @@
     width: 30%;
     border-radius: 25px 0px 0px 25px;
     background-color: #3d816b;
+    @include phone {
+      width: 20%;
+    }
+
     ul {
       position: relative;
       li {
         font-size: 25px;
-        // text-align: center;
         list-style: none;
         margin: 30px;
         position: relative;
+        @include phone {
+          font-size: 0px;
+          margin: 20px;
+        }
       }
     }
   }
   > div:nth-child(2) {
     width: 70%;
     height: 100%;
+    @include phone {
+      width: 80%;
+    }
   }
 }
 </style>

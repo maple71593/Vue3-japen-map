@@ -59,7 +59,6 @@ for (let i = 0; i <= 12; i++) {
   //呼叫函數 並回傳參數
   GetDate(year, month, i)
 }
-
 //改變月曆輪播的方向
 const left = ref(0)
 const ChangeLeft = (num) => {
@@ -223,7 +222,6 @@ const GetUseLocation = () => {
 const cleanStory = (Loc) => {
   const newLoc = useStore.uselocation.filter((item) => item !== Loc)
   useStore.uselocation = newLoc
-  console.log(useStore.uselocation)
 }
 
 const db = useFirestore()
@@ -239,8 +237,6 @@ const getcitydata = async () => {
 getcitydata()
 // 執行搜索函數
 const getdata = async () => {
-  console.log(InpRefStart.value)
-  console.log(new Date(InpRefStart.value))
   const citiesRef = collection(db, 'Plan')
   const startTimestamp = Timestamp.fromDate(new Date(InpRefStart.value))
   const endTimestamp = Timestamp.fromDate(new Date(InpRefEnd.value))
@@ -252,7 +248,6 @@ const getdata = async () => {
   )
   const querySnapshot = await getDocs(q)
   querySnapshot.forEach((doc) => {
-    console.log(doc.id, ' => ', doc.data())
     useCom.SearchData.push(doc.data())
   })
 }
@@ -431,7 +426,7 @@ const goSearch = async () => {
   </div>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .AllCalender {
   width: 100vw;
   max-width: 80vw;
@@ -454,6 +449,10 @@ const goSearch = async () => {
   left: 155px;
   position: absolute;
   z-index: 10;
+  @include phone {
+    left: -25px;
+    top: 150px;
+  }
 }
 .calenderCOM {
   width: 730px;
@@ -461,6 +460,9 @@ const goSearch = async () => {
   margin-left: 10px;
   overflow: hidden;
   display: flex;
+  @include phone {
+    width: 365px;
+  }
 }
 .calender {
   top: 0px;
@@ -475,7 +477,6 @@ const goSearch = async () => {
   border-radius: 10px;
   margin-right: 10px;
   background-color: #ffffff;
-  /* background-color: #f37e7ebd; */
   color: rgba(110, 110, 110, 0.913);
   text-shadow: 1px 1px 3px;
   box-sizing: border-box;
@@ -589,10 +590,21 @@ const goSearch = async () => {
   top: 100px;
   left: -60px;
   position: absolute;
+  @include phone {
+    width: 30px;
+    height: 40px;
+    font-size: 20px;
+    top: 5px;
+    left: 70px;
+    z-index: 30;
+    background-color: #e4e4e4;
+    color: black;
+  }
 }
 
 .btnLeft:hover {
   background-color: #1e87d7;
+  color: rgb(255, 255, 255);
   transition: background-color 0.3s ease;
 }
 
@@ -614,9 +626,20 @@ const goSearch = async () => {
   top: 100px;
   left: 750px;
   position: absolute;
+  @include phone {
+    width: 30px;
+    height: 40px;
+    font-size: 20px;
+    top: 5px;
+    left: 275px;
+    z-index: 30;
+    background-color: #e4e4e4;
+    color: black;
+  }
 }
 .btnRight:hover {
   background-color: #1e87d7;
+  color: rgb(255, 255, 255);
   transition: background-color 0.3s ease;
 }
 /* 搜索框的按鈕 */
@@ -654,6 +677,10 @@ const goSearch = async () => {
   text-align: center;
   position: absolute;
   z-index: 10;
+  @include phone {
+    top: 195px;
+    left: 10px;
+  }
 }
 .num-box p {
   margin: 10px 0px;

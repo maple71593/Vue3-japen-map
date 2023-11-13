@@ -11,7 +11,6 @@ declare module 'vue' {
     FakeHeader: typeof import('./src/components/Fake-Header.vue')['default']
     LoaingIndex: typeof import('./src/components/Loaing-index.vue')['default']
     MessageBox: typeof import('./src/components/Message-Box.vue')['default']
-    MsgBox: typeof import('./src/components/msg-box.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideComponents: typeof import('./src/components/Side-components.vue')['default']

@@ -243,12 +243,19 @@ const goPay = async () => {
       button {
         width: 30px;
         height: 30px;
+        @include phone {
+          width: 20px;
+          height: 20px;
+        }
       }
     }
     td {
       height: 120px;
       font-size: 20px;
       text-align: center;
+      @include phone {
+        font-size: 10px;
+      }
     }
   }
 }

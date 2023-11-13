@@ -1,9 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { useUserStore } from '@/stores'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
-
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -85,7 +83,6 @@ const router = createRouter({
     {
       path: '/Login',
       component: () => import('@/views/Login/index.vue'),
-      // redirect: '/Login/LoginPage',
       children: [
         {
           path: '/Login/LoginPage',
@@ -96,11 +93,6 @@ const router = createRouter({
           component: () => import('@/views/Login/components/Email-check.vue')
         },
         {
-          path: '/Login/ForgetPassword',
-          component: () =>
-            import('@/views/Login/components/forget-password.vue')
-        },
-        {
           path: '/Login/register',
           component: () => import('@/views/Login/components/register-page.vue')
         }
@@ -109,34 +101,13 @@ const router = createRouter({
   ]
 })
 
-// router.beforeEach(async (to, from, next) => {
-//   const auth = getAuth()
-//   const useStore = useUserStore()
-
-//   // 创建一个Promise来等待onAuthStateChanged的结果
-//   const authStatePromise = new Promise((resolve) => {
-//     onAuthStateChanged(auth, (user) => {
-//       if (user.accessToken && to.path === '/Login/LoginPage') {
-//         resolve('/user/center')
-//       } else {
-//         resolve(null)
-//       }
-//     })
-//   })
-
-//   // 使用Promise.all等待onAuthStateChanged和其他条件
-//   const [authStateResult, tokenResult] = await Promise.all([
-//     authStatePromise,
-//     useStore.token
-//   ])
-
-//   // 根据结果来决定导航
-//   if (authStateResult) {
-//     next(authStateResult)
-//   } else if (tokenResult && to.path === '/Login/LoginPage') {
-//     next('/user/center')
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach(async (to) => {
+  const useStore = useUserStore()
+  if (useStore.token && to.path === '/Login/LoginPage') return '/'
+  if (!useStore.token && to.path === '/user/center') return '/'
+  if (!useStore.token && to.path === '/user/ChangePic') return '/'
+  if (!useStore.token && to.path === '/user/passwordChange') return '/'
+  if (!useStore.token && to.path === '/user/dataChange') return '/'
+  if (!useStore.token && to.path === '/Pay') return '/'
+})
 export default router

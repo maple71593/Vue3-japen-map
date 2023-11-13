@@ -127,6 +127,9 @@ const Pic = () => {
     border-radius: 0px 10px 0px 0px;
     h1 {
       color: rgb(0, 50, 50);
+      @include phone {
+        font-size: 20px;
+      }
     }
   }
   > div:nth-child(2) {

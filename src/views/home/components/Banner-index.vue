@@ -5,7 +5,6 @@ import { useFirestore } from 'vuefire'
 const ChangePageNum = ref(0)
 const pic = ref([])
 const db = useFirestore()
-
 const useBannerBcak = async () => {
   const querySnapshot = await getDocs(collection(db, 'BannerPic'))
   querySnapshot.forEach((doc) => {
@@ -39,16 +38,6 @@ useBannerBcak()
   </div>
 </template>
 <style lang="scss" scoped>
-@mixin pad {
-  @media (max-width: 1000px) {
-    @content;
-  }
-}
-@mixin phone {
-  @media (max-width: 420px) {
-    @content;
-  }
-}
 /* banner 輪播圖*/
 .banner-change {
   width: 100vw;
@@ -59,11 +48,13 @@ useBannerBcak()
   z-index: -1;
   @include phone {
     top: -270px;
+    height: 100vh;
   }
 }
 .Img-Box {
   @include phone {
     width: 100vw;
+    height: 100vh;
     overflow: hidden;
   }
 }
@@ -72,7 +63,8 @@ useBannerBcak()
   height: 100%;
   position: absolute;
   @include phone {
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
     bottom: 0;
     overflow: hidden;
   }
@@ -83,6 +75,9 @@ useBannerBcak()
   top: 35%;
   left: 10%;
   position: absolute;
+  @include phone {
+    top: 40%;
+  }
   h1 {
     @include phone {
       font-size: 30px;

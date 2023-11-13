@@ -32,9 +32,9 @@ const sendEmail = async () => {
     ordsr_where: where.value,
     ordsr_Msg: Msg.value
   }
-  let Public = 'PKdYIFmAKtd-J7yZO'
-  let template = 'template_r1fgo0b'
-  let Server = 'service_kc6bj89'
+  let Public = import.meta.env.VITE_VUE_APP_PAY_PUBLIC_KEY
+  let template = import.meta.env.VITE_VUE_APP_CONNECTION_TEMPLATE_KEY
+  let Server = import.meta.env.VITE_VUE_APP_PAY_SERVICE_KEY
   emailjs.send(Server, template, templateParams, Public).then(
     (result) => {
       useCom.MessageBox('收到您的需求，我們會盡速與您聯絡', 3)
@@ -131,6 +131,9 @@ const clean = () => {
   width: 80vw;
   height: 80vh;
   background-color: #a8dd9d;
+  @include phone {
+    height: 100%;
+  }
   > div:nth-child(1) {
     height: 100px;
     display: flex;
@@ -150,11 +153,12 @@ const clean = () => {
   }
 
   > div:nth-child(2) {
-    // width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    // background-color: #ccc;
+    @include phone {
+      display: block;
+    }
     h3 {
       margin: 10px;
       display: inline-block;
@@ -166,7 +170,10 @@ const clean = () => {
       border-radius: 5px;
       outline: none;
       background-color: white;
-      // box-sizing: border-box;
+      @include phone {
+        margin-left: 10px;
+        width: 250px;
+      }
     }
     > div:nth-child(1) {
       width: 300px;
@@ -194,6 +201,9 @@ select {
   border-radius: 5px;
   outline: none;
   background-color: white;
+  @include phone {
+    margin-left: 10px;
+  }
 }
 textarea {
   width: 400px;
@@ -205,5 +215,8 @@ textarea {
   border-radius: 5px;
   outline: none;
   background-color: white;
+  @include phone {
+    margin-left: 10px;
+  }
 }
 </style>
